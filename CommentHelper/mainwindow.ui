@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="SettingTab">
        <attribute name="title">
@@ -39,27 +39,27 @@
           <property name="midLineWidth">
            <number>1</number>
           </property>
-          <widget class="QWidget" name="">
+          <widget class="QWidget" name="layoutWidget">
            <property name="geometry">
             <rect>
              <x>20</x>
-             <y>10</y>
-             <width>262</width>
-             <height>108</height>
+             <y>11</y>
+             <width>281</width>
+             <height>136</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <layout class="QHBoxLayout" name="ExtensionL">
               <item>
-               <widget class="QLabel" name="label_2">
+               <widget class="QLabel" name="extensionLbl">
                 <property name="text">
                  <string>Extension</string>
                 </property>
                </widget>
               </item>
               <item>
-               <spacer name="horizontalSpacer">
+               <spacer name="spacer1">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -72,21 +72,21 @@
                </spacer>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_2"/>
+               <widget class="QLineEdit" name="extensionEdit"/>
               </item>
              </layout>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <layout class="QHBoxLayout" name="PathL">
               <item>
-               <widget class="QLabel" name="label">
+               <widget class="QLabel" name="pathLbl">
                 <property name="text">
-                 <string>Path</string>
+                 <string>Project Path</string>
                 </property>
                </widget>
               </item>
               <item>
-               <spacer name="horizontalSpacer_2">
+               <spacer name="spacer2">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -99,21 +99,21 @@
                </spacer>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit"/>
+               <widget class="QLineEdit" name="pathEdit"/>
               </item>
              </layout>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <layout class="QHBoxLayout" name="AuthorL">
               <item>
-               <widget class="QLabel" name="label_3">
+               <widget class="QLabel" name="authorLbl">
                 <property name="text">
                  <string>Author</string>
                 </property>
                </widget>
               </item>
               <item>
-               <spacer name="horizontalSpacer_3">
+               <spacer name="spacer3">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -126,21 +126,21 @@
                </spacer>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_3"/>
+               <widget class="QLineEdit" name="authorEdit"/>
               </item>
              </layout>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_11">
+             <layout class="QHBoxLayout" name="SeparatorL">
               <item>
-               <widget class="QLabel" name="label_4">
+               <widget class="QLabel" name="separatorLbl">
                 <property name="text">
                  <string>Separator</string>
                 </property>
                </widget>
               </item>
               <item>
-               <spacer name="horizontalSpacer_4">
+               <spacer name="spacer4">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -153,7 +153,7 @@
                </spacer>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_4"/>
+               <widget class="QLineEdit" name="separatorEdit"/>
               </item>
              </layout>
             </item>
@@ -169,21 +169,32 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <layout class="QVBoxLayout" name="flagTabL1">
           <item>
-           <widget class="QTableWidget" name="tableWidget"/>
+           <widget class="QTableWidget" name="flagTblWidget">
+            <column>
+             <property name="text">
+              <string>Flag</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>No</string>
+             </property>
+            </column>
+           </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <layout class="QHBoxLayout" name="flagTabL2">
             <item>
-             <widget class="QPushButton" name="pushButton">
+             <widget class="QPushButton" name="flagAddBtn">
               <property name="text">
                <string>Add</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_2">
+             <widget class="QPushButton" name="flagRemoveBtn">
               <property name="text">
                <string>Remove</string>
               </property>
@@ -201,21 +212,32 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
+         <layout class="QVBoxLayout" name="descTabL1">
           <item>
-           <widget class="QTableWidget" name="tableWidget_2"/>
+           <widget class="QTableWidget" name="descTblWidget">
+            <column>
+             <property name="text">
+              <string>Desc</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Content</string>
+             </property>
+            </column>
+           </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <layout class="QHBoxLayout" name="descTabL2">
             <item>
-             <widget class="QPushButton" name="pushButton_3">
+             <widget class="QPushButton" name="descAddBtn">
               <property name="text">
                <string>Add</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_4">
+             <widget class="QPushButton" name="descRemoveBtn">
               <property name="text">
                <string>Remove</string>
               </property>
@@ -233,21 +255,32 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_10">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
+         <layout class="QVBoxLayout" name="issueTabL">
           <item>
-           <widget class="QTableWidget" name="tableWidget_3"/>
+           <widget class="QTableWidget" name="issueTblWidget">
+            <column>
+             <property name="text">
+              <string>Issue</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Content</string>
+             </property>
+            </column>
+           </widget>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
             <item>
-             <widget class="QPushButton" name="pushButton_5">
+             <widget class="QPushButton" name="issueAddBtn">
               <property name="text">
                <string>Add</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_6">
+             <widget class="QPushButton" name="issueRemoveBtn">
               <property name="text">
                <string>Remove</string>
               </property>
@@ -265,7 +298,7 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QPlainTextEdit" name="plainTextEdit"/>
+         <widget class="QPlainTextEdit" name="previewTextEdit"/>
         </item>
        </layout>
       </widget>
@@ -286,7 +319,12 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSave_as"/>
+    <addaction name="separator"/>
     <addaction name="actionExecute"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -310,6 +348,35 @@
   <action name="actionExecute">
    <property name="text">
     <string>Execute</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSave_as">
+   <property name="text">
+    <string>Save as</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+S</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
    </property>
   </action>
  </widget>
