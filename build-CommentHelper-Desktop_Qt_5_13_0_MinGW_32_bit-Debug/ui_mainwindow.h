@@ -72,6 +72,14 @@ public:
     QLabel *supDivLbl;
     QSpacerItem *spacer6;
     QLineEdit *supDivEdit;
+    QHBoxLayout *EmailL;
+    QLabel *emailLbl;
+    QSpacerItem *spacer7;
+    QLineEdit *emailEdit;
+    QHBoxLayout *TelephoneL;
+    QLabel *telepLbl;
+    QSpacerItem *spacer8;
+    QLineEdit *telepEdit;
     QWidget *FlagTab;
     QHBoxLayout *horizontalLayout_3;
     QVBoxLayout *flagTabL1;
@@ -140,7 +148,7 @@ public:
         frame->setMidLineWidth(1);
         widget = new QWidget(frame);
         widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(20, 12, 301, 164));
+        widget->setGeometry(QRect(20, 13, 277, 220));
         verticalLayout = new QVBoxLayout(widget);
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
@@ -265,6 +273,46 @@ public:
 
 
         verticalLayout->addLayout(SupDivLineL);
+
+        EmailL = new QHBoxLayout();
+        EmailL->setSpacing(6);
+        EmailL->setObjectName(QString::fromUtf8("EmailL"));
+        emailLbl = new QLabel(widget);
+        emailLbl->setObjectName(QString::fromUtf8("emailLbl"));
+
+        EmailL->addWidget(emailLbl);
+
+        spacer7 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        EmailL->addItem(spacer7);
+
+        emailEdit = new QLineEdit(widget);
+        emailEdit->setObjectName(QString::fromUtf8("emailEdit"));
+
+        EmailL->addWidget(emailEdit);
+
+
+        verticalLayout->addLayout(EmailL);
+
+        TelephoneL = new QHBoxLayout();
+        TelephoneL->setSpacing(6);
+        TelephoneL->setObjectName(QString::fromUtf8("TelephoneL"));
+        telepLbl = new QLabel(widget);
+        telepLbl->setObjectName(QString::fromUtf8("telepLbl"));
+
+        TelephoneL->addWidget(telepLbl);
+
+        spacer8 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        TelephoneL->addItem(spacer8);
+
+        telepEdit = new QLineEdit(widget);
+        telepEdit->setObjectName(QString::fromUtf8("telepEdit"));
+
+        TelephoneL->addWidget(telepEdit);
+
+
+        verticalLayout->addLayout(TelephoneL);
 
 
         horizontalLayout_13->addWidget(frame);
@@ -444,6 +492,8 @@ public:
         separatorLbl->setText(QCoreApplication::translate("MainWindow", "Separator", nullptr));
         subDivLbl->setText(QCoreApplication::translate("MainWindow", "Sub Div Line", nullptr));
         supDivLbl->setText(QCoreApplication::translate("MainWindow", "Sup Div Line", nullptr));
+        emailLbl->setText(QCoreApplication::translate("MainWindow", "Email", nullptr));
+        telepLbl->setText(QCoreApplication::translate("MainWindow", "Telephone", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(SettingTab), QCoreApplication::translate("MainWindow", "Global", nullptr));
         QTableWidgetItem *___qtablewidgetitem = flagTblWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "Flag", nullptr));

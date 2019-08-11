@@ -43,9 +43,9 @@
            <property name="geometry">
             <rect>
              <x>20</x>
-             <y>12</y>
-             <width>301</width>
-             <height>164</height>
+             <y>13</y>
+             <width>277</width>
+             <height>220</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout">
@@ -208,6 +208,60 @@
               </item>
               <item>
                <widget class="QLineEdit" name="supDivEdit"/>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="EmailL">
+              <item>
+               <widget class="QLabel" name="emailLbl">
+                <property name="text">
+                 <string>Email</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="spacer7">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="emailEdit"/>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="TelephoneL">
+              <item>
+               <widget class="QLabel" name="telepLbl">
+                <property name="text">
+                 <string>Telephone</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="spacer8">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="telepEdit"/>
               </item>
              </layout>
             </item>

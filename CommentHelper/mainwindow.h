@@ -5,6 +5,7 @@
 
 class QLineEdit;
 class QTableWidget;
+class QFileDialog;
 
 namespace Ui {
 class MainWindow;
@@ -56,6 +57,8 @@ private:
     QLineEdit* targetExtensEdit;
     QLineEdit* authorEdit;
     QLineEdit* separatorEdit;
+
+    QFileDialog* fileOpenDialog;
 
     void setIssueTable();
 

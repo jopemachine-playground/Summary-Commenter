@@ -1,7 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "constant.h"
-#include "QDebug"
+
+#include <QFile>
+#include <QDebug>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -50,6 +53,9 @@ void MainWindow::setFlagTable(){
     insertItem(ui->flagTblWidget, false, "Issue", "1");
     insertItem(ui->flagTblWidget, false, "Sup Div Line", "1");
     insertItem(ui->flagTblWidget, false, "Sub Div Line", "1");
+    insertItem(ui->flagTblWidget, false, "Email", "1");
+    insertItem(ui->flagTblWidget, false, "Telephone", "1");
+
 
 }
 
@@ -89,6 +95,9 @@ QString MainWindow::GetTargetExtens(){
 MainWindow::~MainWindow()
 {
     delete ui;
+    if(fileOpenDialog != nullptr){
+        delete fileOpenDialog;
+    }
 }
 
 void MainWindow::on_descAddBtn_clicked()
@@ -127,6 +136,10 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 
         processFlag(text, "@ Issue", "<Issue>", FLAGPOS_ISSUE);
 
+        processFlag(text, "@ Email", ui->emailEdit->text(), FLAGPOS_EMAIL);
+
+        processFlag(text, "@ Contact", ui->telepEdit->text(), FLAGPOS_TELEP);
+
         processFlag(text, ui->subDivEdit->text(), nullptr, FLAGPOS_SUBDIV);
 
         ui->previewTextEdit->setPlainText(text);
@@ -152,6 +165,11 @@ void MainWindow::on_actionExit_triggered()
     exit(0);
 }
 
+void MainWindow::on_actionGithub_triggered()
+{
+
+}
+
 void MainWindow::on_actionSave_triggered()
 {
 
@@ -159,15 +177,39 @@ void MainWindow::on_actionSave_triggered()
 
 void MainWindow::on_actionOpen_triggered()
 {
+    // FileDialog를 생성하고 연다.
+    fileOpenDialog = new QFileDialog();
+    fileOpenDialog->setFileMode(QFileDialog::AnyFile);
+    fileOpenDialog->setNameFilter(tr("Open a Setting file (*.chs)"));
+    fileOpenDialog->setViewMode(QFileDialog::Detail);
+    fileOpenDialog->open(this, "Open a Setting file");
 
+    QString config;
+
+    // 파일을 선택했을 때
+    if(fileOpenDialog->exec()){
+
+        QFile selectFile(fileOpenDialog->selectedFiles()[0]);
+
+        if(selectFile.exists())
+        {
+            selectFile.open(QFile::ReadOnly|QFile::Text);
+
+            QTextStream ts(&selectFile);
+
+            while(!ts.atEnd())
+            {
+                config = ts.readLine();
+            }
+        }
+
+        selectFile.close();
+    }
+
+    qDebug() << config;
 }
 
 void MainWindow::on_actionExecute_triggered()
-{
-
-}
-
-void MainWindow::on_actionGithub_triggered()
 {
 
 }

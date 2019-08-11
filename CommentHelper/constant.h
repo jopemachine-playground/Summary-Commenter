@@ -11,7 +11,8 @@
 #define FLAGPOS_ISSUE 3, 1
 #define FLAGPOS_SUPDIV 4, 1
 #define FLAGPOS_SUBDIV 5, 1
-
+#define FLAGPOS_EMAIL 6, 1
+#define FLAGPOS_TELEP 7, 1
 
 
 #endif // CONSTANT_H
