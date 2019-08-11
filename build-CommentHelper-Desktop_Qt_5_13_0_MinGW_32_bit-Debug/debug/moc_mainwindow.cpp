@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[8];
-    char stringdata0[155];
+    QByteArrayData data[9];
+    char stringdata0[166];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -33,19 +33,21 @@ struct qt_meta_stringdata_MainWindow_t {
 static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
     {
 QT_MOC_LITERAL(0, 0, 10), // "MainWindow"
-QT_MOC_LITERAL(1, 11, 21), // "on_flagAddBtn_clicked"
+QT_MOC_LITERAL(1, 11, 21), // "on_descAddBtn_clicked"
 QT_MOC_LITERAL(2, 33, 0), // ""
-QT_MOC_LITERAL(3, 34, 24), // "on_flagRemoveBtn_clicked"
-QT_MOC_LITERAL(4, 59, 21), // "on_descAddBtn_clicked"
-QT_MOC_LITERAL(5, 81, 24), // "on_descRemoveBtn_clicked"
-QT_MOC_LITERAL(6, 106, 22), // "on_issueAddBtn_clicked"
-QT_MOC_LITERAL(7, 129, 25) // "on_issueRemoveBtn_clicked"
+QT_MOC_LITERAL(3, 34, 24), // "on_descRemoveBtn_clicked"
+QT_MOC_LITERAL(4, 59, 22), // "on_issueAddBtn_clicked"
+QT_MOC_LITERAL(5, 82, 25), // "on_issueRemoveBtn_clicked"
+QT_MOC_LITERAL(6, 108, 27), // "on_tabWidget_currentChanged"
+QT_MOC_LITERAL(7, 136, 5), // "index"
+QT_MOC_LITERAL(8, 142, 23) // "on_actionExit_triggered"
 
     },
-    "MainWindow\0on_flagAddBtn_clicked\0\0"
-    "on_flagRemoveBtn_clicked\0on_descAddBtn_clicked\0"
+    "MainWindow\0on_descAddBtn_clicked\0\0"
     "on_descRemoveBtn_clicked\0"
-    "on_issueAddBtn_clicked\0on_issueRemoveBtn_clicked"
+    "on_issueAddBtn_clicked\0on_issueRemoveBtn_clicked\0"
+    "on_tabWidget_currentChanged\0index\0"
+    "on_actionExit_triggered"
 };
 #undef QT_MOC_LITERAL
 
@@ -67,15 +69,15 @@ static const uint qt_meta_data_MainWindow[] = {
        3,    0,   45,    2, 0x08 /* Private */,
        4,    0,   46,    2, 0x08 /* Private */,
        5,    0,   47,    2, 0x08 /* Private */,
-       6,    0,   48,    2, 0x08 /* Private */,
-       7,    0,   49,    2, 0x08 /* Private */,
+       6,    1,   48,    2, 0x08 /* Private */,
+       8,    0,   51,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,    7,
     QMetaType::Void,
 
        0        // eod
@@ -87,16 +89,15 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         auto *_t = static_cast<MainWindow *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->on_flagAddBtn_clicked(); break;
-        case 1: _t->on_flagRemoveBtn_clicked(); break;
-        case 2: _t->on_descAddBtn_clicked(); break;
-        case 3: _t->on_descRemoveBtn_clicked(); break;
-        case 4: _t->on_issueAddBtn_clicked(); break;
-        case 5: _t->on_issueRemoveBtn_clicked(); break;
+        case 0: _t->on_descAddBtn_clicked(); break;
+        case 1: _t->on_descRemoveBtn_clicked(); break;
+        case 2: _t->on_issueAddBtn_clicked(); break;
+        case 3: _t->on_issueRemoveBtn_clicked(); break;
+        case 4: _t->on_tabWidget_currentChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 5: _t->on_actionExit_triggered(); break;
         default: ;
         }
     }
-    Q_UNUSED(_a);
 }
 
 QT_INIT_METAOBJECT const QMetaObject MainWindow::staticMetaObject = { {

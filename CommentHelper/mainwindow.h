@@ -26,10 +26,6 @@ public:
 
 private slots:
 
-    void on_flagAddBtn_clicked();
-
-    void on_flagRemoveBtn_clicked();
-
     void on_descAddBtn_clicked();
 
     void on_descRemoveBtn_clicked();
@@ -37,6 +33,20 @@ private slots:
     void on_issueAddBtn_clicked();
 
     void on_issueRemoveBtn_clicked();
+
+    void on_tabWidget_currentChanged(int index);
+
+    void on_actionExit_triggered();
+
+    void on_actionSave_triggered();
+
+    void on_actionOpen_triggered();
+
+    void on_actionExecute_triggered();
+
+    void on_actionGithub_triggered();
+
+    void on_actionSave_as_triggered();
 
 private:
 
@@ -47,7 +57,15 @@ private:
     QLineEdit* authorEdit;
     QLineEdit* separatorEdit;
 
-    void InsertItem(QTableWidget& widget, const QString& key, const QString& value);
+    void setIssueTable();
+
+    void setDescTable();
+
+    void setFlagTable();
+
+    void processFlag(QString& str, const QString& key, const QString& value, int row, int col);
+
+    void insertItem(QTableWidget* widget, bool keyEditable, const QString& key, const QString& value);
 
 };
 

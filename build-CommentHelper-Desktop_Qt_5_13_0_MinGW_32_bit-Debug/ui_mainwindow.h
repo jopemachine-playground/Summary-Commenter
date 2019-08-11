@@ -41,12 +41,12 @@ public:
     QAction *actionSave_as;
     QAction *actionExit;
     QWidget *centralWidget;
-    QHBoxLayout *horizontalLayout_12;
+    QVBoxLayout *verticalLayout_2;
     QTabWidget *tabWidget;
     QWidget *SettingTab;
     QHBoxLayout *horizontalLayout_13;
     QFrame *frame;
-    QWidget *layoutWidget;
+    QWidget *widget;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *ExtensionL;
     QLabel *extensionLbl;
@@ -64,13 +64,18 @@ public:
     QLabel *separatorLbl;
     QSpacerItem *spacer4;
     QLineEdit *separatorEdit;
+    QHBoxLayout *SubDivLineL;
+    QLabel *subDivLbl;
+    QSpacerItem *spacer5;
+    QLineEdit *subDivEdit;
+    QHBoxLayout *SupDivLineL;
+    QLabel *supDivLbl;
+    QSpacerItem *spacer6;
+    QLineEdit *supDivEdit;
     QWidget *FlagTab;
     QHBoxLayout *horizontalLayout_3;
     QVBoxLayout *flagTabL1;
     QTableWidget *flagTblWidget;
-    QHBoxLayout *flagTabL2;
-    QPushButton *flagAddBtn;
-    QPushButton *flagRemoveBtn;
     QWidget *DescTab;
     QVBoxLayout *verticalLayout_4;
     QVBoxLayout *descTabL1;
@@ -115,10 +120,10 @@ public:
         actionExit->setObjectName(QString::fromUtf8("actionExit"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
-        horizontalLayout_12 = new QHBoxLayout(centralWidget);
-        horizontalLayout_12->setSpacing(6);
-        horizontalLayout_12->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_12->setObjectName(QString::fromUtf8("horizontalLayout_12"));
+        verticalLayout_2 = new QVBoxLayout(centralWidget);
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
         SettingTab = new QWidget();
@@ -133,10 +138,10 @@ public:
         frame->setFrameShadow(QFrame::Sunken);
         frame->setLineWidth(1);
         frame->setMidLineWidth(1);
-        layoutWidget = new QWidget(frame);
-        layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(20, 11, 281, 136));
-        verticalLayout = new QVBoxLayout(layoutWidget);
+        widget = new QWidget(frame);
+        widget->setObjectName(QString::fromUtf8("widget"));
+        widget->setGeometry(QRect(20, 12, 301, 164));
+        verticalLayout = new QVBoxLayout(widget);
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
@@ -144,7 +149,7 @@ public:
         ExtensionL = new QHBoxLayout();
         ExtensionL->setSpacing(6);
         ExtensionL->setObjectName(QString::fromUtf8("ExtensionL"));
-        extensionLbl = new QLabel(layoutWidget);
+        extensionLbl = new QLabel(widget);
         extensionLbl->setObjectName(QString::fromUtf8("extensionLbl"));
 
         ExtensionL->addWidget(extensionLbl);
@@ -153,7 +158,7 @@ public:
 
         ExtensionL->addItem(spacer1);
 
-        extensionEdit = new QLineEdit(layoutWidget);
+        extensionEdit = new QLineEdit(widget);
         extensionEdit->setObjectName(QString::fromUtf8("extensionEdit"));
 
         ExtensionL->addWidget(extensionEdit);
@@ -164,7 +169,7 @@ public:
         PathL = new QHBoxLayout();
         PathL->setSpacing(6);
         PathL->setObjectName(QString::fromUtf8("PathL"));
-        pathLbl = new QLabel(layoutWidget);
+        pathLbl = new QLabel(widget);
         pathLbl->setObjectName(QString::fromUtf8("pathLbl"));
 
         PathL->addWidget(pathLbl);
@@ -173,7 +178,7 @@ public:
 
         PathL->addItem(spacer2);
 
-        pathEdit = new QLineEdit(layoutWidget);
+        pathEdit = new QLineEdit(widget);
         pathEdit->setObjectName(QString::fromUtf8("pathEdit"));
 
         PathL->addWidget(pathEdit);
@@ -184,7 +189,7 @@ public:
         AuthorL = new QHBoxLayout();
         AuthorL->setSpacing(6);
         AuthorL->setObjectName(QString::fromUtf8("AuthorL"));
-        authorLbl = new QLabel(layoutWidget);
+        authorLbl = new QLabel(widget);
         authorLbl->setObjectName(QString::fromUtf8("authorLbl"));
 
         AuthorL->addWidget(authorLbl);
@@ -193,7 +198,7 @@ public:
 
         AuthorL->addItem(spacer3);
 
-        authorEdit = new QLineEdit(layoutWidget);
+        authorEdit = new QLineEdit(widget);
         authorEdit->setObjectName(QString::fromUtf8("authorEdit"));
 
         AuthorL->addWidget(authorEdit);
@@ -204,7 +209,7 @@ public:
         SeparatorL = new QHBoxLayout();
         SeparatorL->setSpacing(6);
         SeparatorL->setObjectName(QString::fromUtf8("SeparatorL"));
-        separatorLbl = new QLabel(layoutWidget);
+        separatorLbl = new QLabel(widget);
         separatorLbl->setObjectName(QString::fromUtf8("separatorLbl"));
 
         SeparatorL->addWidget(separatorLbl);
@@ -213,13 +218,53 @@ public:
 
         SeparatorL->addItem(spacer4);
 
-        separatorEdit = new QLineEdit(layoutWidget);
+        separatorEdit = new QLineEdit(widget);
         separatorEdit->setObjectName(QString::fromUtf8("separatorEdit"));
 
         SeparatorL->addWidget(separatorEdit);
 
 
         verticalLayout->addLayout(SeparatorL);
+
+        SubDivLineL = new QHBoxLayout();
+        SubDivLineL->setSpacing(6);
+        SubDivLineL->setObjectName(QString::fromUtf8("SubDivLineL"));
+        subDivLbl = new QLabel(widget);
+        subDivLbl->setObjectName(QString::fromUtf8("subDivLbl"));
+
+        SubDivLineL->addWidget(subDivLbl);
+
+        spacer5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        SubDivLineL->addItem(spacer5);
+
+        subDivEdit = new QLineEdit(widget);
+        subDivEdit->setObjectName(QString::fromUtf8("subDivEdit"));
+
+        SubDivLineL->addWidget(subDivEdit);
+
+
+        verticalLayout->addLayout(SubDivLineL);
+
+        SupDivLineL = new QHBoxLayout();
+        SupDivLineL->setSpacing(6);
+        SupDivLineL->setObjectName(QString::fromUtf8("SupDivLineL"));
+        supDivLbl = new QLabel(widget);
+        supDivLbl->setObjectName(QString::fromUtf8("supDivLbl"));
+
+        SupDivLineL->addWidget(supDivLbl);
+
+        spacer6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        SupDivLineL->addItem(spacer6);
+
+        supDivEdit = new QLineEdit(widget);
+        supDivEdit->setObjectName(QString::fromUtf8("supDivEdit"));
+
+        SupDivLineL->addWidget(supDivEdit);
+
+
+        verticalLayout->addLayout(SupDivLineL);
 
 
         horizontalLayout_13->addWidget(frame);
@@ -244,22 +289,6 @@ public:
         flagTblWidget->setObjectName(QString::fromUtf8("flagTblWidget"));
 
         flagTabL1->addWidget(flagTblWidget);
-
-        flagTabL2 = new QHBoxLayout();
-        flagTabL2->setSpacing(6);
-        flagTabL2->setObjectName(QString::fromUtf8("flagTabL2"));
-        flagAddBtn = new QPushButton(FlagTab);
-        flagAddBtn->setObjectName(QString::fromUtf8("flagAddBtn"));
-
-        flagTabL2->addWidget(flagAddBtn);
-
-        flagRemoveBtn = new QPushButton(FlagTab);
-        flagRemoveBtn->setObjectName(QString::fromUtf8("flagRemoveBtn"));
-
-        flagTabL2->addWidget(flagRemoveBtn);
-
-
-        flagTabL1->addLayout(flagTabL2);
 
 
         horizontalLayout_3->addLayout(flagTabL1);
@@ -358,7 +387,7 @@ public:
 
         tabWidget->addTab(PreviewTab, QString());
 
-        horizontalLayout_12->addWidget(tabWidget);
+        verticalLayout_2->addWidget(tabWidget);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -385,7 +414,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(3);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -413,25 +442,25 @@ public:
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));
         separatorLbl->setText(QCoreApplication::translate("MainWindow", "Separator", nullptr));
+        subDivLbl->setText(QCoreApplication::translate("MainWindow", "Sub Div Line", nullptr));
+        supDivLbl->setText(QCoreApplication::translate("MainWindow", "Sup Div Line", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(SettingTab), QCoreApplication::translate("MainWindow", "Global", nullptr));
         QTableWidgetItem *___qtablewidgetitem = flagTblWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "Flag", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = flagTblWidget->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QCoreApplication::translate("MainWindow", "No", nullptr));
-        flagAddBtn->setText(QCoreApplication::translate("MainWindow", "Add", nullptr));
-        flagRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove", nullptr));
+        ___qtablewidgetitem1->setText(QCoreApplication::translate("MainWindow", "Value", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(FlagTab), QCoreApplication::translate("MainWindow", "Flag", nullptr));
         QTableWidgetItem *___qtablewidgetitem2 = descTblWidget->horizontalHeaderItem(0);
-        ___qtablewidgetitem2->setText(QCoreApplication::translate("MainWindow", "Desc", nullptr));
+        ___qtablewidgetitem2->setText(QCoreApplication::translate("MainWindow", "File Name", nullptr));
         QTableWidgetItem *___qtablewidgetitem3 = descTblWidget->horizontalHeaderItem(1);
-        ___qtablewidgetitem3->setText(QCoreApplication::translate("MainWindow", "Content", nullptr));
+        ___qtablewidgetitem3->setText(QCoreApplication::translate("MainWindow", "Description", nullptr));
         descAddBtn->setText(QCoreApplication::translate("MainWindow", "Add", nullptr));
         descRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(DescTab), QCoreApplication::translate("MainWindow", "Desc", nullptr));
         QTableWidgetItem *___qtablewidgetitem4 = issueTblWidget->horizontalHeaderItem(0);
-        ___qtablewidgetitem4->setText(QCoreApplication::translate("MainWindow", "Issue", nullptr));
+        ___qtablewidgetitem4->setText(QCoreApplication::translate("MainWindow", "File Name", nullptr));
         QTableWidgetItem *___qtablewidgetitem5 = issueTblWidget->horizontalHeaderItem(1);
-        ___qtablewidgetitem5->setText(QCoreApplication::translate("MainWindow", "Content", nullptr));
+        ___qtablewidgetitem5->setText(QCoreApplication::translate("MainWindow", "Issue", nullptr));
         issueAddBtn->setText(QCoreApplication::translate("MainWindow", "Add", nullptr));
         issueRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(IssueTab), QCoreApplication::translate("MainWindow", "Issue", nullptr));

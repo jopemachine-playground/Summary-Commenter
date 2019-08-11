@@ -14,11 +14,11 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_12">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="SettingTab">
        <attribute name="title">
@@ -39,13 +39,13 @@
           <property name="midLineWidth">
            <number>1</number>
           </property>
-          <widget class="QWidget" name="layoutWidget">
+          <widget class="QWidget" name="">
            <property name="geometry">
             <rect>
              <x>20</x>
-             <y>11</y>
-             <width>281</width>
-             <height>136</height>
+             <y>12</y>
+             <width>301</width>
+             <height>164</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout">
@@ -157,6 +157,60 @@
               </item>
              </layout>
             </item>
+            <item>
+             <layout class="QHBoxLayout" name="SubDivLineL">
+              <item>
+               <widget class="QLabel" name="subDivLbl">
+                <property name="text">
+                 <string>Sub Div Line</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="spacer5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="subDivEdit"/>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="SupDivLineL">
+              <item>
+               <widget class="QLabel" name="supDivLbl">
+                <property name="text">
+                 <string>Sup Div Line</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="spacer6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="supDivEdit"/>
+              </item>
+             </layout>
+            </item>
            </layout>
           </widget>
          </widget>
@@ -179,28 +233,10 @@
             </column>
             <column>
              <property name="text">
-              <string>No</string>
+              <string>Value</string>
              </property>
             </column>
            </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="flagTabL2">
-            <item>
-             <widget class="QPushButton" name="flagAddBtn">
-              <property name="text">
-               <string>Add</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="flagRemoveBtn">
-              <property name="text">
-               <string>Remove</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
           </item>
          </layout>
         </item>
@@ -217,12 +253,12 @@
            <widget class="QTableWidget" name="descTblWidget">
             <column>
              <property name="text">
-              <string>Desc</string>
+              <string>File Name</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Content</string>
+              <string>Description</string>
              </property>
             </column>
            </widget>
@@ -260,12 +296,12 @@
            <widget class="QTableWidget" name="issueTblWidget">
             <column>
              <property name="text">
-              <string>Issue</string>
+              <string>File Name</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Content</string>
+              <string>Issue</string>
              </property>
             </column>
            </widget>
