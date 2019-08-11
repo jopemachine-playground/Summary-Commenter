@@ -127,7 +127,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     if(index == TAB_PREVIEW){
         QString text;
 
-        processFlag(text, ui->supDivEdit->text(), nullptr, FLAGPOS_SUPDIV);
+        processFlag(text, ui->subDivEdit->toPlainText(), nullptr, FLAGPOS_SUPDIV);
 
         processFlag(text, "@ Author", ui->authorEdit->text(), FLAGPOS_AUTHOR);
 
@@ -141,7 +141,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 
         processFlag(text, "@ Contact", ui->telepEdit->text(), FLAGPOS_TELEP);
 
-        processFlag(text, ui->subDivEdit->text(), nullptr, FLAGPOS_SUBDIV);
+        processFlag(text, ui->subDivEdit->toPlainText(), nullptr, FLAGPOS_SUBDIV);
 
         ui->previewTextEdit->setPlainText(text);
     }
@@ -149,11 +149,15 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 
 void MainWindow::processFlag(QString& str, const QString& key, const QString& value, int row, int col){
 
+    if(key.trimmed() == "" || key == nullptr){
+        return;
+    }
+
     if(ui->flagTblWidget->item(row, col)->text() == "1"){
 
         if(value == nullptr){
 
-            str += ui->separatorEdit->text() + " " + key + "\n";
+            str += ui->separatorEdit->text() + key + "\n";
             return;
         }
 
@@ -229,8 +233,8 @@ void MainWindow::saveCHSFile(const QString& path){
     ts << "global.Project_Path     =  " <<   ui->pathEdit->text() << "\n";
     ts << "global.Author           =  " <<   ui->authorEdit->text() << "\n";
     ts << "global.Separator        =  " <<   ui->separatorEdit->text() << "\n";
-    ts << "global.Sub_Div_Line     =  " <<   ui->subDivEdit->text() << "\n";
-    ts << "global.Sup_Div_Line     =  " <<   ui->supDivEdit->text() << "\n";
+    ts << "global.Sub_Div_Line     =  " <<   ui->subDivEdit->toPlainText() << "\n";
+    ts << "global.Sup_Div_Line     =  " <<   ui->supDivEdit->toPlainText() << "\n";
     ts << "global.Email            =  " <<   ui->emailEdit->text() << "\n";
     ts << "global.Telephone        =  " <<   ui->telepEdit->text() << "\n";
 
@@ -445,6 +449,9 @@ void MainWindow::on_actionExecute_triggered()
         return;
     }
 
+
+
+
 }
 
 void MainWindow::on_actionSave_as_triggered()
@@ -456,4 +463,14 @@ void MainWindow::on_actionSave_as_triggered()
     setWindowTitle(selectedFile);
 
     saveCHSFile(selectedFile);
+}
+
+void MainWindow::on_copyBtn_clicked()
+{
+
+}
+
+void MainWindow::on_executeBtn_clicked()
+{
+
 }

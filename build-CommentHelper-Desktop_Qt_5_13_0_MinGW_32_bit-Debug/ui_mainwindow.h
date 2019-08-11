@@ -26,6 +26,7 @@
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
+#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -46,7 +47,8 @@ public:
     QWidget *SettingTab;
     QHBoxLayout *horizontalLayout_13;
     QFrame *frame;
-    QWidget *layoutWidget;
+    QHBoxLayout *horizontalLayout_4;
+    QHBoxLayout *horizontalLayout_2;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *ExtensionL;
     QLabel *extensionLbl;
@@ -64,14 +66,6 @@ public:
     QLabel *separatorLbl;
     QSpacerItem *spacer4;
     QLineEdit *separatorEdit;
-    QHBoxLayout *SubDivLineL;
-    QLabel *subDivLbl;
-    QSpacerItem *spacer5;
-    QLineEdit *subDivEdit;
-    QHBoxLayout *SupDivLineL;
-    QLabel *supDivLbl;
-    QSpacerItem *spacer6;
-    QLineEdit *supDivEdit;
     QHBoxLayout *EmailL;
     QLabel *emailLbl;
     QSpacerItem *spacer7;
@@ -80,6 +74,24 @@ public:
     QLabel *telepLbl;
     QSpacerItem *spacer8;
     QLineEdit *telepEdit;
+    QHBoxLayout *SupDivLineL;
+    QLabel *supDivLbl;
+    QSpacerItem *spacer7_2;
+    QTextEdit *supDivEdit;
+    QHBoxLayout *SubDivLineL;
+    QLabel *subDivLbl;
+    QSpacerItem *spacer7_3;
+    QTextEdit *subDivEdit;
+    QFrame *line;
+    QVBoxLayout *verticalLayout_8;
+    QHBoxLayout *GithubL;
+    QLabel *githubLbl;
+    QSpacerItem *spacer1_4;
+    QLineEdit *githubEdit;
+    QSpacerItem *verticalSpacer;
+    QHBoxLayout *ReferenceL;
+    QLabel *referenceLbl;
+    QTextEdit *textEdit;
     QWidget *FlagTab;
     QHBoxLayout *horizontalLayout_3;
     QVBoxLayout *flagTabL1;
@@ -98,9 +110,20 @@ public:
     QHBoxLayout *horizontalLayout_8;
     QPushButton *issueAddBtn;
     QPushButton *issueRemoveBtn;
+    QWidget *referenceTab;
+    QVBoxLayout *verticalLayout_10;
+    QVBoxLayout *verticalLayout_9;
+    QTableWidget *referenceTbl;
+    QHBoxLayout *ReferenceL_2;
+    QPushButton *addReferenceBtn;
+    QPushButton *rmReferenceBtn;
     QWidget *PreviewTab;
-    QHBoxLayout *horizontalLayout;
+    QVBoxLayout *verticalLayout_5;
+    QVBoxLayout *verticalLayout_3;
     QPlainTextEdit *previewTextEdit;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *copyBtn;
+    QPushButton *executeBtn;
     QMenuBar *menuBar;
     QMenu *menuFiel;
     QMenu *menuHelp;
@@ -110,7 +133,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(698, 448);
+        MainWindow->resize(650, 450);
         actionGithub = new QAction(MainWindow);
         actionGithub->setObjectName(QString::fromUtf8("actionGithub"));
         QIcon icon;
@@ -146,18 +169,20 @@ public:
         frame->setFrameShadow(QFrame::Sunken);
         frame->setLineWidth(1);
         frame->setMidLineWidth(1);
-        layoutWidget = new QWidget(frame);
-        layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(20, 13, 277, 220));
-        verticalLayout = new QVBoxLayout(layoutWidget);
+        horizontalLayout_4 = new QHBoxLayout(frame);
+        horizontalLayout_4->setSpacing(6);
+        horizontalLayout_4->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        verticalLayout = new QVBoxLayout();
         verticalLayout->setSpacing(6);
-        verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
         ExtensionL = new QHBoxLayout();
         ExtensionL->setSpacing(6);
         ExtensionL->setObjectName(QString::fromUtf8("ExtensionL"));
-        extensionLbl = new QLabel(layoutWidget);
+        extensionLbl = new QLabel(frame);
         extensionLbl->setObjectName(QString::fromUtf8("extensionLbl"));
 
         ExtensionL->addWidget(extensionLbl);
@@ -166,7 +191,7 @@ public:
 
         ExtensionL->addItem(spacer1);
 
-        extensionEdit = new QLineEdit(layoutWidget);
+        extensionEdit = new QLineEdit(frame);
         extensionEdit->setObjectName(QString::fromUtf8("extensionEdit"));
 
         ExtensionL->addWidget(extensionEdit);
@@ -177,7 +202,7 @@ public:
         PathL = new QHBoxLayout();
         PathL->setSpacing(6);
         PathL->setObjectName(QString::fromUtf8("PathL"));
-        pathLbl = new QLabel(layoutWidget);
+        pathLbl = new QLabel(frame);
         pathLbl->setObjectName(QString::fromUtf8("pathLbl"));
 
         PathL->addWidget(pathLbl);
@@ -186,7 +211,7 @@ public:
 
         PathL->addItem(spacer2);
 
-        pathEdit = new QLineEdit(layoutWidget);
+        pathEdit = new QLineEdit(frame);
         pathEdit->setObjectName(QString::fromUtf8("pathEdit"));
 
         PathL->addWidget(pathEdit);
@@ -197,7 +222,7 @@ public:
         AuthorL = new QHBoxLayout();
         AuthorL->setSpacing(6);
         AuthorL->setObjectName(QString::fromUtf8("AuthorL"));
-        authorLbl = new QLabel(layoutWidget);
+        authorLbl = new QLabel(frame);
         authorLbl->setObjectName(QString::fromUtf8("authorLbl"));
 
         AuthorL->addWidget(authorLbl);
@@ -206,7 +231,7 @@ public:
 
         AuthorL->addItem(spacer3);
 
-        authorEdit = new QLineEdit(layoutWidget);
+        authorEdit = new QLineEdit(frame);
         authorEdit->setObjectName(QString::fromUtf8("authorEdit"));
 
         AuthorL->addWidget(authorEdit);
@@ -217,7 +242,7 @@ public:
         SeparatorL = new QHBoxLayout();
         SeparatorL->setSpacing(6);
         SeparatorL->setObjectName(QString::fromUtf8("SeparatorL"));
-        separatorLbl = new QLabel(layoutWidget);
+        separatorLbl = new QLabel(frame);
         separatorLbl->setObjectName(QString::fromUtf8("separatorLbl"));
 
         SeparatorL->addWidget(separatorLbl);
@@ -226,7 +251,7 @@ public:
 
         SeparatorL->addItem(spacer4);
 
-        separatorEdit = new QLineEdit(layoutWidget);
+        separatorEdit = new QLineEdit(frame);
         separatorEdit->setObjectName(QString::fromUtf8("separatorEdit"));
 
         SeparatorL->addWidget(separatorEdit);
@@ -234,50 +259,10 @@ public:
 
         verticalLayout->addLayout(SeparatorL);
 
-        SubDivLineL = new QHBoxLayout();
-        SubDivLineL->setSpacing(6);
-        SubDivLineL->setObjectName(QString::fromUtf8("SubDivLineL"));
-        subDivLbl = new QLabel(layoutWidget);
-        subDivLbl->setObjectName(QString::fromUtf8("subDivLbl"));
-
-        SubDivLineL->addWidget(subDivLbl);
-
-        spacer5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        SubDivLineL->addItem(spacer5);
-
-        subDivEdit = new QLineEdit(layoutWidget);
-        subDivEdit->setObjectName(QString::fromUtf8("subDivEdit"));
-
-        SubDivLineL->addWidget(subDivEdit);
-
-
-        verticalLayout->addLayout(SubDivLineL);
-
-        SupDivLineL = new QHBoxLayout();
-        SupDivLineL->setSpacing(6);
-        SupDivLineL->setObjectName(QString::fromUtf8("SupDivLineL"));
-        supDivLbl = new QLabel(layoutWidget);
-        supDivLbl->setObjectName(QString::fromUtf8("supDivLbl"));
-
-        SupDivLineL->addWidget(supDivLbl);
-
-        spacer6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        SupDivLineL->addItem(spacer6);
-
-        supDivEdit = new QLineEdit(layoutWidget);
-        supDivEdit->setObjectName(QString::fromUtf8("supDivEdit"));
-
-        SupDivLineL->addWidget(supDivEdit);
-
-
-        verticalLayout->addLayout(SupDivLineL);
-
         EmailL = new QHBoxLayout();
         EmailL->setSpacing(6);
         EmailL->setObjectName(QString::fromUtf8("EmailL"));
-        emailLbl = new QLabel(layoutWidget);
+        emailLbl = new QLabel(frame);
         emailLbl->setObjectName(QString::fromUtf8("emailLbl"));
 
         EmailL->addWidget(emailLbl);
@@ -286,7 +271,7 @@ public:
 
         EmailL->addItem(spacer7);
 
-        emailEdit = new QLineEdit(layoutWidget);
+        emailEdit = new QLineEdit(frame);
         emailEdit->setObjectName(QString::fromUtf8("emailEdit"));
 
         EmailL->addWidget(emailEdit);
@@ -297,7 +282,7 @@ public:
         TelephoneL = new QHBoxLayout();
         TelephoneL->setSpacing(6);
         TelephoneL->setObjectName(QString::fromUtf8("TelephoneL"));
-        telepLbl = new QLabel(layoutWidget);
+        telepLbl = new QLabel(frame);
         telepLbl->setObjectName(QString::fromUtf8("telepLbl"));
 
         TelephoneL->addWidget(telepLbl);
@@ -306,13 +291,114 @@ public:
 
         TelephoneL->addItem(spacer8);
 
-        telepEdit = new QLineEdit(layoutWidget);
+        telepEdit = new QLineEdit(frame);
         telepEdit->setObjectName(QString::fromUtf8("telepEdit"));
 
         TelephoneL->addWidget(telepEdit);
 
 
         verticalLayout->addLayout(TelephoneL);
+
+        SupDivLineL = new QHBoxLayout();
+        SupDivLineL->setSpacing(6);
+        SupDivLineL->setObjectName(QString::fromUtf8("SupDivLineL"));
+        supDivLbl = new QLabel(frame);
+        supDivLbl->setObjectName(QString::fromUtf8("supDivLbl"));
+
+        SupDivLineL->addWidget(supDivLbl);
+
+        spacer7_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        SupDivLineL->addItem(spacer7_2);
+
+        supDivEdit = new QTextEdit(frame);
+        supDivEdit->setObjectName(QString::fromUtf8("supDivEdit"));
+
+        SupDivLineL->addWidget(supDivEdit);
+
+
+        verticalLayout->addLayout(SupDivLineL);
+
+        SubDivLineL = new QHBoxLayout();
+        SubDivLineL->setSpacing(6);
+        SubDivLineL->setObjectName(QString::fromUtf8("SubDivLineL"));
+        subDivLbl = new QLabel(frame);
+        subDivLbl->setObjectName(QString::fromUtf8("subDivLbl"));
+
+        SubDivLineL->addWidget(subDivLbl);
+
+        spacer7_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        SubDivLineL->addItem(spacer7_3);
+
+        subDivEdit = new QTextEdit(frame);
+        subDivEdit->setObjectName(QString::fromUtf8("subDivEdit"));
+
+        SubDivLineL->addWidget(subDivEdit);
+
+
+        verticalLayout->addLayout(SubDivLineL);
+
+
+        horizontalLayout_2->addLayout(verticalLayout);
+
+        line = new QFrame(frame);
+        line->setObjectName(QString::fromUtf8("line"));
+        line->setFrameShadow(QFrame::Raised);
+        line->setLineWidth(1);
+        line->setMidLineWidth(0);
+        line->setFrameShape(QFrame::VLine);
+
+        horizontalLayout_2->addWidget(line);
+
+        verticalLayout_8 = new QVBoxLayout();
+        verticalLayout_8->setSpacing(6);
+        verticalLayout_8->setObjectName(QString::fromUtf8("verticalLayout_8"));
+        GithubL = new QHBoxLayout();
+        GithubL->setSpacing(6);
+        GithubL->setObjectName(QString::fromUtf8("GithubL"));
+        githubLbl = new QLabel(frame);
+        githubLbl->setObjectName(QString::fromUtf8("githubLbl"));
+
+        GithubL->addWidget(githubLbl);
+
+        spacer1_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        GithubL->addItem(spacer1_4);
+
+        githubEdit = new QLineEdit(frame);
+        githubEdit->setObjectName(QString::fromUtf8("githubEdit"));
+
+        GithubL->addWidget(githubEdit);
+
+
+        verticalLayout_8->addLayout(GithubL);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_8->addItem(verticalSpacer);
+
+        ReferenceL = new QHBoxLayout();
+        ReferenceL->setSpacing(6);
+        ReferenceL->setObjectName(QString::fromUtf8("ReferenceL"));
+        referenceLbl = new QLabel(frame);
+        referenceLbl->setObjectName(QString::fromUtf8("referenceLbl"));
+
+        ReferenceL->addWidget(referenceLbl);
+
+        textEdit = new QTextEdit(frame);
+        textEdit->setObjectName(QString::fromUtf8("textEdit"));
+
+        ReferenceL->addWidget(textEdit);
+
+
+        verticalLayout_8->addLayout(ReferenceL);
+
+
+        horizontalLayout_2->addLayout(verticalLayout_8);
+
+
+        horizontalLayout_4->addLayout(horizontalLayout_2);
 
 
         horizontalLayout_13->addWidget(frame);
@@ -422,16 +508,78 @@ public:
         horizontalLayout_10->addLayout(issueTabL);
 
         tabWidget->addTab(IssueTab, QString());
+        referenceTab = new QWidget();
+        referenceTab->setObjectName(QString::fromUtf8("referenceTab"));
+        verticalLayout_10 = new QVBoxLayout(referenceTab);
+        verticalLayout_10->setSpacing(6);
+        verticalLayout_10->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_10->setObjectName(QString::fromUtf8("verticalLayout_10"));
+        verticalLayout_9 = new QVBoxLayout();
+        verticalLayout_9->setSpacing(6);
+        verticalLayout_9->setObjectName(QString::fromUtf8("verticalLayout_9"));
+        referenceTbl = new QTableWidget(referenceTab);
+        if (referenceTbl->columnCount() < 2)
+            referenceTbl->setColumnCount(2);
+        QTableWidgetItem *__qtablewidgetitem6 = new QTableWidgetItem();
+        referenceTbl->setHorizontalHeaderItem(0, __qtablewidgetitem6);
+        QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
+        referenceTbl->setHorizontalHeaderItem(1, __qtablewidgetitem7);
+        referenceTbl->setObjectName(QString::fromUtf8("referenceTbl"));
+
+        verticalLayout_9->addWidget(referenceTbl);
+
+        ReferenceL_2 = new QHBoxLayout();
+        ReferenceL_2->setSpacing(6);
+        ReferenceL_2->setObjectName(QString::fromUtf8("ReferenceL_2"));
+        addReferenceBtn = new QPushButton(referenceTab);
+        addReferenceBtn->setObjectName(QString::fromUtf8("addReferenceBtn"));
+
+        ReferenceL_2->addWidget(addReferenceBtn);
+
+        rmReferenceBtn = new QPushButton(referenceTab);
+        rmReferenceBtn->setObjectName(QString::fromUtf8("rmReferenceBtn"));
+
+        ReferenceL_2->addWidget(rmReferenceBtn);
+
+
+        verticalLayout_9->addLayout(ReferenceL_2);
+
+
+        verticalLayout_10->addLayout(verticalLayout_9);
+
+        tabWidget->addTab(referenceTab, QString());
         PreviewTab = new QWidget();
         PreviewTab->setObjectName(QString::fromUtf8("PreviewTab"));
-        horizontalLayout = new QHBoxLayout(PreviewTab);
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        verticalLayout_5 = new QVBoxLayout(PreviewTab);
+        verticalLayout_5->setSpacing(6);
+        verticalLayout_5->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
+        verticalLayout_3 = new QVBoxLayout();
+        verticalLayout_3->setSpacing(6);
+        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
         previewTextEdit = new QPlainTextEdit(PreviewTab);
         previewTextEdit->setObjectName(QString::fromUtf8("previewTextEdit"));
 
-        horizontalLayout->addWidget(previewTextEdit);
+        verticalLayout_3->addWidget(previewTextEdit);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        copyBtn = new QPushButton(PreviewTab);
+        copyBtn->setObjectName(QString::fromUtf8("copyBtn"));
+
+        horizontalLayout->addWidget(copyBtn);
+
+        executeBtn = new QPushButton(PreviewTab);
+        executeBtn->setObjectName(QString::fromUtf8("executeBtn"));
+
+        horizontalLayout->addWidget(executeBtn);
+
+
+        verticalLayout_3->addLayout(horizontalLayout);
+
+
+        verticalLayout_5->addLayout(verticalLayout_3);
 
         tabWidget->addTab(PreviewTab, QString());
 
@@ -440,7 +588,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 698, 21));
+        menuBar->setGeometry(QRect(0, 0, 650, 21));
         menuFiel = new QMenu(menuBar);
         menuFiel->setObjectName(QString::fromUtf8("menuFiel"));
         menuHelp = new QMenu(menuBar);
@@ -462,7 +610,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(5);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -493,10 +641,12 @@ public:
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));
         separatorLbl->setText(QCoreApplication::translate("MainWindow", "Separator", nullptr));
-        subDivLbl->setText(QCoreApplication::translate("MainWindow", "Sub Div Line", nullptr));
-        supDivLbl->setText(QCoreApplication::translate("MainWindow", "Sup Div Line", nullptr));
         emailLbl->setText(QCoreApplication::translate("MainWindow", "Email", nullptr));
         telepLbl->setText(QCoreApplication::translate("MainWindow", "Telephone", nullptr));
+        supDivLbl->setText(QCoreApplication::translate("MainWindow", "Sup Div Line", nullptr));
+        subDivLbl->setText(QCoreApplication::translate("MainWindow", "Sub Div Line", nullptr));
+        githubLbl->setText(QCoreApplication::translate("MainWindow", "Github Account", nullptr));
+        referenceLbl->setText(QCoreApplication::translate("MainWindow", "Reference URL", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(SettingTab), QCoreApplication::translate("MainWindow", "Global", nullptr));
         QTableWidgetItem *___qtablewidgetitem = flagTblWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "Flag", nullptr));
@@ -517,6 +667,15 @@ public:
         issueAddBtn->setText(QCoreApplication::translate("MainWindow", "Add", nullptr));
         issueRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(IssueTab), QCoreApplication::translate("MainWindow", "Issue", nullptr));
+        QTableWidgetItem *___qtablewidgetitem6 = referenceTbl->horizontalHeaderItem(0);
+        ___qtablewidgetitem6->setText(QCoreApplication::translate("MainWindow", "Reference", nullptr));
+        QTableWidgetItem *___qtablewidgetitem7 = referenceTbl->horizontalHeaderItem(1);
+        ___qtablewidgetitem7->setText(QCoreApplication::translate("MainWindow", "URLs", nullptr));
+        addReferenceBtn->setText(QCoreApplication::translate("MainWindow", "Add", nullptr));
+        rmReferenceBtn->setText(QCoreApplication::translate("MainWindow", "Remove", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(referenceTab), QCoreApplication::translate("MainWindow", "Reference", nullptr));
+        copyBtn->setText(QCoreApplication::translate("MainWindow", "Copy", nullptr));
+        executeBtn->setText(QCoreApplication::translate("MainWindow", "Execute", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(PreviewTab), QCoreApplication::translate("MainWindow", "Preview", nullptr));
         menuFiel->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
         menuHelp->setTitle(QCoreApplication::translate("MainWindow", "Help", nullptr));

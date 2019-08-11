@@ -53,6 +53,10 @@ private slots:
 
     void on_actionSave_as_triggered();
 
+    void on_copyBtn_clicked();
+
+    void on_executeBtn_clicked();
+
 private:
 
     Ui::MainWindow *ui;
