@@ -1,13 +1,13 @@
+#include <QDebug>
+#include <QFile>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "constant.h"
-
-#include <QFile>
-#include <QDebug>
-#include <QFileDialog>
-#include <QRegularExpression>
-#include <QRegularExpressionMatch>
-#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -171,12 +171,12 @@ void MainWindow::on_actionGithub_triggered()
     system("start chrome /new-window https://github.com/jopemachine/CommentHelper");
 }
 
-void MainWindow::ShowMessageBox(const QString& message){
+void MainWindow::ShowMessageBox(const QString& message, const QString& title){
     QMessageBox a(this);
     a.setText(message);
     a.setFixedSize(400, 150);
+    a.setWindowTitle(title);
     a.exec();
-    return;
 }
 
 void MainWindow::on_actionSave_triggered()
@@ -185,8 +185,8 @@ void MainWindow::on_actionSave_triggered()
     if(selectedFile == "") {
 
         selectedFile = QFileDialog::getSaveFileName(this,
-                tr("save setting file"), "",
-                tr("comment helper setting (*.chs);;All Files (*)"));
+                tr("Save setting file"), "",
+                tr("Comment helper setting (*.chs);;All Files (*)"));
 
         setWindowTitle(selectedFile);
     }
@@ -236,11 +236,47 @@ void MainWindow::saveCHSFile(const QString& path){
 
     ts << "\n# Desc\n";
 
+
+    bool existDuplicateKeys = false;
+
+    for(int i = 0; i < ui->descTblWidget->rowCount(); i++){
+
+        // 중복 키 값이 들어갈 수 없게 한다.
+        auto dup = ui->descTblWidget->findItems(ui->descTblWidget->item(i, 0)->text(), Qt::MatchExactly);
+
+        if(dup.length() != 1){
+            existDuplicateKeys = true;
+            continue;
+        }
+
+        ts << "desc." + ui->descTblWidget->item(i, 0)->text()
+              + "  =  " + ui->descTblWidget->item(i, 1)->text() << "\n";
+    }
+
     ts << "\n# Issue\n";
+
+    for(int i = 0; i < ui->issueTblWidget->rowCount(); i++){
+
+        auto dup = ui->issueTblWidget->findItems(ui->issueTblWidget->item(i, 0)->text(), Qt::MatchExactly);
+
+        if(dup.length() != 1){
+            existDuplicateKeys = true;
+            continue;
+        }
+
+        ts << "issue." + ui->issueTblWidget->item(i, 0)->text()
+              + "  =  " + ui->issueTblWidget->item(i, 1)->text() << "\n";
+    }
 
     selectedFile = path;
 
     selectFile.close();
+
+    if(existDuplicateKeys){
+        ShowMessageBox("There is duplicate keys in some tables. "
+                       "\nGenerated setting file does not contained these records",
+            "duplicate key error");
+    }
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -283,6 +319,8 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::setCHSFile(std::queue<QString>& confToken){
 
+    bool errFlag = false;
+
     while(!confToken.empty()){
 
         // 주석 및 빈줄은 생략
@@ -302,6 +340,8 @@ void MainWindow::setCHSFile(std::queue<QString>& confToken){
         if(flagMatch.hasMatch()){
             auto item = searchTable(ui->flagTblWidget, flagMatch.captured("attKey"));
             item->setText(flagMatch.captured("attValue"));
+            confToken.pop();
+            continue;
         }
 
         // Global Setting
@@ -312,16 +352,41 @@ void MainWindow::setCHSFile(std::queue<QString>& confToken){
 
         if(globalMatch.hasMatch()){
             addGlobalVars(globalMatch.captured("attKey"), globalMatch.captured("attValue"));
+            confToken.pop();
+            continue;
         }
 
         // Desc Setting
 
+        QRegularExpression descRe("desc[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
+
+        auto descMatch = descRe.match(confToken.front(), 0, QRegularExpression::NormalMatch);
+
+        if(descMatch.hasMatch()){
+            insertItem(ui->descTblWidget, true, descMatch.captured("attKey"), descMatch.captured("attValue"));
+            confToken.pop();
+            continue;
+        }
 
         // Issue Setting
 
+        QRegularExpression issueRe("issue[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
 
+        auto issueMatch = issueRe.match(confToken.front(), 0, QRegularExpression::NormalMatch);
+
+        if(issueMatch.hasMatch()){
+            insertItem(ui->issueTblWidget, true, issueMatch.captured("attKey"), issueMatch.captured("attValue"));
+            confToken.pop();
+            continue;
+        }
 
         confToken.pop();
+
+        errFlag = true;
+    }
+
+    if(errFlag){
+        ShowMessageBox("Setting file could contain syntax error", "Caution");
     }
 
 }
@@ -375,8 +440,8 @@ QTableWidgetItem* MainWindow::searchTable(QTableWidget* table, const QString& ke
 
 void MainWindow::on_actionExecute_triggered()
 {
-    if(ui->pathEdit->text() == ""){
-        ShowMessageBox("No directory include!");
+    if(ui->pathEdit->text().trimmed() == ""){
+        ShowMessageBox("No directory include!", "No directory");
         return;
     }
 

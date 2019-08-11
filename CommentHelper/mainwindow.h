@@ -26,7 +26,7 @@ public:
     QString GetAuthor();
     QString GetSeparator();
 
-    void ShowMessageBox(const QString&);
+    void ShowMessageBox(const QString&, const QString&);
 
 
 private slots:
