@@ -13,6 +13,8 @@
 #define FLAGPOS_SUBDIV      5, 1
 #define FLAGPOS_EMAIL       6, 1
 #define FLAGPOS_TELEP       7, 1
+#define FLAGPOS_GITHUBACC   8, 1
+#define FLAGPOS_REFURLS     9, 1
 
 #define CSH_START_COMMENT   "#--------------------------------------------------------\n#\n# This file is created by comment helper 2019-08-10\n#\n#--------------------------------------------------------"
 

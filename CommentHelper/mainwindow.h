@@ -57,16 +57,15 @@ private slots:
 
     void on_executeBtn_clicked();
 
+    void on_addReferenceBtn_clicked();
+
+    void on_rmReferenceBtn_clicked();
+
 private:
 
     Ui::MainWindow *ui;
 
     std::queue<QString> *confQueue;
-
-    QLineEdit* projPathEdit;
-    QLineEdit* targetExtensEdit;
-    QLineEdit* authorEdit;
-    QLineEdit* separatorEdit;
 
     QFileDialog* fileOpenDialog;
 
@@ -77,6 +76,8 @@ private:
     void setDescTable();
 
     void setFlagTable();
+
+    void setReferenceTable();
 
     void setCHSFile(std::queue<QString>& config);
 

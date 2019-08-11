@@ -610,7 +610,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(5);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -646,7 +646,7 @@ public:
         supDivLbl->setText(QCoreApplication::translate("MainWindow", "Sup Div Line", nullptr));
         subDivLbl->setText(QCoreApplication::translate("MainWindow", "Sub Div Line", nullptr));
         githubLbl->setText(QCoreApplication::translate("MainWindow", "Github Account", nullptr));
-        referenceLbl->setText(QCoreApplication::translate("MainWindow", "Reference URL", nullptr));
+        referenceLbl->setText(QCoreApplication::translate("MainWindow", "Memo", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(SettingTab), QCoreApplication::translate("MainWindow", "Global", nullptr));
         QTableWidgetItem *___qtablewidgetitem = flagTblWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "Flag", nullptr));

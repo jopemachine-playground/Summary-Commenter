@@ -19,14 +19,10 @@ MainWindow::MainWindow(QWidget *parent) :
     fileOpenDialog = nullptr;
     confQueue = nullptr;
 
-    projPathEdit = ui->pathEdit;
-    targetExtensEdit = ui->extensionEdit;
-    authorEdit = ui->authorEdit;
-    separatorEdit = ui->separatorEdit;
-
     setFlagTable();
     setDescTable();
     setIssueTable();
+    setReferenceTable();
 
 }
 
@@ -38,6 +34,11 @@ void MainWindow::setDescTable(){
 void MainWindow::setIssueTable(){
     ui->issueTblWidget->horizontalHeader()->setStretchLastSection(true);
     ui->issueTblWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+}
+
+void MainWindow::setReferenceTable(){
+    ui->referenceTbl->horizontalHeader()->setStretchLastSection(true);
+    ui->referenceTbl->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 void MainWindow::setFlagTable(){
@@ -54,6 +55,8 @@ void MainWindow::setFlagTable(){
     insertItem(ui->flagTblWidget, false, "Sub_Div_Line", "0");
     insertItem(ui->flagTblWidget, false, "Email", "0");
     insertItem(ui->flagTblWidget, false, "Telephone", "0");
+    insertItem(ui->flagTblWidget, false, "Github_Account", "0");
+    insertItem(ui->flagTblWidget, false, "Ref_URLs", "0");
 
 }
 
@@ -75,19 +78,19 @@ void MainWindow::insertItem(QTableWidget* tbl, bool keyEditable, const QString& 
 }
 
 QString MainWindow::GetProjPath(){
-    return projPathEdit->text();
+    return ui->pathEdit->text();
 }
 
 QString MainWindow::GetSeparator(){
-    return separatorEdit->text();
+    return ui->separatorEdit->text();
 }
 
 QString MainWindow::GetAuthor(){
-    return authorEdit->text();
+    return ui->authorEdit->text();
 }
 
 QString MainWindow::GetTargetExtens(){
-    return targetExtensEdit->text();
+    return ui->extensionEdit->text();
 }
 
 MainWindow::~MainWindow()
@@ -121,6 +124,17 @@ void MainWindow::on_issueRemoveBtn_clicked()
     ui->issueTblWidget->removeRow(ui->issueTblWidget->currentRow());
 }
 
+void MainWindow::on_addReferenceBtn_clicked()
+{
+    insertItem(ui->referenceTbl, true, "fileName", "url");
+}
+
+void MainWindow::on_rmReferenceBtn_clicked()
+{
+    ui->referenceTbl->removeRow(ui->descTblWidget->currentRow());
+}
+
+
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
     // preview 탭이 클릭되면 preview에 들어갈 텍스트를 계산
@@ -140,6 +154,10 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         processFlag(text, "@ Email", ui->emailEdit->text(), FLAGPOS_EMAIL);
 
         processFlag(text, "@ Contact", ui->telepEdit->text(), FLAGPOS_TELEP);
+
+        processFlag(text, "@ Github Account", ui->githubEdit->text(), FLAGPOS_GITHUBACC);
+
+        processFlag(text, "@ Ref URLs", "<URLs>", FLAGPOS_REFURLS);
 
         processFlag(text, ui->subDivEdit->toPlainText(), nullptr, FLAGPOS_SUBDIV);
 
@@ -237,6 +255,7 @@ void MainWindow::saveCHSFile(const QString& path){
     ts << "global.Sup_Div_Line     =  " <<   ui->supDivEdit->toPlainText() << "\n";
     ts << "global.Email            =  " <<   ui->emailEdit->text() << "\n";
     ts << "global.Telephone        =  " <<   ui->telepEdit->text() << "\n";
+    ts << "global.Github_Account   =  " <<   ui->githubEdit->text() << "\n";
 
     ts << "\n# Desc\n";
 
@@ -270,6 +289,15 @@ void MainWindow::saveCHSFile(const QString& path){
 
         ts << "issue." + ui->issueTblWidget->item(i, 0)->text()
               + "  =  " + ui->issueTblWidget->item(i, 1)->text() << "\n";
+    }
+
+    ts << "\n# Reference URLs\n";
+
+    for(int i = 0; i < ui->referenceTbl->rowCount(); i++){
+
+        // 중복 값 허용
+        ts << "refURLs." + ui->referenceTbl->item(i, 0)->text()
+              + "  =  " + ui->referenceTbl->item(i, 1)->text() << "\n";
     }
 
     selectedFile = path;
@@ -328,12 +356,10 @@ void MainWindow::setCHSFile(std::queue<QString>& confToken){
     while(!confToken.empty()){
 
         // 주석 및 빈줄은 생략
-        if(confToken.front() == "" || confToken.front().at(0) == "#"){
+        if(confToken.front().trimmed() == "" || confToken.front().at(0) == "#"){
             confToken.pop();
             continue;
         }
-
-        // qDebug() << confToken.front();
 
         // Flag Setting
 
@@ -384,6 +410,18 @@ void MainWindow::setCHSFile(std::queue<QString>& confToken){
             continue;
         }
 
+        // Reference URLs Setting
+
+        QRegularExpression refURLRe("refURLs[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
+
+        auto refURLsMatch = refURLRe.match(confToken.front(), 0, QRegularExpression::NormalMatch);
+
+        if(refURLsMatch.hasMatch()){
+            insertItem(ui->referenceTbl, true, refURLsMatch.captured("attKey"), refURLsMatch.captured("attValue"));
+            confToken.pop();
+            continue;
+        }
+
         confToken.pop();
 
         errFlag = true;
@@ -429,6 +467,12 @@ void MainWindow::addGlobalVars(const QString& key, const QString& value){
         ui->telepEdit   ->setText(value);
         return;
     }
+    if(key == "Github_Account"){
+        ui->githubEdit  ->setText(value);
+        return;
+    }
+
+    qDebug() << "wrong Info included in addGlobalVars";
 }
 
 // key를 String input으로 받고 해당하는 row의 value item을 반환한다
