@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -15,17 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle(WIN_TITLE);
 
+    fileOpenDialog = nullptr;
+    confQueue = nullptr;
+
     projPathEdit = ui->pathEdit;
     targetExtensEdit = ui->extensionEdit;
     authorEdit = ui->authorEdit;
     separatorEdit = ui->separatorEdit;
-
-    projPathEdit->setText("C:\\");
-    targetExtensEdit->setText("cpp, h");
-    authorEdit->setText("jopemachine");
-    separatorEdit->setText("//");
-    ui->subDivEdit->setText("----------------------------------------------------------------------------------------------");
-    ui->supDivEdit->setText("----------------------------------------------------------------------------------------------");
 
     setFlagTable();
     setDescTable();
@@ -49,15 +46,14 @@ void MainWindow::setFlagTable(){
     ui->flagTblWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     // FlagTableWidget Setting
-    insertItem(ui->flagTblWidget, false, "Author", "1");
-    insertItem(ui->flagTblWidget, false, "Last_Edited", "1");
-    insertItem(ui->flagTblWidget, false, "Desc", "1");
-    insertItem(ui->flagTblWidget, false, "Issue", "1");
-    insertItem(ui->flagTblWidget, false, "Sup_Div_Line", "1");
-    insertItem(ui->flagTblWidget, false, "Sub_Div_Line", "1");
-    insertItem(ui->flagTblWidget, false, "Email", "1");
-    insertItem(ui->flagTblWidget, false, "Telephone", "1");
-
+    insertItem(ui->flagTblWidget, false, "Author", "0");
+    insertItem(ui->flagTblWidget, false, "Last_Edited", "0");
+    insertItem(ui->flagTblWidget, false, "Desc", "0");
+    insertItem(ui->flagTblWidget, false, "Issue", "0");
+    insertItem(ui->flagTblWidget, false, "Sup_Div_Line", "0");
+    insertItem(ui->flagTblWidget, false, "Sub_Div_Line", "0");
+    insertItem(ui->flagTblWidget, false, "Email", "0");
+    insertItem(ui->flagTblWidget, false, "Telephone", "0");
 
 }
 
@@ -172,19 +168,38 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionGithub_triggered()
 {
+    system("start chrome /new-window https://github.com/jopemachine/CommentHelper");
+}
 
+void MainWindow::ShowMessageBox(const QString& message){
+    QMessageBox a(this);
+    a.setText(message);
+    a.setFixedSize(400, 150);
+    a.exec();
+    return;
 }
 
 void MainWindow::on_actionSave_triggered()
 {
-    // 파일이 열려 있지 않을 땐 행동하지 않음
-    if(selectedFile == "") return;
+    // 파일이 열려 있지 않을 땐 파일 저장 Dialog를 띄워 먼저 저장할 파일의 경로를 받아온다
+    if(selectedFile == "") {
 
-    QFile selectFile(selectedFile);
+        selectedFile = QFileDialog::getSaveFileName(this,
+                tr("save setting file"), "",
+                tr("comment helper setting (*.chs);;All Files (*)"));
 
-    // 파일이 존재하지 않을 때
-    if(!selectFile.exists()) return;
+        setWindowTitle(selectedFile);
+    }
 
+    saveCHSFile(selectedFile);
+
+}
+
+void MainWindow::saveCHSFile(const QString& path){
+
+    QFile selectFile(path);
+
+    // 파일이 존재하지 않을 땐 경로에 파일을 생성한다.
     selectFile.open(QFile::WriteOnly|QFile::Text);
 
     QTextStream ts(&selectFile);
@@ -204,16 +219,14 @@ void MainWindow::on_actionSave_triggered()
         }
         // Value
         else {
-            if(selectedCells[i]->text() == "1"){
-                ts << "flag     +=      " << key << "\n";
-            }
+            ts << "flag." << key << "   =   " << selectedCells[i]->text() << "\n";
         }
     }
 
     ts << "\n# Globals\n";
 
     ts << "global.Extension        =  " <<   ui->extensionEdit->text() << "\n";
-    ts << "global.Project Path     =  " <<   ui->pathEdit->text() << "\n";
+    ts << "global.Project_Path     =  " <<   ui->pathEdit->text() << "\n";
     ts << "global.Author           =  " <<   ui->authorEdit->text() << "\n";
     ts << "global.Separator        =  " <<   ui->separatorEdit->text() << "\n";
     ts << "global.Sub_Div_Line     =  " <<   ui->subDivEdit->text() << "\n";
@@ -224,6 +237,8 @@ void MainWindow::on_actionSave_triggered()
     ts << "\n# Desc\n";
 
     ts << "\n# Issue\n";
+
+    selectedFile = path;
 
     selectFile.close();
 }
@@ -263,6 +278,7 @@ void MainWindow::on_actionOpen_triggered()
     }
 
     setCHSFile(*confQueue);
+    setWindowTitle(selectedFile);
 }
 
 void MainWindow::setCHSFile(std::queue<QString>& confToken){
@@ -278,13 +294,14 @@ void MainWindow::setCHSFile(std::queue<QString>& confToken){
         // qDebug() << confToken.front();
 
         // Flag Setting
-        QRegularExpression flagRe("flag\\s+[+][=]\\s+(?<activateFlag>\\w+)");
+
+        QRegularExpression flagRe("flag[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
 
         auto flagMatch = flagRe.match(confToken.front(), 0, QRegularExpression::NormalMatch);
 
         if(flagMatch.hasMatch()){
-
-            qDebug() << flagMatch.captured("activateFlag");
+            auto item = searchTable(ui->flagTblWidget, flagMatch.captured("attKey"));
+            item->setText(flagMatch.captured("attValue"));
         }
 
         // Global Setting
@@ -294,22 +311,84 @@ void MainWindow::setCHSFile(std::queue<QString>& confToken){
         auto globalMatch = globalRe.match(confToken.front(), 0, QRegularExpression::NormalMatch);
 
         if(globalMatch.hasMatch()){
-
-            qDebug() << globalMatch.captured("attKey");
-            qDebug() << globalMatch.captured("attValue");
+            addGlobalVars(globalMatch.captured("attKey"), globalMatch.captured("attValue"));
         }
+
+        // Desc Setting
+
+
+        // Issue Setting
+
+
 
         confToken.pop();
     }
 
 }
 
+void MainWindow::addGlobalVars(const QString& key, const QString& value){
+
+    if(key == "Extension"){
+        ui->extensionEdit->setText(value);
+        return;
+    }
+    if(key == "Project_Path"){
+        ui->pathEdit     ->setText(value);
+        return;
+    }
+    if(key == "Author"){
+        ui->authorEdit   ->setText(value);
+        return;
+    }
+    if(key == "Separator"){
+        ui->separatorEdit->setText(value);
+        return;
+    }
+    if(key == "Sub_Div_Line"){
+        ui->subDivEdit  ->setText(value);
+        return;
+    }
+    if(key == "Sup_Div_Line"){
+        ui->supDivEdit  ->setText(value);
+        return;
+    }
+    if(key == "Email"){
+        ui->emailEdit   ->setText(value);
+        return;
+    }
+    if(key == "Telephone"){
+        ui->telepEdit   ->setText(value);
+        return;
+    }
+}
+
+// key를 String input으로 받고 해당하는 row의 value item을 반환한다
+QTableWidgetItem* MainWindow::searchTable(QTableWidget* table, const QString& key){
+    for(int i = 0;  i < table->rowCount(); i++){
+        if(table->item(i, 0)->text() == key){
+            // qDebug() << table->item(i, 0)->text();
+            return table->item(i, 1);
+        }
+    }
+    return nullptr;
+}
+
 void MainWindow::on_actionExecute_triggered()
 {
+    if(ui->pathEdit->text() == ""){
+        ShowMessageBox("No directory include!");
+        return;
+    }
 
 }
 
 void MainWindow::on_actionSave_as_triggered()
 {
+    selectedFile = QFileDialog::getSaveFileName(this,
+            tr("save setting file"), "",
+            tr("comment helper setting (*.chs);;All Files (*)"));
 
+    setWindowTitle(selectedFile);
+
+    saveCHSFile(selectedFile);
 }

@@ -6,6 +6,7 @@
 
 class QLineEdit;
 class QTableWidget;
+class QTableWidgetItem;
 class QFileDialog;
 
 namespace Ui {
@@ -24,6 +25,8 @@ public:
     QString GetTargetExtens();
     QString GetAuthor();
     QString GetSeparator();
+
+    void ShowMessageBox(const QString&);
 
 
 private slots:
@@ -73,9 +76,15 @@ private:
 
     void setCHSFile(std::queue<QString>& config);
 
+    void saveCHSFile(const QString& path);
+
+    QTableWidgetItem* searchTable(QTableWidget* table, const QString& key);
+
     void processFlag(QString& str, const QString& key, const QString& value, int row, int col);
 
     void insertItem(QTableWidget* widget, bool keyEditable, const QString& key, const QString& value);
+
+    void addGlobalVars(const QString& key, const QString& value);
 
 };
 
