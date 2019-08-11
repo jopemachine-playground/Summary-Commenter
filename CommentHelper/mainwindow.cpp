@@ -5,6 +5,8 @@
 #include <QFile>
 #include <QDebug>
 #include <QFileDialog>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -48,11 +50,11 @@ void MainWindow::setFlagTable(){
 
     // FlagTableWidget Setting
     insertItem(ui->flagTblWidget, false, "Author", "1");
-    insertItem(ui->flagTblWidget, false, "Last Edited", "1");
+    insertItem(ui->flagTblWidget, false, "Last_Edited", "1");
     insertItem(ui->flagTblWidget, false, "Desc", "1");
     insertItem(ui->flagTblWidget, false, "Issue", "1");
-    insertItem(ui->flagTblWidget, false, "Sup Div Line", "1");
-    insertItem(ui->flagTblWidget, false, "Sub Div Line", "1");
+    insertItem(ui->flagTblWidget, false, "Sup_Div_Line", "1");
+    insertItem(ui->flagTblWidget, false, "Sub_Div_Line", "1");
     insertItem(ui->flagTblWidget, false, "Email", "1");
     insertItem(ui->flagTblWidget, false, "Telephone", "1");
 
@@ -97,6 +99,9 @@ MainWindow::~MainWindow()
     delete ui;
     if(fileOpenDialog != nullptr){
         delete fileOpenDialog;
+    }
+    if(confQueue != nullptr){
+        delete confQueue;
     }
 }
 
@@ -172,24 +177,75 @@ void MainWindow::on_actionGithub_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
+    // 파일이 열려 있지 않을 땐 행동하지 않음
+    if(selectedFile == "") return;
 
+    QFile selectFile(selectedFile);
+
+    // 파일이 존재하지 않을 때
+    if(!selectFile.exists()) return;
+
+    selectFile.open(QFile::WriteOnly|QFile::Text);
+
+    QTextStream ts(&selectFile);
+
+    ts << CSH_START_COMMENT << "\n";
+
+    ts << "\n# Flags\n";
+
+    ui->flagTblWidget->selectAll();
+    QList<QTableWidgetItem *> selectedCells = ui->flagTblWidget->selectedItems();
+
+    QString key;
+    for(int i = 0; i < selectedCells.length(); i++){
+        // Key
+        if(i % 2 == 0){
+            key = selectedCells[i]->text();
+        }
+        // Value
+        else {
+            if(selectedCells[i]->text() == "1"){
+                ts << "flag     +=      " << key << "\n";
+            }
+        }
+    }
+
+    ts << "\n# Globals\n";
+
+    ts << "global.Extension        =  " <<   ui->extensionEdit->text() << "\n";
+    ts << "global.Project Path     =  " <<   ui->pathEdit->text() << "\n";
+    ts << "global.Author           =  " <<   ui->authorEdit->text() << "\n";
+    ts << "global.Separator        =  " <<   ui->separatorEdit->text() << "\n";
+    ts << "global.Sub_Div_Line     =  " <<   ui->subDivEdit->text() << "\n";
+    ts << "global.Sup_Div_Line     =  " <<   ui->supDivEdit->text() << "\n";
+    ts << "global.Email            =  " <<   ui->emailEdit->text() << "\n";
+    ts << "global.Telephone        =  " <<   ui->telepEdit->text() << "\n";
+
+    ts << "\n# Desc\n";
+
+    ts << "\n# Issue\n";
+
+    selectFile.close();
 }
 
 void MainWindow::on_actionOpen_triggered()
 {
     // FileDialog를 생성하고 연다.
+
+    confQueue = new std::queue<QString>;
+
     fileOpenDialog = new QFileDialog();
     fileOpenDialog->setFileMode(QFileDialog::AnyFile);
     fileOpenDialog->setNameFilter(tr("Open a Setting file (*.chs)"));
     fileOpenDialog->setViewMode(QFileDialog::Detail);
     fileOpenDialog->open(this, "Open a Setting file");
 
-    QString config;
-
     // 파일을 선택했을 때
     if(fileOpenDialog->exec()){
 
-        QFile selectFile(fileOpenDialog->selectedFiles()[0]);
+        selectedFile = fileOpenDialog->selectedFiles()[0];
+
+        QFile selectFile(selectedFile);
 
         if(selectFile.exists())
         {
@@ -199,14 +255,53 @@ void MainWindow::on_actionOpen_triggered()
 
             while(!ts.atEnd())
             {
-                config = ts.readLine();
+                confQueue->push(ts.readLine());
             }
         }
 
         selectFile.close();
     }
 
-    qDebug() << config;
+    setCHSFile(*confQueue);
+}
+
+void MainWindow::setCHSFile(std::queue<QString>& confToken){
+
+    while(!confToken.empty()){
+
+        // 주석 및 빈줄은 생략
+        if(confToken.front() == "" || confToken.front().at(0) == "#"){
+            confToken.pop();
+            continue;
+        }
+
+        // qDebug() << confToken.front();
+
+        // Flag Setting
+        QRegularExpression flagRe("flag\\s+[+][=]\\s+(?<activateFlag>\\w+)");
+
+        auto flagMatch = flagRe.match(confToken.front(), 0, QRegularExpression::NormalMatch);
+
+        if(flagMatch.hasMatch()){
+
+            qDebug() << flagMatch.captured("activateFlag");
+        }
+
+        // Global Setting
+
+        QRegularExpression globalRe("global[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
+
+        auto globalMatch = globalRe.match(confToken.front(), 0, QRegularExpression::NormalMatch);
+
+        if(globalMatch.hasMatch()){
+
+            qDebug() << globalMatch.captured("attKey");
+            qDebug() << globalMatch.captured("attValue");
+        }
+
+        confToken.pop();
+    }
+
 }
 
 void MainWindow::on_actionExecute_triggered()

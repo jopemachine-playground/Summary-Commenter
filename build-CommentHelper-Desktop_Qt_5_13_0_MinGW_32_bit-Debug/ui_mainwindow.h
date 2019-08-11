@@ -46,7 +46,7 @@ public:
     QWidget *SettingTab;
     QHBoxLayout *horizontalLayout_13;
     QFrame *frame;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *ExtensionL;
     QLabel *extensionLbl;
@@ -146,10 +146,10 @@ public:
         frame->setFrameShadow(QFrame::Sunken);
         frame->setLineWidth(1);
         frame->setMidLineWidth(1);
-        widget = new QWidget(frame);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(20, 13, 277, 220));
-        verticalLayout = new QVBoxLayout(widget);
+        layoutWidget = new QWidget(frame);
+        layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
+        layoutWidget->setGeometry(QRect(20, 13, 277, 220));
+        verticalLayout = new QVBoxLayout(layoutWidget);
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
@@ -157,7 +157,7 @@ public:
         ExtensionL = new QHBoxLayout();
         ExtensionL->setSpacing(6);
         ExtensionL->setObjectName(QString::fromUtf8("ExtensionL"));
-        extensionLbl = new QLabel(widget);
+        extensionLbl = new QLabel(layoutWidget);
         extensionLbl->setObjectName(QString::fromUtf8("extensionLbl"));
 
         ExtensionL->addWidget(extensionLbl);
@@ -166,7 +166,7 @@ public:
 
         ExtensionL->addItem(spacer1);
 
-        extensionEdit = new QLineEdit(widget);
+        extensionEdit = new QLineEdit(layoutWidget);
         extensionEdit->setObjectName(QString::fromUtf8("extensionEdit"));
 
         ExtensionL->addWidget(extensionEdit);
@@ -177,7 +177,7 @@ public:
         PathL = new QHBoxLayout();
         PathL->setSpacing(6);
         PathL->setObjectName(QString::fromUtf8("PathL"));
-        pathLbl = new QLabel(widget);
+        pathLbl = new QLabel(layoutWidget);
         pathLbl->setObjectName(QString::fromUtf8("pathLbl"));
 
         PathL->addWidget(pathLbl);
@@ -186,7 +186,7 @@ public:
 
         PathL->addItem(spacer2);
 
-        pathEdit = new QLineEdit(widget);
+        pathEdit = new QLineEdit(layoutWidget);
         pathEdit->setObjectName(QString::fromUtf8("pathEdit"));
 
         PathL->addWidget(pathEdit);
@@ -197,7 +197,7 @@ public:
         AuthorL = new QHBoxLayout();
         AuthorL->setSpacing(6);
         AuthorL->setObjectName(QString::fromUtf8("AuthorL"));
-        authorLbl = new QLabel(widget);
+        authorLbl = new QLabel(layoutWidget);
         authorLbl->setObjectName(QString::fromUtf8("authorLbl"));
 
         AuthorL->addWidget(authorLbl);
@@ -206,7 +206,7 @@ public:
 
         AuthorL->addItem(spacer3);
 
-        authorEdit = new QLineEdit(widget);
+        authorEdit = new QLineEdit(layoutWidget);
         authorEdit->setObjectName(QString::fromUtf8("authorEdit"));
 
         AuthorL->addWidget(authorEdit);
@@ -217,7 +217,7 @@ public:
         SeparatorL = new QHBoxLayout();
         SeparatorL->setSpacing(6);
         SeparatorL->setObjectName(QString::fromUtf8("SeparatorL"));
-        separatorLbl = new QLabel(widget);
+        separatorLbl = new QLabel(layoutWidget);
         separatorLbl->setObjectName(QString::fromUtf8("separatorLbl"));
 
         SeparatorL->addWidget(separatorLbl);
@@ -226,7 +226,7 @@ public:
 
         SeparatorL->addItem(spacer4);
 
-        separatorEdit = new QLineEdit(widget);
+        separatorEdit = new QLineEdit(layoutWidget);
         separatorEdit->setObjectName(QString::fromUtf8("separatorEdit"));
 
         SeparatorL->addWidget(separatorEdit);
@@ -237,7 +237,7 @@ public:
         SubDivLineL = new QHBoxLayout();
         SubDivLineL->setSpacing(6);
         SubDivLineL->setObjectName(QString::fromUtf8("SubDivLineL"));
-        subDivLbl = new QLabel(widget);
+        subDivLbl = new QLabel(layoutWidget);
         subDivLbl->setObjectName(QString::fromUtf8("subDivLbl"));
 
         SubDivLineL->addWidget(subDivLbl);
@@ -246,7 +246,7 @@ public:
 
         SubDivLineL->addItem(spacer5);
 
-        subDivEdit = new QLineEdit(widget);
+        subDivEdit = new QLineEdit(layoutWidget);
         subDivEdit->setObjectName(QString::fromUtf8("subDivEdit"));
 
         SubDivLineL->addWidget(subDivEdit);
@@ -257,7 +257,7 @@ public:
         SupDivLineL = new QHBoxLayout();
         SupDivLineL->setSpacing(6);
         SupDivLineL->setObjectName(QString::fromUtf8("SupDivLineL"));
-        supDivLbl = new QLabel(widget);
+        supDivLbl = new QLabel(layoutWidget);
         supDivLbl->setObjectName(QString::fromUtf8("supDivLbl"));
 
         SupDivLineL->addWidget(supDivLbl);
@@ -266,7 +266,7 @@ public:
 
         SupDivLineL->addItem(spacer6);
 
-        supDivEdit = new QLineEdit(widget);
+        supDivEdit = new QLineEdit(layoutWidget);
         supDivEdit->setObjectName(QString::fromUtf8("supDivEdit"));
 
         SupDivLineL->addWidget(supDivEdit);
@@ -277,7 +277,7 @@ public:
         EmailL = new QHBoxLayout();
         EmailL->setSpacing(6);
         EmailL->setObjectName(QString::fromUtf8("EmailL"));
-        emailLbl = new QLabel(widget);
+        emailLbl = new QLabel(layoutWidget);
         emailLbl->setObjectName(QString::fromUtf8("emailLbl"));
 
         EmailL->addWidget(emailLbl);
@@ -286,7 +286,7 @@ public:
 
         EmailL->addItem(spacer7);
 
-        emailEdit = new QLineEdit(widget);
+        emailEdit = new QLineEdit(layoutWidget);
         emailEdit->setObjectName(QString::fromUtf8("emailEdit"));
 
         EmailL->addWidget(emailEdit);
@@ -297,7 +297,7 @@ public:
         TelephoneL = new QHBoxLayout();
         TelephoneL->setSpacing(6);
         TelephoneL->setObjectName(QString::fromUtf8("TelephoneL"));
-        telepLbl = new QLabel(widget);
+        telepLbl = new QLabel(layoutWidget);
         telepLbl->setObjectName(QString::fromUtf8("telepLbl"));
 
         TelephoneL->addWidget(telepLbl);
@@ -306,7 +306,7 @@ public:
 
         TelephoneL->addItem(spacer8);
 
-        telepEdit = new QLineEdit(widget);
+        telepEdit = new QLineEdit(layoutWidget);
         telepEdit->setObjectName(QString::fromUtf8("telepEdit"));
 
         TelephoneL->addWidget(telepEdit);
@@ -462,7 +462,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -473,6 +473,9 @@ public:
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         actionGithub->setText(QCoreApplication::translate("MainWindow", "Github", nullptr));
         actionExecute->setText(QCoreApplication::translate("MainWindow", "Execute", nullptr));
+#if QT_CONFIG(shortcut)
+        actionExecute->setShortcut(QCoreApplication::translate("MainWindow", "F5", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionSave->setText(QCoreApplication::translate("MainWindow", "Save", nullptr));
 #if QT_CONFIG(shortcut)
         actionSave->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+S", nullptr));

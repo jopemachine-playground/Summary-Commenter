@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="SettingTab">
        <attribute name="title">
@@ -39,7 +39,7 @@
           <property name="midLineWidth">
            <number>1</number>
           </property>
-          <widget class="QWidget" name="">
+          <widget class="QWidget" name="layoutWidget">
            <property name="geometry">
             <rect>
              <x>20</x>
@@ -438,6 +438,9 @@
   <action name="actionExecute">
    <property name="text">
     <string>Execute</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
    </property>
   </action>
   <action name="actionSave">

@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <queue>
 #include <QMainWindow>
 
 class QLineEdit;
@@ -53,6 +54,8 @@ private:
 
     Ui::MainWindow *ui;
 
+    std::queue<QString> *confQueue;
+
     QLineEdit* projPathEdit;
     QLineEdit* targetExtensEdit;
     QLineEdit* authorEdit;
@@ -60,11 +63,15 @@ private:
 
     QFileDialog* fileOpenDialog;
 
+    QString selectedFile;
+
     void setIssueTable();
 
     void setDescTable();
 
     void setFlagTable();
+
+    void setCHSFile(std::queue<QString>& config);
 
     void processFlag(QString& str, const QString& key, const QString& value, int row, int col);
 
