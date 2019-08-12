@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
+    <width>755</width>
     <height>450</height>
    </rect>
   </property>
@@ -39,300 +39,284 @@
           <property name="midLineWidth">
            <number>1</number>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <layout class="QVBoxLayout" name="verticalLayout">
              <item>
-              <layout class="QVBoxLayout" name="verticalLayout">
+              <layout class="QHBoxLayout" name="ExtensionL">
                <item>
-                <layout class="QHBoxLayout" name="ExtensionL">
-                 <item>
-                  <widget class="QLabel" name="extensionLbl">
-                   <property name="text">
-                    <string>Extension</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="spacer1">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="extensionEdit"/>
-                 </item>
-                </layout>
+                <widget class="QLabel" name="extensionLbl">
+                 <property name="text">
+                  <string>Extension</string>
+                 </property>
+                </widget>
                </item>
                <item>
-                <layout class="QHBoxLayout" name="PathL">
-                 <item>
-                  <widget class="QLabel" name="pathLbl">
-                   <property name="text">
-                    <string>Project Path</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="spacer2">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="pathEdit"/>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="AuthorL">
-                 <item>
-                  <widget class="QLabel" name="authorLbl">
-                   <property name="text">
-                    <string>Author</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="spacer3">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="authorEdit"/>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="SeparatorL">
-                 <item>
-                  <widget class="QLabel" name="separatorLbl">
-                   <property name="text">
-                    <string>Separator</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="spacer4">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="separatorEdit"/>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="EmailL">
-                 <item>
-                  <widget class="QLabel" name="emailLbl">
-                   <property name="text">
-                    <string>Email</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="spacer7">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="emailEdit"/>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="TelephoneL">
-                 <item>
-                  <widget class="QLabel" name="telepLbl">
-                   <property name="text">
-                    <string>Telephone</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="spacer8">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="telepEdit"/>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="SupDivLineL">
-                 <item>
-                  <widget class="QLabel" name="supDivLbl">
-                   <property name="text">
-                    <string>Sup Div Line</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="spacer7_2">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QTextEdit" name="supDivEdit"/>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="SubDivLineL">
-                 <item>
-                  <widget class="QLabel" name="subDivLbl">
-                   <property name="text">
-                    <string>Sub Div Line</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="spacer7_3">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QTextEdit" name="subDivEdit"/>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <widget class="Line" name="line">
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
-               <property name="lineWidth">
-                <number>1</number>
-               </property>
-               <property name="midLineWidth">
-                <number>0</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout_8">
-               <item>
-                <layout class="QHBoxLayout" name="GithubL">
-                 <item>
-                  <widget class="QLabel" name="githubLbl">
-                   <property name="text">
-                    <string>Github Account</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="spacer1_4">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="githubEdit"/>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <spacer name="verticalSpacer">
+                <spacer name="spacer1">
                  <property name="orientation">
-                  <enum>Qt::Vertical</enum>
+                  <enum>Qt::Horizontal</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
-                   <width>20</width>
-                   <height>40</height>
+                   <width>40</width>
+                   <height>20</height>
                   </size>
                  </property>
                 </spacer>
                </item>
                <item>
-                <layout class="QHBoxLayout" name="ReferenceL">
-                 <item>
-                  <widget class="QLabel" name="referenceLbl">
-                   <property name="text">
-                    <string>Memo</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QTextEdit" name="textEdit"/>
-                 </item>
-                </layout>
+                <widget class="QLineEdit" name="extensionEdit"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="PathL">
+               <item>
+                <widget class="QLabel" name="pathLbl">
+                 <property name="text">
+                  <string>Project Path</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="spacer2">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="pathEdit"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="AuthorL">
+               <item>
+                <widget class="QLabel" name="authorLbl">
+                 <property name="text">
+                  <string>Author</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="spacer3">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="authorEdit"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="SeparatorL">
+               <item>
+                <widget class="QLabel" name="separatorLbl">
+                 <property name="text">
+                  <string>Separator</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="spacer4">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="separatorEdit"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="EmailL">
+               <item>
+                <widget class="QLabel" name="emailLbl">
+                 <property name="text">
+                  <string>Email</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="spacer7">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="emailEdit"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="TelephoneL">
+               <item>
+                <widget class="QLabel" name="telepLbl">
+                 <property name="text">
+                  <string>Telephone</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="spacer8">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="telepEdit"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="SupDivLineL">
+               <item>
+                <widget class="QLabel" name="supDivLbl">
+                 <property name="text">
+                  <string>Sup Div Line</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QTextEdit" name="supDivEdit"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="SubDivLineL">
+               <item>
+                <widget class="QLabel" name="subDivLbl">
+                 <property name="text">
+                  <string>Sub Div Line</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QTextEdit" name="subDivEdit"/>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="Line" name="line">
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <property name="lineWidth">
+              <number>1</number>
+             </property>
+             <property name="midLineWidth">
+              <number>0</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <layout class="QHBoxLayout" name="GithubL">
+               <item>
+                <widget class="QLabel" name="githubLbl">
+                 <property name="text">
+                  <string>Github Account</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="spacer1_4">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="githubEdit"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="TeamL">
+               <item>
+                <widget class="QLabel" name="teamLbl">
+                 <property name="text">
+                  <string>Team</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="spacer1_5">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="teamEdit"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="ReferenceL">
+               <item>
+                <widget class="QLabel" name="referenceLbl">
+                 <property name="text">
+                  <string>Memo</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QTextEdit" name="textEdit"/>
                </item>
               </layout>
              </item>
@@ -538,7 +522,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>650</width>
+     <width>755</width>
      <height>21</height>
     </rect>
    </property>

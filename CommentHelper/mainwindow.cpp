@@ -59,6 +59,9 @@ void MainWindow::setFlagTable(){
     insertItem(ui->flagTblWidget, false, "Github_Account", "0");
     insertItem(ui->flagTblWidget, false, "Ref_URLs",       "0");
 
+
+    insertItem(ui->flagTblWidget, false, "Created_Date",   "0");
+
 }
 
 void MainWindow::clearTbl(QTableWidget* tbl){

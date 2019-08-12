@@ -51,7 +51,6 @@ public:
     QWidget *SettingTab;
     QHBoxLayout *horizontalLayout_13;
     QFrame *frame;
-    QHBoxLayout *horizontalLayout_4;
     QHBoxLayout *horizontalLayout_2;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *ExtensionL;
@@ -80,19 +79,20 @@ public:
     QLineEdit *telepEdit;
     QHBoxLayout *SupDivLineL;
     QLabel *supDivLbl;
-    QSpacerItem *spacer7_2;
     QTextEdit *supDivEdit;
     QHBoxLayout *SubDivLineL;
     QLabel *subDivLbl;
-    QSpacerItem *spacer7_3;
     QTextEdit *subDivEdit;
     QFrame *line;
-    QVBoxLayout *verticalLayout_8;
+    QVBoxLayout *verticalLayout_6;
     QHBoxLayout *GithubL;
     QLabel *githubLbl;
     QSpacerItem *spacer1_4;
     QLineEdit *githubEdit;
-    QSpacerItem *verticalSpacer;
+    QHBoxLayout *TeamL;
+    QLabel *teamLbl;
+    QSpacerItem *spacer1_5;
+    QLineEdit *teamEdit;
     QHBoxLayout *ReferenceL;
     QLabel *referenceLbl;
     QTextEdit *textEdit;
@@ -137,7 +137,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(650, 450);
+        MainWindow->resize(755, 450);
         actionGithub = new QAction(MainWindow);
         actionGithub->setObjectName(QString::fromUtf8("actionGithub"));
         QIcon icon;
@@ -181,12 +181,9 @@ public:
         frame->setFrameShadow(QFrame::Sunken);
         frame->setLineWidth(1);
         frame->setMidLineWidth(1);
-        horizontalLayout_4 = new QHBoxLayout(frame);
-        horizontalLayout_4->setSpacing(6);
-        horizontalLayout_4->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
-        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2 = new QHBoxLayout(frame);
         horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         verticalLayout = new QVBoxLayout();
         verticalLayout->setSpacing(6);
@@ -319,10 +316,6 @@ public:
 
         SupDivLineL->addWidget(supDivLbl);
 
-        spacer7_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        SupDivLineL->addItem(spacer7_2);
-
         supDivEdit = new QTextEdit(frame);
         supDivEdit->setObjectName(QString::fromUtf8("supDivEdit"));
 
@@ -338,10 +331,6 @@ public:
         subDivLbl->setObjectName(QString::fromUtf8("subDivLbl"));
 
         SubDivLineL->addWidget(subDivLbl);
-
-        spacer7_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        SubDivLineL->addItem(spacer7_3);
 
         subDivEdit = new QTextEdit(frame);
         subDivEdit->setObjectName(QString::fromUtf8("subDivEdit"));
@@ -363,9 +352,9 @@ public:
 
         horizontalLayout_2->addWidget(line);
 
-        verticalLayout_8 = new QVBoxLayout();
-        verticalLayout_8->setSpacing(6);
-        verticalLayout_8->setObjectName(QString::fromUtf8("verticalLayout_8"));
+        verticalLayout_6 = new QVBoxLayout();
+        verticalLayout_6->setSpacing(6);
+        verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
         GithubL = new QHBoxLayout();
         GithubL->setSpacing(6);
         GithubL->setObjectName(QString::fromUtf8("GithubL"));
@@ -384,11 +373,27 @@ public:
         GithubL->addWidget(githubEdit);
 
 
-        verticalLayout_8->addLayout(GithubL);
+        verticalLayout_6->addLayout(GithubL);
 
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        TeamL = new QHBoxLayout();
+        TeamL->setSpacing(6);
+        TeamL->setObjectName(QString::fromUtf8("TeamL"));
+        teamLbl = new QLabel(frame);
+        teamLbl->setObjectName(QString::fromUtf8("teamLbl"));
 
-        verticalLayout_8->addItem(verticalSpacer);
+        TeamL->addWidget(teamLbl);
+
+        spacer1_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        TeamL->addItem(spacer1_5);
+
+        teamEdit = new QLineEdit(frame);
+        teamEdit->setObjectName(QString::fromUtf8("teamEdit"));
+
+        TeamL->addWidget(teamEdit);
+
+
+        verticalLayout_6->addLayout(TeamL);
 
         ReferenceL = new QHBoxLayout();
         ReferenceL->setSpacing(6);
@@ -404,13 +409,10 @@ public:
         ReferenceL->addWidget(textEdit);
 
 
-        verticalLayout_8->addLayout(ReferenceL);
+        verticalLayout_6->addLayout(ReferenceL);
 
 
-        horizontalLayout_2->addLayout(verticalLayout_8);
-
-
-        horizontalLayout_4->addLayout(horizontalLayout_2);
+        horizontalLayout_2->addLayout(verticalLayout_6);
 
 
         horizontalLayout_13->addWidget(frame);
@@ -600,7 +602,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 650, 21));
+        menuBar->setGeometry(QRect(0, 0, 755, 21));
         menuFiel = new QMenu(menuBar);
         menuFiel->setObjectName(QString::fromUtf8("menuFiel"));
         menuHelp = new QMenu(menuBar);
@@ -671,6 +673,7 @@ public:
         supDivLbl->setText(QCoreApplication::translate("MainWindow", "Sup Div Line", nullptr));
         subDivLbl->setText(QCoreApplication::translate("MainWindow", "Sub Div Line", nullptr));
         githubLbl->setText(QCoreApplication::translate("MainWindow", "Github Account", nullptr));
+        teamLbl->setText(QCoreApplication::translate("MainWindow", "Team", nullptr));
         referenceLbl->setText(QCoreApplication::translate("MainWindow", "Memo", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(SettingTab), QCoreApplication::translate("MainWindow", "Global", nullptr));
         QTableWidgetItem *___qtablewidgetitem = flagTblWidget->horizontalHeaderItem(0);
