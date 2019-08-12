@@ -21,7 +21,7 @@
 
 ## How to work
 
-**chs 파일 ** : comment helper가 사용하는 설정 파일. 정규식을 이용해 읽어들임. 기본적으로 아래 값 들을 갖고 있고, `{ fileName }::[ desc | issue | urls ] += { content }  ` 형식으로 값을 작성해,  해당 파일 주석에 값을 추가할 수 있음.
+**chs 파일** : comment helper가 사용하는 설정 파일. 정규식을 이용해 읽어들임. 기본적으로 아래 값 들을 갖고 있고, `{ fileName }::[ desc | issue | urls ] += { content }  ` 형식으로 값을 작성해,  해당 파일 주석에 값을 추가할 수 있음.
 
 ```
 # Flags
@@ -29,11 +29,11 @@ flag.Author   			=   1
 flag.Last_Edited   		=   1
 flag.Desc   			=   1
 flag.Issue   			=   1
-flag.Sup_Div_Line   	=   1
+flag.Sup_Div_Line   	        =   1
 flag.Sub_Div_Line  		=   1
 flag.Email   			=   1
 flag.Telephone   		=   1
-flag.Github_Account   	=   1
+flag.Github_Account   	        =   1
 flag.Ref_URLs   		=   1
 
 # Globals
@@ -60,7 +60,7 @@ constant.h::desc       	+=      상수 값들을 모아놓은 헤더 파일
 mainwindow.cpp::desc	+=		이벤트 처리 메인 윈도우 구현 파일
 gamemanager.cpp::issue	+=		버그 있음
 gamemanager.cpp::urls	+=		https://urlexample.com
-constant.h::urls		+=		https://urlexample2.com
+constant.h::urls        +=		https://urlexample2.com
 ```
 
 
