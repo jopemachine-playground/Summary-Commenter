@@ -90,7 +90,7 @@ QString MainWindow::GetProjPath(){
 QString MainWindow::GetSeparator(){
     return ui->separatorEdit->text();
 }
-
+// ==============================+===============================================================
 QString MainWindow::GetAuthor(){
     return ui->authorEdit->text();
 }
@@ -137,7 +137,7 @@ void MainWindow::on_addReferenceBtn_clicked()
 
 void MainWindow::on_rmReferenceBtn_clicked()
 {
-    ui->referenceTbl->removeRow(ui->descTblWidget->currentRow());
+    ui->referenceTbl->removeRow(ui->referenceTbl->currentRow());
 }
 
 
@@ -158,10 +158,10 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
 
     QString
-        date    = nullptr,
-        desc    = nullptr,
-        issue   = nullptr,
-        urls    = nullptr;
+            date    = nullptr,
+            desc    = nullptr,
+            issue   = nullptr,
+            urls    = nullptr;
 
     // 함수를 preview tab에서 사용하는 경우
     if(fileInfo.fileName == nullptr){
@@ -605,10 +605,10 @@ std::shared_ptr<std::queue<FileInfo>> MainWindow::getAllTargetFiles(const QStrin
         it.next();
     }
 
-//    while(!que->empty()){
-//        qDebug() << que->front();
-//        que->pop();
-//    }
+    //    while(!que->empty()){
+    //        qDebug() << que->front();
+    //        que->pop();
+    //    }
 
     return workQue;
 }
@@ -646,12 +646,99 @@ void MainWindow::on_actionExecute_triggered()
 
     auto que = getAllTargetFiles(ui->pathEdit->text());
 
+    // chproj는 지정 프로젝트 경로에서 주석을 추가해놓은 설정 파일이다.
+    // chproj가 삭제되면 run 재 실행 시 해당 파일들에 주석이 한 번 더 들어가게 된다.
+    QString chprojContent = "";
+
+    // 리눅스의 경우 \\ 대신 / 를 써야한다
+    QFile chprojFile(ui->pathEdit->text() + "\\" + "chproj");
+
+    // 설정파일이 존재하면 파일을 읽어들여 주석을 지울 파일들의 리스트를 만든다
+    if(chprojFile.exists()){
+        chprojFile.open(QFile::ReadOnly|QFile::Text);
+        QTextStream ts(&chprojContent);
+        ts << chprojFile.readAll();
+        QStringList list = chprojContent.split(",");
+        removeComment(list);
+    }
+
+    chprojContent = "";
+
     while(!que->empty()){
         prependComment(que->front());
+        chprojContent += que->front().fileName + ",";
         que->pop();
     }
 
-    ShowMessageBox("done!", "Work complete");
+    if(chprojFile.isOpen()) chprojFile.close();
+
+    chprojFile.open(QIODevice::WriteOnly|QFile::Text);
+
+    chprojFile.write(chprojContent.toStdString().c_str());
+
+    chprojFile.close();
+
+    ShowMessageBox("done!", "Complete");
+}
+
+void MainWindow::removeComment(QStringList &strList){
+
+    auto targetExtensions = ui->extensionEdit->text().split(",");
+
+    for(auto& i : targetExtensions){
+        i = i.trimmed();
+        if(i == ""){
+            // 마지막 "" 원소 제거
+            strList.pop_back();
+        }
+    }
+
+    QDirIterator it(ui->pathEdit->text(), QDirIterator::Subdirectories);
+
+    while(true){
+
+        // directory 명과 올바르지 않은 path 제외
+        if(!it.fileInfo().isDir() && it.filePath() != ""){
+
+            // target 확장자가 아닌 경우 제외
+            if(targetExtensions.contains(it.fileInfo().suffix())){
+
+                // 리스트가 해당 원소를 포함하는 경우 주석을 제거
+                if(strList.contains(it.fileName())){
+
+                    QFile target(it.filePath());
+                    QString bufferStr = "";
+                    QTextStream ts(&target);
+
+                    ts.setCodec("UTF-8");
+
+                    target.open(QFile::ReadWrite|QFile::Text);
+
+                    while(!target.atEnd()){
+
+                        QString line = target.readLine();
+
+                        bool isComment = (line.left(ui->separatorEdit->text().length()) == ui->separatorEdit->text());
+
+                        if(!isComment){
+                            break;
+                        }
+                    }
+
+                    while(!target.atEnd()){
+                        bufferStr.append(target.readLine());
+                    }
+
+                    target.resize(0);
+                    ts << bufferStr;
+                    target.close();
+                }
+            }
+        }
+        if(!it.hasNext()) break;
+        it.next();
+    }
+
 }
 
 void MainWindow::on_actionSave_as_triggered()
@@ -688,4 +775,28 @@ void MainWindow::on_actionAdd_Setting_triggered()
 void MainWindow::on_actionOpen_Recents_triggered()
 {
 
+}
+
+void MainWindow::on_actionRemove_Comments_triggered()
+{
+    QString chprojContent = "";
+
+    // 리눅스의 경우 \\ 대신 / 를 써야한다
+    QFile chprojFile(ui->pathEdit->text() + "\\" + "chproj");
+
+    // 설정파일이 존재하면 파일을 읽어들여 주석을 지울 파일들의 리스트를 만든다
+    if(chprojFile.exists()){
+        chprojFile.open(QFile::ReadOnly|QFile::Text);
+        QTextStream ts(&chprojContent);
+        ts << chprojFile.readAll();
+        QStringList list = chprojContent.split(",");
+        removeComment(list);
+    }
+    else{
+        ShowMessageBox("chproj file not exist!", "Error");
+        return;
+    }
+
+    chprojFile.remove();
+    ShowMessageBox("done!", "Complete");
 }

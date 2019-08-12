@@ -44,6 +44,7 @@ public:
     QAction *actionOpen_and_run;
     QAction *actionAdd_Setting;
     QAction *actionOpen_Recents;
+    QAction *actionRemove_Comments;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_2;
     QTabWidget *tabWidget;
@@ -158,6 +159,8 @@ public:
         actionAdd_Setting->setObjectName(QString::fromUtf8("actionAdd_Setting"));
         actionOpen_Recents = new QAction(MainWindow);
         actionOpen_Recents->setObjectName(QString::fromUtf8("actionOpen_Recents"));
+        actionRemove_Comments = new QAction(MainWindow);
+        actionRemove_Comments->setObjectName(QString::fromUtf8("actionRemove_Comments"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_2 = new QVBoxLayout(centralWidget);
@@ -618,6 +621,7 @@ public:
         menuFiel->addSeparator();
         menuFiel->addAction(actionExecute);
         menuFiel->addAction(actionOpen_and_run);
+        menuFiel->addAction(actionRemove_Comments);
         menuFiel->addSeparator();
         menuFiel->addAction(actionExit);
         menuHelp->addAction(actionGithub);
@@ -657,6 +661,7 @@ public:
 #endif // QT_CONFIG(shortcut)
         actionAdd_Setting->setText(QCoreApplication::translate("MainWindow", "Add Setting", nullptr));
         actionOpen_Recents->setText(QCoreApplication::translate("MainWindow", "Open Recents", nullptr));
+        actionRemove_Comments->setText(QCoreApplication::translate("MainWindow", "Remove Comments", nullptr));
         extensionLbl->setText(QCoreApplication::translate("MainWindow", "Extension", nullptr));
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));

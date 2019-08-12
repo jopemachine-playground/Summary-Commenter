@@ -90,6 +90,8 @@ private slots:
 
     void on_actionOpen_Recents_triggered();
 
+    void on_actionRemove_Comments_triggered();
+
 private:
 
     Ui::MainWindow *ui;
@@ -123,6 +125,8 @@ private:
     void prependComment(FileInfo fileInfo);
     void processFlag(QTextStream& ts, const QString& key, const QString& value, FlagType flag, bool keyValueSpace);
     void makeComment(QTextStream& ts, const FileInfo& fileName);
+
+    void removeComment(QStringList& strList);
 
 
 };

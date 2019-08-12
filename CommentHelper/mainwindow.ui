@@ -555,6 +555,7 @@
     <addaction name="separator"/>
     <addaction name="actionExecute"/>
     <addaction name="actionOpen_and_run"/>
+    <addaction name="actionRemove_Comments"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -630,6 +631,11 @@
   <action name="actionOpen_Recents">
    <property name="text">
     <string>Open Recents</string>
+   </property>
+  </action>
+  <action name="actionRemove_Comments">
+   <property name="text">
+    <string>Remove Comments</string>
    </property>
   </action>
  </widget>
