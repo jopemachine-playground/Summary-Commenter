@@ -42,6 +42,8 @@ public:
     QAction *actionSave_as;
     QAction *actionExit;
     QAction *actionOpen_and_run;
+    QAction *actionAdd_Setting;
+    QAction *actionOpen_Recents;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_2;
     QTabWidget *tabWidget;
@@ -152,6 +154,10 @@ public:
         actionExit->setObjectName(QString::fromUtf8("actionExit"));
         actionOpen_and_run = new QAction(MainWindow);
         actionOpen_and_run->setObjectName(QString::fromUtf8("actionOpen_and_run"));
+        actionAdd_Setting = new QAction(MainWindow);
+        actionAdd_Setting->setObjectName(QString::fromUtf8("actionAdd_Setting"));
+        actionOpen_Recents = new QAction(MainWindow);
+        actionOpen_Recents->setObjectName(QString::fromUtf8("actionOpen_Recents"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_2 = new QVBoxLayout(centralWidget);
@@ -604,11 +610,15 @@ public:
         menuBar->addAction(menuFiel->menuAction());
         menuBar->addAction(menuHelp->menuAction());
         menuFiel->addAction(actionOpen);
+        menuFiel->addAction(actionOpen_Recents);
+        menuFiel->addAction(actionAdd_Setting);
+        menuFiel->addSeparator();
         menuFiel->addAction(actionSave);
         menuFiel->addAction(actionSave_as);
         menuFiel->addSeparator();
         menuFiel->addAction(actionExecute);
         menuFiel->addAction(actionOpen_and_run);
+        menuFiel->addSeparator();
         menuFiel->addAction(actionExit);
         menuHelp->addAction(actionGithub);
 
@@ -645,6 +655,8 @@ public:
 #if QT_CONFIG(shortcut)
         actionOpen_and_run->setShortcut(QCoreApplication::translate("MainWindow", "Shift+F5", nullptr));
 #endif // QT_CONFIG(shortcut)
+        actionAdd_Setting->setText(QCoreApplication::translate("MainWindow", "Add Setting", nullptr));
+        actionOpen_Recents->setText(QCoreApplication::translate("MainWindow", "Open Recents", nullptr));
         extensionLbl->setText(QCoreApplication::translate("MainWindow", "Extension", nullptr));
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));

@@ -5,6 +5,7 @@
 #include <memory>
 
 #include <QMainWindow>
+#include <QDateTime>
 
 class QLineEdit;
 class QTableWidget;
@@ -32,6 +33,7 @@ enum FlagType{
 typedef struct{
     QString filePath;
     QString fileName;
+    QDateTime lastModified;
 } FileInfo;
 
 class MainWindow : public QMainWindow
@@ -84,6 +86,10 @@ private slots:
 
     void on_actionOpen_and_run_triggered();
 
+    void on_actionAdd_Setting_triggered();
+
+    void on_actionOpen_Recents_triggered();
+
 private:
 
     Ui::MainWindow *ui;
@@ -116,7 +122,7 @@ private:
     // make and prepend comment
     void prependComment(FileInfo fileInfo);
     void processFlag(QTextStream& ts, const QString& key, const QString& value, FlagType flag, bool keyValueSpace);
-    void makeComment(QTextStream& ts, const QString& fileName);
+    void makeComment(QTextStream& ts, const FileInfo& fileName);
 
 
 };

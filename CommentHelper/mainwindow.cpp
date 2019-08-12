@@ -149,15 +149,13 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 
         QTextStream ts(&text);
 
-        makeComment(ts, nullptr);
-
-        qDebug() << text;
+        makeComment(ts, {});
 
         ui->previewTextEdit->setPlainText(text);
     }
 }
 
-void MainWindow::makeComment(QTextStream& ts, const QString& targetName){
+void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
 
     QString
         date    = nullptr,
@@ -166,7 +164,7 @@ void MainWindow::makeComment(QTextStream& ts, const QString& targetName){
         urls    = nullptr;
 
     // 함수를 preview tab에서 사용하는 경우
-    if(targetName == nullptr){
+    if(fileInfo.fileName == nullptr){
         date    =   "<Data>";
         desc    =   "<Desc>";
         issue   =   "<Issue>";
@@ -175,10 +173,13 @@ void MainWindow::makeComment(QTextStream& ts, const QString& targetName){
     // Run에서 사용하는 경우, fileName이 들어온다
     else{
 
+        // # last modified
+        date = fileInfo.lastModified.toString("yyyy-MM-dd, HH:mm:ss");
+
         // # desc
         for(int i = 0; i < ui->descTblWidget->rowCount(); i++){
             auto fName = ui->descTblWidget->item(i, 0)->text();
-            if(fName == targetName){
+            if(fName == fileInfo.fileName){
                 desc = ui->descTblWidget->item(i, 1)->text();
                 break;
             }
@@ -187,7 +188,7 @@ void MainWindow::makeComment(QTextStream& ts, const QString& targetName){
         // # issue
         for(int i = 0; i < ui->issueTblWidget->rowCount(); i++){
             auto fName = ui->issueTblWidget->item(i, 0)->text();
-            if(fName == targetName){
+            if(fName == fileInfo.fileName){
                 issue = ui->issueTblWidget->item(i, 1)->text();
                 break;
             }
@@ -197,7 +198,7 @@ void MainWindow::makeComment(QTextStream& ts, const QString& targetName){
         int hits = 0;
         for(int i = 0; i < ui->referenceTbl->rowCount(); i++){
             auto fName = ui->referenceTbl->item(i, 0)->text();
-            if(fName == targetName){
+            if(fName == fileInfo.fileName){
                 urls +=
                         ui->separatorEdit->text() + " " +
                         QString::number(++hits) + ". " +
@@ -227,6 +228,7 @@ void MainWindow::makeComment(QTextStream& ts, const QString& targetName){
     processFlag(ts, "@ Ref URLs",                   urls,                   FlagType::REFURLS,    true );
 
     processFlag(ts, ui->subDivEdit->toPlainText(),  "",                     FlagType::SUBDIV,     false);
+
 
 }
 
@@ -326,15 +328,15 @@ void MainWindow::saveCHSFile(const QString& path){
 
     ts << "\n# Globals\n";
 
-    ts << "global.Extension        =  " <<   ui->extensionEdit->text() << "\n";
-    ts << "global.Project_Path     =  " <<   ui->pathEdit->text() << "\n";
-    ts << "global.Author           =  " <<   ui->authorEdit->text() << "\n";
-    ts << "global.Separator        =  " <<   ui->separatorEdit->text() << "\n";
-    ts << "global.Sub_Div_Line     =  " <<   ui->subDivEdit->toPlainText() << "\n";
-    ts << "global.Sup_Div_Line     =  " <<   ui->supDivEdit->toPlainText() << "\n";
-    ts << "global.Email            =  " <<   ui->emailEdit->text() << "\n";
-    ts << "global.Telephone        =  " <<   ui->telepEdit->text() << "\n";
-    ts << "global.Github_Account   =  " <<   ui->githubEdit->text() << "\n";
+    ts << "global.Extension        =  " <<   ui->extensionEdit->text()      << "\n";
+    ts << "global.Project_Path     =  " <<   ui->pathEdit->text()           << "\n";
+    ts << "global.Author           =  " <<   ui->authorEdit->text()         << "\n";
+    ts << "global.Separator        =  " <<   ui->separatorEdit->text()      << "\n";
+    ts << "global.Sub_Div_Line     =  " <<   ui->subDivEdit->toPlainText()  << "\n";
+    ts << "global.Sup_Div_Line     =  " <<   ui->supDivEdit->toPlainText()  << "\n";
+    ts << "global.Email            =  " <<   ui->emailEdit->text()          << "\n";
+    ts << "global.Telephone        =  " <<   ui->telepEdit->text()          << "\n";
+    ts << "global.Github_Account   =  " <<   ui->githubEdit->text()         << "\n";
 
     ts << "\n# Desc\n";
 
@@ -351,7 +353,7 @@ void MainWindow::saveCHSFile(const QString& path){
             continue;
         }
 
-        ts << ui->descTblWidget->item(i, 0)->text() + "::desc       =       "
+        ts << ui->descTblWidget->item(i, 0)->text() + "::desc       +=       "
               + ui->descTblWidget->item(i, 1)->text() << "\n";
     }
 
@@ -366,7 +368,7 @@ void MainWindow::saveCHSFile(const QString& path){
             continue;
         }
 
-        ts << ui->issueTblWidget->item(i, 0)->text() + "::issue       =       "
+        ts << ui->issueTblWidget->item(i, 0)->text() + "::issue       +=       "
               + ui->issueTblWidget->item(i, 1)->text() << "\n";
     }
 
@@ -376,7 +378,7 @@ void MainWindow::saveCHSFile(const QString& path){
 
         // 중복 값 허용
 
-        ts << ui->referenceTbl->item(i, 0)->text() + "::refURLs       =       "
+        ts << ui->referenceTbl->item(i, 0)->text() + "::refURLs       +=       "
               + ui->referenceTbl->item(i, 1)->text() << "\n";
     }
 
@@ -415,6 +417,10 @@ void MainWindow::on_actionOpen_triggered()
             selectFile.open(QFile::ReadOnly|QFile::Text);
 
             QTextStream ts(&selectFile);
+
+            // Caution : 파일이 깨진다면, CHS 셋팅 파일의 인코딩이
+            // UTF-8로 셋팅되어 있는지 확인할 것
+            ts.setAutoDetectUnicode(true);
 
             while(!ts.atEnd())
             {
@@ -472,7 +478,7 @@ void MainWindow::setCHSFile(std::queue<QString>& confToken){
 
         // Desc Setting
 
-        QRegularExpression descRe("(?<attKey>\\w+[.]\\w+)::desc\\s+[=]\\s+(?<attValue>.+)");
+        QRegularExpression descRe("(?<attKey>\\w+[.]\\w+)::desc\\s+[+][=]\\s+(?<attValue>.+)");
 
         auto descMatch = descRe.match(confToken.front(), 0, QRegularExpression::NormalMatch);
 
@@ -484,7 +490,7 @@ void MainWindow::setCHSFile(std::queue<QString>& confToken){
 
         // Issue Setting
 
-        QRegularExpression issueRe("(?<attKey>\\w+[.]\\w+)::issue\\s+[=]\\s+(?<attValue>.+)");
+        QRegularExpression issueRe("(?<attKey>\\w+[.]\\w+)::issue\\s+[+][=]\\s+(?<attValue>.+)");
 
         auto issueMatch = issueRe.match(confToken.front(), 0, QRegularExpression::NormalMatch);
 
@@ -496,7 +502,7 @@ void MainWindow::setCHSFile(std::queue<QString>& confToken){
 
         // Reference URLs Setting
 
-        QRegularExpression refURLRe("(?<attKey>\\w+[.]\\w+)::refURLs\\s+[=]\\s+(?<attValue>.+)");
+        QRegularExpression refURLRe("(?<attKey>\\w+[.]\\w+)::refURLs\\s+[+][=]\\s+(?<attValue>.+)");
 
         auto refURLsMatch = refURLRe.match(confToken.front(), 0, QRegularExpression::NormalMatch);
 
@@ -590,7 +596,7 @@ std::shared_ptr<std::queue<FileInfo>> MainWindow::getAllTargetFiles(const QStrin
 
             // target 확장자가 아닌 경우 제외
             if(targetExtensions.contains(it.fileInfo().suffix())){
-                workQue->push({it.filePath(), it.fileName()});
+                workQue->push({it.filePath(), it.fileName(), it.fileInfo().lastModified()});
             }
         }
 
@@ -621,7 +627,9 @@ void MainWindow::prependComment(FileInfo fileInfo){
 
     QTextStream ts(&qf);
 
-    makeComment(ts, fileInfo.fileName);
+    ts.setCodec("UTF-8");
+
+    makeComment(ts, fileInfo);
 
     // 개행 후 buffer 내용 출력
     ts << "\n" <<buffer;
@@ -643,6 +651,7 @@ void MainWindow::on_actionExecute_triggered()
         que->pop();
     }
 
+    ShowMessageBox("done!", "Work complete");
 }
 
 void MainWindow::on_actionSave_as_triggered()
@@ -667,6 +676,16 @@ void MainWindow::on_executeBtn_clicked()
 }
 
 void MainWindow::on_actionOpen_and_run_triggered()
+{
+
+}
+
+void MainWindow::on_actionAdd_Setting_triggered()
+{
+
+}
+
+void MainWindow::on_actionOpen_Recents_triggered()
 {
 
 }
