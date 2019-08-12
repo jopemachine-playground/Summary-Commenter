@@ -21,7 +21,8 @@
 
 ## How to work
 
-**chs 파일** : comment helper가 사용하는 설정 파일. 정규식을 이용해 읽어들임. 기본적으로 아래 값 들을 갖고 있고, `{ fileName }::[ desc | issue | urls ] += { content }  ` 형식으로 값을 작성해,  해당 파일 주석에 값을 추가할 수 있음.
+**chs 파일** : comment helper가 사용하는 설정 파일. 정규식을 이용해 읽어들임. 기본적으로 아래 값 들을 갖고 있고,  
+`{ fileName }::[ desc | issue | urls ] += { content }` 형식으로 값을 작성해,  해당 파일 주석에 값을 추가할 수 있음.
 
 ```
 # Flags
