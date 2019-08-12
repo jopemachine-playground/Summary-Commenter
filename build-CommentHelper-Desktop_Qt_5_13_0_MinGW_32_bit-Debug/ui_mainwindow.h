@@ -41,6 +41,7 @@ public:
     QAction *actionOpen;
     QAction *actionSave_as;
     QAction *actionExit;
+    QAction *actionOpen_and_run;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_2;
     QTabWidget *tabWidget;
@@ -149,6 +150,8 @@ public:
         actionSave_as->setObjectName(QString::fromUtf8("actionSave_as"));
         actionExit = new QAction(MainWindow);
         actionExit->setObjectName(QString::fromUtf8("actionExit"));
+        actionOpen_and_run = new QAction(MainWindow);
+        actionOpen_and_run->setObjectName(QString::fromUtf8("actionOpen_and_run"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_2 = new QVBoxLayout(centralWidget);
@@ -605,6 +608,7 @@ public:
         menuFiel->addAction(actionSave_as);
         menuFiel->addSeparator();
         menuFiel->addAction(actionExecute);
+        menuFiel->addAction(actionOpen_and_run);
         menuFiel->addAction(actionExit);
         menuHelp->addAction(actionGithub);
 
@@ -620,7 +624,7 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         actionGithub->setText(QCoreApplication::translate("MainWindow", "Github", nullptr));
-        actionExecute->setText(QCoreApplication::translate("MainWindow", "Execute", nullptr));
+        actionExecute->setText(QCoreApplication::translate("MainWindow", "Run", nullptr));
 #if QT_CONFIG(shortcut)
         actionExecute->setShortcut(QCoreApplication::translate("MainWindow", "F5", nullptr));
 #endif // QT_CONFIG(shortcut)
@@ -637,6 +641,10 @@ public:
         actionSave_as->setShortcut(QCoreApplication::translate("MainWindow", "Alt+S", nullptr));
 #endif // QT_CONFIG(shortcut)
         actionExit->setText(QCoreApplication::translate("MainWindow", "Exit", nullptr));
+        actionOpen_and_run->setText(QCoreApplication::translate("MainWindow", "Open and Run", nullptr));
+#if QT_CONFIG(shortcut)
+        actionOpen_and_run->setShortcut(QCoreApplication::translate("MainWindow", "Shift+F5", nullptr));
+#endif // QT_CONFIG(shortcut)
         extensionLbl->setText(QCoreApplication::translate("MainWindow", "Extension", nullptr));
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));

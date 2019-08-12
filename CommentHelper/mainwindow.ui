@@ -551,6 +551,7 @@
     <addaction name="actionSave_as"/>
     <addaction name="separator"/>
     <addaction name="actionExecute"/>
+    <addaction name="actionOpen_and_run"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -574,7 +575,7 @@
   </action>
   <action name="actionExecute">
    <property name="text">
-    <string>Execute</string>
+    <string>Run</string>
    </property>
    <property name="shortcut">
     <string>F5</string>
@@ -607,6 +608,14 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionOpen_and_run">
+   <property name="text">
+    <string>Open and Run</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+F5</string>
    </property>
   </action>
  </widget>

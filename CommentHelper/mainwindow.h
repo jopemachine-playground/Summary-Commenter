@@ -2,16 +2,37 @@
 #define MAINWINDOW_H
 
 #include <queue>
+#include <memory>
+
 #include <QMainWindow>
 
 class QLineEdit;
 class QTableWidget;
 class QTableWidgetItem;
 class QFileDialog;
+class QTextStream;
 
 namespace Ui {
 class MainWindow;
 }
+
+enum FlagType{
+    AUTHOR = 0,
+    LASTEDITED,
+    DESC,
+    ISSUE,
+    SUPDIV,
+    SUBDIV,
+    EMAIL,
+    TELEP,
+    GITHUBACC,
+    REFURLS
+};
+
+typedef struct{
+    QString filePath;
+    QString fileName;
+} FileInfo;
 
 class MainWindow : public QMainWindow
 {
@@ -61,6 +82,8 @@ private slots:
 
     void on_rmReferenceBtn_clicked();
 
+    void on_actionOpen_and_run_triggered();
+
 private:
 
     Ui::MainWindow *ui;
@@ -71,25 +94,30 @@ private:
 
     QString selectedFile;
 
+    // setting Table
     void setIssueTable();
-
     void setDescTable();
-
     void setFlagTable();
-
     void setReferenceTable();
+    void clearTbl(QTableWidget* table);
 
-    void setCHSFile(std::queue<QString>& config);
-
-    void saveCHSFile(const QString& path);
-
+    // handle tables
     QTableWidgetItem* searchTable(QTableWidget* table, const QString& key);
-
-    void processFlag(QString& str, const QString& key, const QString& value, int row, int col);
-
     void insertItem(QTableWidget* widget, bool keyEditable, const QString& key, const QString& value);
 
+    // file save and load
+    void setCHSFile(std::queue<QString>& config);
+    void saveCHSFile(const QString& path);
     void addGlobalVars(const QString& key, const QString& value);
+
+    // directory traversal recursively and get all file info (except link file)
+    std::shared_ptr<std::queue<FileInfo>> getAllTargetFiles(const QString& dirName);
+
+    // make and prepend comment
+    void prependComment(FileInfo fileInfo);
+    void processFlag(QTextStream& ts, const QString& key, const QString& value, FlagType flag, bool keyValueSpace);
+    void makeComment(QTextStream& ts, const QString& fileName);
+
 
 };
 

@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
+#include <QDirIterator>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -47,18 +48,23 @@ void MainWindow::setFlagTable(){
     ui->flagTblWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     // FlagTableWidget Setting
-    insertItem(ui->flagTblWidget, false, "Author", "0");
-    insertItem(ui->flagTblWidget, false, "Last_Edited", "0");
-    insertItem(ui->flagTblWidget, false, "Desc", "0");
-    insertItem(ui->flagTblWidget, false, "Issue", "0");
-    insertItem(ui->flagTblWidget, false, "Sup_Div_Line", "0");
-    insertItem(ui->flagTblWidget, false, "Sub_Div_Line", "0");
-    insertItem(ui->flagTblWidget, false, "Email", "0");
-    insertItem(ui->flagTblWidget, false, "Telephone", "0");
+    insertItem(ui->flagTblWidget, false, "Author",         "0");
+    insertItem(ui->flagTblWidget, false, "Last_Edited",    "0");
+    insertItem(ui->flagTblWidget, false, "Desc",           "0");
+    insertItem(ui->flagTblWidget, false, "Issue",          "0");
+    insertItem(ui->flagTblWidget, false, "Sup_Div_Line",   "0");
+    insertItem(ui->flagTblWidget, false, "Sub_Div_Line",   "0");
+    insertItem(ui->flagTblWidget, false, "Email",          "0");
+    insertItem(ui->flagTblWidget, false, "Telephone",      "0");
     insertItem(ui->flagTblWidget, false, "Github_Account", "0");
-    insertItem(ui->flagTblWidget, false, "Ref_URLs", "0");
+    insertItem(ui->flagTblWidget, false, "Ref_URLs",       "0");
 
 }
+
+void MainWindow::clearTbl(QTableWidget* tbl){
+    tbl->setRowCount(0);
+}
+
 
 void MainWindow::insertItem(QTableWidget* tbl, bool keyEditable, const QString& key, const QString& value){
 
@@ -139,47 +145,118 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 {
     // preview 탭이 클릭되면 preview에 들어갈 텍스트를 계산
     if(index == TAB_PREVIEW){
-        QString text;
+        QString text = "";
 
-        processFlag(text, ui->subDivEdit->toPlainText(), nullptr, FLAGPOS_SUPDIV);
+        QTextStream ts(&text);
 
-        processFlag(text, "@ Author", ui->authorEdit->text(), FLAGPOS_AUTHOR);
+        makeComment(ts, nullptr);
 
-        processFlag(text, "@ Last Edited", "<Date>", FLAGPOS_LASTEDITED);
-
-        processFlag(text, "@ Desc", "<Desc>", FLAGPOS_DESC);
-
-        processFlag(text, "@ Issue", "<Issue>", FLAGPOS_ISSUE);
-
-        processFlag(text, "@ Email", ui->emailEdit->text(), FLAGPOS_EMAIL);
-
-        processFlag(text, "@ Contact", ui->telepEdit->text(), FLAGPOS_TELEP);
-
-        processFlag(text, "@ Github Account", ui->githubEdit->text(), FLAGPOS_GITHUBACC);
-
-        processFlag(text, "@ Ref URLs", "<URLs>", FLAGPOS_REFURLS);
-
-        processFlag(text, ui->subDivEdit->toPlainText(), nullptr, FLAGPOS_SUBDIV);
+        qDebug() << text;
 
         ui->previewTextEdit->setPlainText(text);
     }
 }
 
-void MainWindow::processFlag(QString& str, const QString& key, const QString& value, int row, int col){
+void MainWindow::makeComment(QTextStream& ts, const QString& targetName){
+
+    QString
+        date    = nullptr,
+        desc    = nullptr,
+        issue   = nullptr,
+        urls    = nullptr;
+
+    // 함수를 preview tab에서 사용하는 경우
+    if(targetName == nullptr){
+        date    =   "<Data>";
+        desc    =   "<Desc>";
+        issue   =   "<Issue>";
+        urls    =   "<URLs>";
+    }
+    // Run에서 사용하는 경우, fileName이 들어온다
+    else{
+
+        // # desc
+        for(int i = 0; i < ui->descTblWidget->rowCount(); i++){
+            auto fName = ui->descTblWidget->item(i, 0)->text();
+            if(fName == targetName){
+                desc = ui->descTblWidget->item(i, 1)->text();
+                break;
+            }
+        }
+
+        // # issue
+        for(int i = 0; i < ui->issueTblWidget->rowCount(); i++){
+            auto fName = ui->issueTblWidget->item(i, 0)->text();
+            if(fName == targetName){
+                issue = ui->issueTblWidget->item(i, 1)->text();
+                break;
+            }
+        }
+
+        // # urls
+        int hits = 0;
+        for(int i = 0; i < ui->referenceTbl->rowCount(); i++){
+            auto fName = ui->referenceTbl->item(i, 0)->text();
+            if(fName == targetName){
+                urls +=
+                        ui->separatorEdit->text() + " " +
+                        QString::number(++hits) + ". " +
+                        ui->referenceTbl->item(i, 1)->text()
+                        + "\n";
+            }
+        }
+
+    }
+
+    processFlag(ts, ui->subDivEdit->toPlainText(),  "",                     FlagType::SUPDIV,     false);
+
+    processFlag(ts, "@ Author",                     ui->authorEdit->text(), FlagType::AUTHOR,     false);
+
+    processFlag(ts, "@ Last Edited",                date,                   FlagType::LASTEDITED, false);
+
+    processFlag(ts, "@ Desc",                       desc,                   FlagType::DESC,       false);
+
+    processFlag(ts, "@ Issue",                      issue,                  FlagType::ISSUE,      false);
+
+    processFlag(ts, "@ Email",                      ui->emailEdit->text(),  FlagType::EMAIL,      false);
+
+    processFlag(ts, "@ Contact",                    ui->telepEdit->text(),  FlagType::TELEP,      false);
+
+    processFlag(ts, "@ Github Account",             ui->githubEdit->text(), FlagType::GITHUBACC,  false);
+
+    processFlag(ts, "@ Ref URLs",                   urls,                   FlagType::REFURLS,    true );
+
+    processFlag(ts, ui->subDivEdit->toPlainText(),  "",                     FlagType::SUBDIV,     false);
+
+}
+
+void MainWindow::processFlag(QTextStream& ts, const QString& key, const QString& value, FlagType flag, bool keyValueSpace = false){
 
     if(key.trimmed() == "" || key == nullptr){
         return;
     }
 
-    if(ui->flagTblWidget->item(row, col)->text() == "1"){
+    if(ui->flagTblWidget->item(flag, 1)->text() == "1"){
 
-        if(value == nullptr){
-
-            str += ui->separatorEdit->text() + key + "\n";
+        // div line의 경우
+        if(flag == FlagType::SUBDIV || flag == FlagType::SUPDIV){
+            ts << ui->separatorEdit->text() + " " + key + "\n";
             return;
         }
 
-        str += ui->separatorEdit->text() + " " + key + " : " + value + "\n";
+        // 값을 명시할 필요 없는 케이스
+        else if(value == nullptr){
+            return;
+        }
+
+        // key와 value 사이에 띄어쓰기를 넣을 것인지 여부
+        if(keyValueSpace){
+            ts << ui->separatorEdit->text() + " " + key + " : \n" + value;
+        }
+        else{
+            ts << ui->separatorEdit->text() + " " + key + " : " + value + "\n";
+        }
+
     }
 }
 
@@ -207,8 +284,8 @@ void MainWindow::on_actionSave_triggered()
     if(selectedFile == "") {
 
         selectedFile = QFileDialog::getSaveFileName(this,
-                tr("Save setting file"), "",
-                tr("Comment helper setting (*.chs);;All Files (*)"));
+                                                    tr("Save setting file"), "",
+                                                    tr("Comment helper setting (*.chs);;All Files (*)"));
 
         setWindowTitle(selectedFile);
     }
@@ -245,6 +322,8 @@ void MainWindow::saveCHSFile(const QString& path){
         }
     }
 
+    ui->flagTblWidget->clearSelection();
+
     ts << "\n# Globals\n";
 
     ts << "global.Extension        =  " <<   ui->extensionEdit->text() << "\n";
@@ -272,8 +351,8 @@ void MainWindow::saveCHSFile(const QString& path){
             continue;
         }
 
-        ts << "desc." + ui->descTblWidget->item(i, 0)->text()
-              + "  =  " + ui->descTblWidget->item(i, 1)->text() << "\n";
+        ts << ui->descTblWidget->item(i, 0)->text() + "::desc       =       "
+              + ui->descTblWidget->item(i, 1)->text() << "\n";
     }
 
     ts << "\n# Issue\n";
@@ -287,8 +366,8 @@ void MainWindow::saveCHSFile(const QString& path){
             continue;
         }
 
-        ts << "issue." + ui->issueTblWidget->item(i, 0)->text()
-              + "  =  " + ui->issueTblWidget->item(i, 1)->text() << "\n";
+        ts << ui->issueTblWidget->item(i, 0)->text() + "::issue       =       "
+              + ui->issueTblWidget->item(i, 1)->text() << "\n";
     }
 
     ts << "\n# Reference URLs\n";
@@ -296,8 +375,9 @@ void MainWindow::saveCHSFile(const QString& path){
     for(int i = 0; i < ui->referenceTbl->rowCount(); i++){
 
         // 중복 값 허용
-        ts << "refURLs." + ui->referenceTbl->item(i, 0)->text()
-              + "  =  " + ui->referenceTbl->item(i, 1)->text() << "\n";
+
+        ts << ui->referenceTbl->item(i, 0)->text() + "::refURLs       =       "
+              + ui->referenceTbl->item(i, 1)->text() << "\n";
     }
 
     selectedFile = path;
@@ -307,7 +387,7 @@ void MainWindow::saveCHSFile(const QString& path){
     if(existDuplicateKeys){
         ShowMessageBox("There is duplicate keys in some tables. "
                        "\nGenerated setting file does not contained these records",
-            "duplicate key error");
+                       "duplicate key error");
     }
 }
 
@@ -344,6 +424,10 @@ void MainWindow::on_actionOpen_triggered()
 
         selectFile.close();
     }
+
+    clearTbl(ui->issueTblWidget);
+    clearTbl(ui->descTblWidget);
+    clearTbl(ui->referenceTbl);
 
     setCHSFile(*confQueue);
     setWindowTitle(selectedFile);
@@ -388,7 +472,7 @@ void MainWindow::setCHSFile(std::queue<QString>& confToken){
 
         // Desc Setting
 
-        QRegularExpression descRe("desc[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
+        QRegularExpression descRe("(?<attKey>\\w+[.]\\w+)::desc\\s+[=]\\s+(?<attValue>.+)");
 
         auto descMatch = descRe.match(confToken.front(), 0, QRegularExpression::NormalMatch);
 
@@ -400,7 +484,7 @@ void MainWindow::setCHSFile(std::queue<QString>& confToken){
 
         // Issue Setting
 
-        QRegularExpression issueRe("issue[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
+        QRegularExpression issueRe("(?<attKey>\\w+[.]\\w+)::issue\\s+[=]\\s+(?<attValue>.+)");
 
         auto issueMatch = issueRe.match(confToken.front(), 0, QRegularExpression::NormalMatch);
 
@@ -412,7 +496,7 @@ void MainWindow::setCHSFile(std::queue<QString>& confToken){
 
         // Reference URLs Setting
 
-        QRegularExpression refURLRe("refURLs[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
+        QRegularExpression refURLRe("(?<attKey>\\w+[.]\\w+)::refURLs\\s+[=]\\s+(?<attValue>.+)");
 
         auto refURLsMatch = refURLRe.match(confToken.front(), 0, QRegularExpression::NormalMatch);
 
@@ -486,23 +570,86 @@ QTableWidgetItem* MainWindow::searchTable(QTableWidget* table, const QString& ke
     return nullptr;
 }
 
+std::shared_ptr<std::queue<FileInfo>> MainWindow::getAllTargetFiles(const QString &dirName){
+
+    // target Extension을 구하고, trim 한다.
+    auto targetExtensions = ui->extensionEdit->text().split(",");
+
+    for(auto& i : targetExtensions){
+        i = i.trimmed();
+    }
+
+    auto workQue = std::make_shared<std::queue<FileInfo>>();
+
+    QDirIterator it(dirName, QDirIterator::Subdirectories);
+
+    while(true){
+
+        // directory 명과 올바르지 않은 path 제외
+        if(!it.fileInfo().isDir() && it.filePath() != ""){
+
+            // target 확장자가 아닌 경우 제외
+            if(targetExtensions.contains(it.fileInfo().suffix())){
+                workQue->push({it.filePath(), it.fileName()});
+            }
+        }
+
+        if(!it.hasNext()) break;
+
+        it.next();
+    }
+
+//    while(!que->empty()){
+//        qDebug() << que->front();
+//        que->pop();
+//    }
+
+    return workQue;
+}
+
+void MainWindow::prependComment(FileInfo fileInfo){
+
+    QFile qf(fileInfo.filePath);
+
+    qf.open(QFile::ReadOnly | QFile::Text);
+
+    QByteArray buffer = qf.readAll();
+
+    qf.close();
+
+    qf.open(QFile::WriteOnly | QFile::Text);
+
+    QTextStream ts(&qf);
+
+    makeComment(ts, fileInfo.fileName);
+
+    // 개행 후 buffer 내용 출력
+    ts << "\n" <<buffer;
+
+}
+
 void MainWindow::on_actionExecute_triggered()
 {
+
     if(ui->pathEdit->text().trimmed() == ""){
         ShowMessageBox("No directory include!", "No directory");
         return;
     }
 
+    auto que = getAllTargetFiles(ui->pathEdit->text());
 
-
+    while(!que->empty()){
+        prependComment(que->front());
+        que->pop();
+    }
 
 }
 
 void MainWindow::on_actionSave_as_triggered()
 {
     selectedFile = QFileDialog::getSaveFileName(this,
-            tr("save setting file"), "",
-            tr("comment helper setting (*.chs);;All Files (*)"));
+                                                tr("save setting file"), "",
+                                                tr("comment helper setting (*.chs);;All Files (*)"));
 
     setWindowTitle(selectedFile);
 
@@ -515,6 +662,11 @@ void MainWindow::on_copyBtn_clicked()
 }
 
 void MainWindow::on_executeBtn_clicked()
+{
+
+}
+
+void MainWindow::on_actionOpen_and_run_triggered()
 {
 
 }
