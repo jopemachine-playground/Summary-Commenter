@@ -56,12 +56,16 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+
     explicit MainWindow(QWidget *parent = nullptr);
 
     ~MainWindow();
 
     void ShowMessageBox(const QString&, const QString&);
 
+    bool Open();
+
+    void Run();
 
 private slots:
 
@@ -97,11 +101,15 @@ private slots:
 
     void on_actionOpen_and_run_triggered();
 
-    void on_actionAdd_Setting_triggered();
-
-    void on_actionOpen_Recents_triggered();
-
     void on_actionRemove_Comments_triggered();
+
+    void on_actionrecent1_triggered();
+
+    void on_actionrecent2_triggered();
+
+    void on_actionrecent3_triggered();
+
+    void on_actionrecent4_triggered();
 
 private:
 
@@ -133,6 +141,7 @@ private:
     void makeComment(QTextStream& ts, const FileInfo& fileName);
 
     void removeComment(QStringList& strList);
+
 
 
 };

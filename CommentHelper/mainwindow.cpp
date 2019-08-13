@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setWindowTitle(WIN_TITLE);
+    setWindowTitle(DEFAULT_WIN_TITLE);
 
     chLately = new QFile(QDir::currentPath() + "\\" + "chlately");
 
@@ -32,12 +32,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setFlagTable();
 
-    ui->descTblWidget->horizontalHeader()->setStretchLastSection(true);
-    ui->descTblWidget->setSelectionBehavior (   QAbstractItemView::SelectRows   );
-    ui->issueTblWidget->horizontalHeader()->setStretchLastSection(true);
-    ui->issueTblWidget->setSelectionBehavior(   QAbstractItemView::SelectRows   );
-    ui->referenceTbl->horizontalHeader()->setStretchLastSection(true);
-    ui->referenceTbl->setSelectionBehavior  (   QAbstractItemView::SelectRows   );
+    ui->descTblWidget   ->horizontalHeader()->setStretchLastSection(true);
+    ui->issueTblWidget  ->horizontalHeader()->setStretchLastSection(true);
+    ui->referenceTbl    ->horizontalHeader()->setStretchLastSection(true);
+    ui->descTblWidget   ->setSelectionBehavior  (   QAbstractItemView::SelectRows   );
+    ui->issueTblWidget  ->setSelectionBehavior  (   QAbstractItemView::SelectRows   );
+    ui->referenceTbl    ->setSelectionBehavior  (   QAbstractItemView::SelectRows   );
 
     if(chLately->exists()){
 
@@ -45,15 +45,28 @@ MainWindow::MainWindow(QWidget *parent) :
 
         QString o = chLately->readLine();
 
-        auto list = o.split(",");
+        QStringList list = o.split(",");
+
         latest = list[0];
 
-        for(auto& path : list){
-            pathQue->push_back(path);
+        auto actionList = ui->menuOpen_Recents->actions();
+
+        int index = 0;
+
+        for (auto& action : actionList){
+            if(list.length() <= index) {
+                action->setVisible( false );
+            }
+            else{
+                action->setText( list[index++] );
+            }
         }
 
-        latest.replace("\n", "");
-        qDebug() << latest;
+        for(auto& path : list){
+            if(path == "") continue;
+            pathQue->push_back( path );
+        }
+
         setCHSFile(latest);
     }
     else{
@@ -80,7 +93,7 @@ MainWindow::~MainWindow()
                     break;
                 }
 
-                ts << pathQue->front() + ",";
+                ts << (pathQue->size() == 1 ? pathQue->front() : pathQue->front() + ",") ;
                 pathQue->pop_front();
             }
 
@@ -89,15 +102,84 @@ MainWindow::~MainWindow()
         delete chLately;
         delete pathQue;
     }
+}
 
+
+bool MainWindow::Open(){
+    // FileDialog를 생성하고 연다.
+    QFileDialog fileOpenDialog;
+    fileOpenDialog.setFileMode(QFileDialog::AnyFile);
+    fileOpenDialog.setNameFilter(tr("Open a Setting file (*.chs)"));
+    fileOpenDialog.setViewMode(QFileDialog::Detail);
+    fileOpenDialog.open(this, "Open a Setting file");
+
+    // 파일을 선택했을 때
+    if(fileOpenDialog.exec()){
+        selectedFile = fileOpenDialog.selectedFiles()[0];
+        pathQue->push_front(selectedFile);
+    }
+    else{
+        return false;
+    }
+
+    clearTbl(ui->issueTblWidget);
+    clearTbl(ui->descTblWidget);
+    clearTbl(ui->referenceTbl);
+
+    setCHSFile(selectedFile);
+    return true;
+}
+
+
+void MainWindow::Run(){
+    if(ui->pathEdit->text().trimmed() == ""){
+        ShowMessageBox("No directory include!", "No directory");
+        return;
+    }
+
+    auto que = getAllTargetFiles(ui->pathEdit->text());
+
+    // chproj는 지정 프로젝트 경로에서 주석을 추가해놓은 설정 파일이다.
+    // chproj가 삭제되면 run 재 실행 시 해당 파일들에 주석이 한 번 더 들어가게 된다.
+    QString chprojContent = "";
+
+    // 리눅스의 경우 \\ 대신 / 를 써야한다
+    QFile chprojFile(ui->pathEdit->text() + "\\" + "chproj");
+
+    // 설정파일이 존재하면 파일을 읽어들여 주석을 지울 파일들의 리스트를 만든다
+    if(chprojFile.exists()){
+        chprojFile.open(QFile::ReadOnly|QFile::Text);
+        QTextStream ts(&chprojContent);
+        ts << chprojFile.readAll();
+        QStringList list = chprojContent.split(",");
+        removeComment(list);
+    }
+
+    chprojContent = "";
+
+    while(!que->empty()){
+        prependComment(que->front());
+        chprojContent += que->size() == 1 ? que->front().fileName : que->front().fileName + ",";
+        que->pop();
+    }
+
+    if(chprojFile.isOpen()) chprojFile.close();
+
+    chprojFile.open(QIODevice::WriteOnly|QFile::Text);
+
+    chprojFile.write(chprojContent.toStdString().c_str());
+
+    chprojFile.close();
+
+    ShowMessageBox("work completed!", "Jobs done");
 }
 
 void MainWindow::ShowMessageBox(const QString& message, const QString& title){
-    QMessageBox a(this);
-    a.setText(message);
-    a.setFixedSize(400, 150);
-    a.setWindowTitle(title);
-    a.exec();
+    QMessageBox msgBox;
+    msgBox.setText(message);
+    msgBox.setBaseSize(QSize(600, 120));
+    msgBox.setWindowTitle(title);
+    msgBox.exec();
 }
 
 // ==============================+===============================================================
@@ -135,18 +217,18 @@ void MainWindow::on_rmReferenceBtn_clicked()
 
 void MainWindow::on_copyBtn_clicked()
 {
-
+    ui->previewTextEdit->selectAll();
+    ui->previewTextEdit->copy();
 }
 
 void MainWindow::on_executeBtn_clicked()
 {
-
+    Run();
 }
-
 
 void MainWindow::on_actionExit_triggered()
 {
-    exit(0);
+    QApplication::quit();
 }
 
 void MainWindow::on_actionGithub_triggered()
@@ -172,27 +254,8 @@ void MainWindow::on_actionSave_triggered()
 
 void MainWindow::on_actionOpen_triggered()
 {
-    // FileDialog를 생성하고 연다.
-    QFileDialog fileOpenDialog;
-    fileOpenDialog.setFileMode(QFileDialog::AnyFile);
-    fileOpenDialog.setNameFilter(tr("Open a Setting file (*.chs)"));
-    fileOpenDialog.setViewMode(QFileDialog::Detail);
-    fileOpenDialog.open(this, "Open a Setting file");
-
-    // 파일을 선택했을 때
-    if(fileOpenDialog.exec()){
-        selectedFile = fileOpenDialog.selectedFiles()[0];
-        pathQue->push_front(selectedFile);
-    }
-
-    clearTbl(ui->issueTblWidget);
-    clearTbl(ui->descTblWidget);
-    clearTbl(ui->referenceTbl);
-
-    setCHSFile(selectedFile);
-    setWindowTitle(selectedFile);
+    Open();
 }
-
 
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
@@ -223,17 +286,9 @@ void MainWindow::on_actionSave_as_triggered()
 
 void MainWindow::on_actionOpen_and_run_triggered()
 {
-
-}
-
-void MainWindow::on_actionAdd_Setting_triggered()
-{
-
-}
-
-void MainWindow::on_actionOpen_Recents_triggered()
-{
-
+    if(Open()){
+        Run();
+    }
 }
 
 void MainWindow::on_actionRemove_Comments_triggered()
@@ -262,49 +317,28 @@ void MainWindow::on_actionRemove_Comments_triggered()
 
 void MainWindow::on_actionExecute_triggered()
 {
-
-    if(ui->pathEdit->text().trimmed() == ""){
-        ShowMessageBox("No directory include!", "No directory");
-        return;
-    }
-
-    auto que = getAllTargetFiles(ui->pathEdit->text());
-
-    // chproj는 지정 프로젝트 경로에서 주석을 추가해놓은 설정 파일이다.
-    // chproj가 삭제되면 run 재 실행 시 해당 파일들에 주석이 한 번 더 들어가게 된다.
-    QString chprojContent = "";
-
-    // 리눅스의 경우 \\ 대신 / 를 써야한다
-    QFile chprojFile(ui->pathEdit->text() + "\\" + "chproj");
-
-    // 설정파일이 존재하면 파일을 읽어들여 주석을 지울 파일들의 리스트를 만든다
-    if(chprojFile.exists()){
-        chprojFile.open(QFile::ReadOnly|QFile::Text);
-        QTextStream ts(&chprojContent);
-        ts << chprojFile.readAll();
-        QStringList list = chprojContent.split(",");
-        removeComment(list);
-    }
-
-    chprojContent = "";
-
-    while(!que->empty()){
-        prependComment(que->front());
-        chprojContent += que->front().fileName + ",";
-        que->pop();
-    }
-
-    if(chprojFile.isOpen()) chprojFile.close();
-
-    chprojFile.open(QIODevice::WriteOnly|QFile::Text);
-
-    chprojFile.write(chprojContent.toStdString().c_str());
-
-    chprojFile.close();
-
-    ShowMessageBox("done!", "Complete");
+    Run();
 }
 
+void MainWindow::on_actionrecent1_triggered()
+{
+    setCHSFile(ui->menuOpen_Recents->actions()[0]->text());
+}
+
+void MainWindow::on_actionrecent2_triggered()
+{
+    setCHSFile(ui->menuOpen_Recents->actions()[1]->text());
+}
+
+void MainWindow::on_actionrecent3_triggered()
+{
+    setCHSFile(ui->menuOpen_Recents->actions()[2]->text());
+}
+
+void MainWindow::on_actionrecent4_triggered()
+{
+    setCHSFile(ui->menuOpen_Recents->actions()[3]->text());
+}
 
 
 // ==============================+===============================================================
@@ -375,6 +409,8 @@ void MainWindow::insertItem(QTableWidget* tbl, bool keyEditable,
 // File save and load
 
 void MainWindow::setCHSFile(const QString& chsPath){
+
+    setWindowTitle(chsPath);
 
     bool errFlag = false;
 
@@ -544,18 +580,9 @@ void MainWindow::saveCHSFile(const QString& path){
 
     ts << "\n# Desc\n";
 
-
-    bool existDuplicateKeys = false;
-
     for(int i = 0; i < ui->descTblWidget->rowCount(); i++){
 
-        // 중복 키 값이 들어갈 수 없게 한다.
-        auto dup = ui->descTblWidget->findItems(ui->descTblWidget->item(i, 0)->text(), Qt::MatchExactly);
-
-        if(dup.length() != 1){
-            existDuplicateKeys = true;
-            continue;
-        }
+        // 중복 값 허용
 
         ts << ui->descTblWidget->item(i, 0)->text() + "::desc       +=       "
               + ui->descTblWidget->item(i, 1)->text() << "\n";
@@ -565,12 +592,7 @@ void MainWindow::saveCHSFile(const QString& path){
 
     for(int i = 0; i < ui->issueTblWidget->rowCount(); i++){
 
-        auto dup = ui->issueTblWidget->findItems(ui->issueTblWidget->item(i, 0)->text(), Qt::MatchExactly);
-
-        if(dup.length() != 1){
-            existDuplicateKeys = true;
-            continue;
-        }
+        // 중복 값 허용
 
         ts << ui->issueTblWidget->item(i, 0)->text() + "::issue       +=       "
               + ui->issueTblWidget->item(i, 1)->text() << "\n";
@@ -590,11 +612,6 @@ void MainWindow::saveCHSFile(const QString& path){
 
     selectFile.close();
 
-    if(existDuplicateKeys){
-        ShowMessageBox("There is duplicate keys in some tables. "
-                       "\nGenerated setting file does not contained these records",
-                       "duplicate key error");
-    }
 }
 
 void MainWindow::addGlobalVars(const QString& key, const QString& value){
@@ -637,14 +654,16 @@ void MainWindow::addGlobalVars(const QString& key, const QString& value){
     }
     if(key == "Team"){
         ui->teamEdit     ->setText(value);
+        return;
     }
     if(key == "Memo"){
         QString& memo = const_cast<QString&>(value);
         memo.replace(",","\n");
         ui->memoEdit     ->setText(memo);
+        return;
     }
 
-    qDebug() << "wrong Info included in addGlobalVars";
+    qDebug() << "wrong Info included in addGlobalVars, value: " << key;
 }
 
 // ==============================+===============================================================
@@ -662,7 +681,11 @@ std::shared_ptr<std::queue<FileInfo>> MainWindow::getAllTargetFiles(const QStrin
 
     auto workQue = std::make_shared<std::queue<FileInfo>>();
 
-    QDirIterator it(dirName, QDirIterator::Subdirectories);
+    auto flag = ui->actionRecursive_Traversal->isChecked() ?
+                QDirIterator::IteratorFlag::Subdirectories :
+                QDirIterator::IteratorFlag::NoIteratorFlags;
+
+    QDirIterator it(dirName, flag);
 
     while(true){
 
@@ -735,11 +758,6 @@ void MainWindow::processFlag(QTextStream& ts, const QString& key, const QString&
             return;
         }
 
-        // 값을 명시할 필요 없는 케이스
-        else if(value == nullptr){
-            return;
-        }
-
         // key와 value 사이에 띄어쓰기를 넣을 것인지 여부
         if(keyValueSpace){
             ts << ui->separatorEdit->text() + " " + key + " : \n" + value;
@@ -750,7 +768,6 @@ void MainWindow::processFlag(QTextStream& ts, const QString& key, const QString&
 
     }
 }
-
 
 void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
 
@@ -766,15 +783,17 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
 
     // 함수를 preview tab에서 사용하는 경우
     if(fileInfo.fileName == nullptr){
-        edit    =   "<Edited>";
-        desc    =   "<Desc>";
-        issue   =   "<Issue>";
-        date    =   "<Date>";
-        urls    =   "<URLs>";
-        memo    =   "<Memo>";
+            edit    =   "<Edited>";
+            desc    =   "";
+            issue   =   "";
+            date    =   "<Date>";
+            urls    =   "";
+            memo    =   "";
     }
     // Run에서 사용하는 경우, fileName이 들어온다
     else{
+
+        int hits = 0;
 
         // # last modified
         edit = fileInfo.lastModified.toString("yyyy-MM-dd, HH:mm:ss");
@@ -783,30 +802,39 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
         date = fileInfo.created.toString("yyyy-MM-dd, HH:mm:ss");
 
         // # desc
+        hits = 0;
         for(int i = 0; i < ui->descTblWidget->rowCount(); i++){
             auto fName = ui->descTblWidget->item(i, 0)->text();
             if(fName == fileInfo.fileName){
-                desc = ui->descTblWidget->item(i, 1)->text();
-                break;
+                desc +=
+                        ui->separatorEdit->text() + " @     " +
+                        QString::number(++hits) + ". " +
+                        ui->descTblWidget->item(i, 1)->text()
+                        + "\n";
             }
         }
 
+
         // # issue
+        hits = 0;
         for(int i = 0; i < ui->issueTblWidget->rowCount(); i++){
             auto fName = ui->issueTblWidget->item(i, 0)->text();
             if(fName == fileInfo.fileName){
-                issue = ui->issueTblWidget->item(i, 1)->text();
-                break;
+                issue +=
+                        ui->separatorEdit->text() + " @     " +
+                        QString::number(++hits) + ". " +
+                        ui->issueTblWidget->item(i, 1)->text()
+                        + "\n";
             }
         }
 
         // # urls
-        int hits = 0;
+        hits = 0;
         for(int i = 0; i < ui->referenceTbl->rowCount(); i++){
             auto fName = ui->referenceTbl->item(i, 0)->text();
             if(fName == fileInfo.fileName){
                 urls +=
-                        ui->separatorEdit->text() + " " +
+                        ui->separatorEdit->text() + " @     " +
                         QString::number(++hits) + ". " +
                         ui->referenceTbl->item(i, 1)->text()
                         + "\n";
@@ -820,7 +848,7 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
 
         for(auto& text : memos){
             if(text.trimmed() == "") continue;
-            memo.append(ui->separatorEdit->text() + " " + text + "\n");
+            memo.append(ui->separatorEdit->text() + "  " + text + "\n");
         }
     }
 
@@ -834,9 +862,9 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
 
     processFlag(ts, "@ Last Edited",    edit,                   FlagType::LASTEDITED, false);
 
-    processFlag(ts, "@ Desc",           desc,                   FlagType::DESC,       false);
+    processFlag(ts, "@ Desc",           desc,                   FlagType::DESC,       true );
 
-    processFlag(ts, "@ Issue",          issue,                  FlagType::ISSUE,      false);
+    processFlag(ts, "@ Issue",          issue,                  FlagType::ISSUE,      true );
 
     processFlag(ts, "@ Email",          ui->emailEdit->text(),  FlagType::EMAIL,      false);
 
@@ -866,7 +894,11 @@ void MainWindow::removeComment(QStringList &strList){
         }
     }
 
-    QDirIterator it(ui->pathEdit->text(), QDirIterator::Subdirectories);
+    auto flag = ui->actionRecursive_Traversal->isChecked() ?
+                QDirIterator::IteratorFlag::Subdirectories :
+                QDirIterator::IteratorFlag::NoIteratorFlags;
+
+    QDirIterator it(ui->pathEdit->text(), flag);
 
     while(true){
 
@@ -916,3 +948,4 @@ void MainWindow::removeComment(QStringList &strList){
 }
 
 // ==============================+===============================================================
+

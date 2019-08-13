@@ -1,7 +1,7 @@
 #ifndef CONSTANT_H
 #define CONSTANT_H
 
-#define WIN_TITLE           "Comment Helper"
+#define DEFAULT_WIN_TITLE           "Comment Helper"
 
 #define TAB_PREVIEW         5
 #define SAVE_RECENT_PATH    5

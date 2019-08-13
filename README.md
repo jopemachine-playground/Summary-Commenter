@@ -1,5 +1,4 @@
 <h2>Outline</h2>
-
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/144828b21cf043aa9fc8381b95ec8bae)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jopemachine/CommentHelper&amp;utm_campaign=Badge_Grade)
 
 2019 Personal Project
@@ -53,7 +52,7 @@ global.Github_Account   =
 
 
 
-아래처럼 desc, issue, urls 값만 명시한 chs 파일의 경우 Add Setting 버튼으로 추가하면 flag, global 값은 변하지 않고 import한 파일의 설정만 추가하는 식으로 이용할 수 있음.
+아래처럼 desc, issue, urls 값만 명시한 chs 파일의 경우 Open하면 flag, global 값은 변하지 않고 import한 파일의 설정만 추가하는 식으로 이용할 수도 있음.
 
 
 
@@ -72,6 +71,12 @@ constant.h::urls        +=		https://urlexample2.com
 
 
 
+**chlately 파일** : 최근 열었던 chs 파일들의 경로를 5개 까지 기억하고 있음. comment helper 실행 시 가장 최근에 열렸던 chs 파일을 자동으로 셋팅하며, Open Recents 버튼으로 이 경로의 chs 파일들에 접근할 수 있음.
+
+
+
+
+
 ## Caution
 
 프로그램 작동 상 주의할 점은 아래와 같다.
@@ -84,4 +89,3 @@ constant.h::urls        +=		https://urlexample2.com
 
 
 <h2>Screen shots</h2>
-

@@ -42,10 +42,12 @@ public:
     QAction *actionSave_as;
     QAction *actionExit;
     QAction *actionOpen_and_run;
-    QAction *actionAdd_Setting;
-    QAction *actionOpen_Recents;
     QAction *actionRemove_Comments;
     QAction *actionRecursive_Traversal;
+    QAction *actionrecent1;
+    QAction *actionrecent2;
+    QAction *actionrecent3;
+    QAction *actionrecent4;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_2;
     QTabWidget *tabWidget;
@@ -131,6 +133,7 @@ public:
     QPushButton *executeBtn;
     QMenuBar *menuBar;
     QMenu *menuFiel;
+    QMenu *menuOpen_Recents;
     QMenu *menuHelp;
     QMenu *menuSetting;
     QStatusBar *statusBar;
@@ -157,16 +160,20 @@ public:
         actionExit->setObjectName(QString::fromUtf8("actionExit"));
         actionOpen_and_run = new QAction(MainWindow);
         actionOpen_and_run->setObjectName(QString::fromUtf8("actionOpen_and_run"));
-        actionAdd_Setting = new QAction(MainWindow);
-        actionAdd_Setting->setObjectName(QString::fromUtf8("actionAdd_Setting"));
-        actionOpen_Recents = new QAction(MainWindow);
-        actionOpen_Recents->setObjectName(QString::fromUtf8("actionOpen_Recents"));
         actionRemove_Comments = new QAction(MainWindow);
         actionRemove_Comments->setObjectName(QString::fromUtf8("actionRemove_Comments"));
         actionRecursive_Traversal = new QAction(MainWindow);
         actionRecursive_Traversal->setObjectName(QString::fromUtf8("actionRecursive_Traversal"));
         actionRecursive_Traversal->setCheckable(true);
         actionRecursive_Traversal->setChecked(true);
+        actionrecent1 = new QAction(MainWindow);
+        actionrecent1->setObjectName(QString::fromUtf8("actionrecent1"));
+        actionrecent2 = new QAction(MainWindow);
+        actionrecent2->setObjectName(QString::fromUtf8("actionrecent2"));
+        actionrecent3 = new QAction(MainWindow);
+        actionrecent3->setObjectName(QString::fromUtf8("actionrecent3"));
+        actionrecent4 = new QAction(MainWindow);
+        actionrecent4->setObjectName(QString::fromUtf8("actionrecent4"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_2 = new QVBoxLayout(centralWidget);
@@ -611,6 +618,8 @@ public:
         menuBar->setGeometry(QRect(0, 0, 755, 21));
         menuFiel = new QMenu(menuBar);
         menuFiel->setObjectName(QString::fromUtf8("menuFiel"));
+        menuOpen_Recents = new QMenu(menuFiel);
+        menuOpen_Recents->setObjectName(QString::fromUtf8("menuOpen_Recents"));
         menuHelp = new QMenu(menuBar);
         menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         menuSetting = new QMenu(menuBar);
@@ -624,8 +633,7 @@ public:
         menuBar->addAction(menuSetting->menuAction());
         menuBar->addAction(menuHelp->menuAction());
         menuFiel->addAction(actionOpen);
-        menuFiel->addAction(actionOpen_Recents);
-        menuFiel->addAction(actionAdd_Setting);
+        menuFiel->addAction(menuOpen_Recents->menuAction());
         menuFiel->addSeparator();
         menuFiel->addAction(actionSave);
         menuFiel->addAction(actionSave_as);
@@ -635,6 +643,10 @@ public:
         menuFiel->addAction(actionRemove_Comments);
         menuFiel->addSeparator();
         menuFiel->addAction(actionExit);
+        menuOpen_Recents->addAction(actionrecent1);
+        menuOpen_Recents->addAction(actionrecent2);
+        menuOpen_Recents->addAction(actionrecent3);
+        menuOpen_Recents->addAction(actionrecent4);
         menuHelp->addAction(actionGithub);
         menuSetting->addAction(actionRecursive_Traversal);
 
@@ -671,10 +683,12 @@ public:
 #if QT_CONFIG(shortcut)
         actionOpen_and_run->setShortcut(QCoreApplication::translate("MainWindow", "Shift+F5", nullptr));
 #endif // QT_CONFIG(shortcut)
-        actionAdd_Setting->setText(QCoreApplication::translate("MainWindow", "Add Setting", nullptr));
-        actionOpen_Recents->setText(QCoreApplication::translate("MainWindow", "Open Recents", nullptr));
         actionRemove_Comments->setText(QCoreApplication::translate("MainWindow", "Remove Comments", nullptr));
         actionRecursive_Traversal->setText(QCoreApplication::translate("MainWindow", "Recursive Traversal", nullptr));
+        actionrecent1->setText(QCoreApplication::translate("MainWindow", "recent1", nullptr));
+        actionrecent2->setText(QCoreApplication::translate("MainWindow", "recent2", nullptr));
+        actionrecent3->setText(QCoreApplication::translate("MainWindow", "recent3", nullptr));
+        actionrecent4->setText(QCoreApplication::translate("MainWindow", "recent4", nullptr));
         extensionLbl->setText(QCoreApplication::translate("MainWindow", "Extension", nullptr));
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));
@@ -717,6 +731,7 @@ public:
         executeBtn->setText(QCoreApplication::translate("MainWindow", "Execute", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(PreviewTab), QCoreApplication::translate("MainWindow", "Preview", nullptr));
         menuFiel->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
+        menuOpen_Recents->setTitle(QCoreApplication::translate("MainWindow", "Open Recents", nullptr));
         menuHelp->setTitle(QCoreApplication::translate("MainWindow", "Help", nullptr));
         menuSetting->setTitle(QCoreApplication::translate("MainWindow", "Setting", nullptr));
     } // retranslateUi
