@@ -307,16 +307,16 @@
               </layout>
              </item>
              <item>
-              <layout class="QHBoxLayout" name="ReferenceL">
+              <layout class="QHBoxLayout" name="MemoL">
                <item>
-                <widget class="QLabel" name="referenceLbl">
+                <widget class="QLabel" name="memoLbl">
                  <property name="text">
                   <string>Memo</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QTextEdit" name="textEdit"/>
+                <widget class="QTextEdit" name="memoEdit"/>
                </item>
               </layout>
              </item>
@@ -549,7 +549,14 @@
     </property>
     <addaction name="actionGithub"/>
    </widget>
+   <widget class="QMenu" name="menuSetting">
+    <property name="title">
+     <string>Setting</string>
+    </property>
+    <addaction name="actionRecursive_Traversal"/>
+   </widget>
    <addaction name="menuFiel"/>
+   <addaction name="menuSetting"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -620,6 +627,17 @@
   <action name="actionRemove_Comments">
    <property name="text">
     <string>Remove Comments</string>
+   </property>
+  </action>
+  <action name="actionRecursive_Traversal">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Recursive Traversal</string>
    </property>
   </action>
  </widget>

@@ -1,21 +1,30 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+// ==============================+===============================================================
+
+#include <stack>
 #include <queue>
 #include <memory>
+#include <memory.h>
 
 #include <QMainWindow>
 #include <QDateTime>
 
+// ==============================+===============================================================
+
 class QLineEdit;
 class QTableWidget;
 class QTableWidgetItem;
+class QFile;
 class QFileDialog;
 class QTextStream;
 
 namespace Ui {
 class MainWindow;
 }
+
+// ==============================+===============================================================
 
 enum FlagType{
     AUTHOR = 0,
@@ -27,14 +36,20 @@ enum FlagType{
     EMAIL,
     TELEP,
     GITHUBACC,
-    REFURLS
+    REFURLS,
+    CREATEDDATE,
+    TEAM,
+    MEMO
 };
 
 typedef struct{
     QString filePath;
     QString fileName;
     QDateTime lastModified;
+    QDateTime created;
 } FileInfo;
+
+// ==============================+===============================================================
 
 class MainWindow : public QMainWindow
 {
@@ -42,12 +57,8 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
 
-    QString GetProjPath();
-    QString GetTargetExtens();
-    QString GetAuthor();
-    QString GetSeparator();
+    ~MainWindow();
 
     void ShowMessageBox(const QString&, const QString&);
 
@@ -94,19 +105,14 @@ private slots:
 
 private:
 
+    // member vars
     Ui::MainWindow *ui;
-
-    std::queue<QString> *confQueue;
-
-    QFileDialog* fileOpenDialog;
-
     QString selectedFile;
+    QFile* chLately;
+    std::deque<QString>* pathQue;
 
     // setting Table
-    void setIssueTable();
-    void setDescTable();
     void setFlagTable();
-    void setReferenceTable();
     void clearTbl(QTableWidget* table);
 
     // handle tables
@@ -114,7 +120,7 @@ private:
     void insertItem(QTableWidget* widget, bool keyEditable, const QString& key, const QString& value);
 
     // file save and load
-    void setCHSFile(std::queue<QString>& config);
+    void setCHSFile(const QString& path);
     void saveCHSFile(const QString& path);
     void addGlobalVars(const QString& key, const QString& value);
 

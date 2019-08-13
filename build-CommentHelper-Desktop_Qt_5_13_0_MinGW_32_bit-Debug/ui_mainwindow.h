@@ -45,6 +45,7 @@ public:
     QAction *actionAdd_Setting;
     QAction *actionOpen_Recents;
     QAction *actionRemove_Comments;
+    QAction *actionRecursive_Traversal;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_2;
     QTabWidget *tabWidget;
@@ -93,9 +94,9 @@ public:
     QLabel *teamLbl;
     QSpacerItem *spacer1_5;
     QLineEdit *teamEdit;
-    QHBoxLayout *ReferenceL;
-    QLabel *referenceLbl;
-    QTextEdit *textEdit;
+    QHBoxLayout *MemoL;
+    QLabel *memoLbl;
+    QTextEdit *memoEdit;
     QWidget *FlagTab;
     QHBoxLayout *horizontalLayout_3;
     QVBoxLayout *flagTabL1;
@@ -131,6 +132,7 @@ public:
     QMenuBar *menuBar;
     QMenu *menuFiel;
     QMenu *menuHelp;
+    QMenu *menuSetting;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -161,6 +163,10 @@ public:
         actionOpen_Recents->setObjectName(QString::fromUtf8("actionOpen_Recents"));
         actionRemove_Comments = new QAction(MainWindow);
         actionRemove_Comments->setObjectName(QString::fromUtf8("actionRemove_Comments"));
+        actionRecursive_Traversal = new QAction(MainWindow);
+        actionRecursive_Traversal->setObjectName(QString::fromUtf8("actionRecursive_Traversal"));
+        actionRecursive_Traversal->setCheckable(true);
+        actionRecursive_Traversal->setChecked(true);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_2 = new QVBoxLayout(centralWidget);
@@ -395,21 +401,21 @@ public:
 
         verticalLayout_6->addLayout(TeamL);
 
-        ReferenceL = new QHBoxLayout();
-        ReferenceL->setSpacing(6);
-        ReferenceL->setObjectName(QString::fromUtf8("ReferenceL"));
-        referenceLbl = new QLabel(frame);
-        referenceLbl->setObjectName(QString::fromUtf8("referenceLbl"));
+        MemoL = new QHBoxLayout();
+        MemoL->setSpacing(6);
+        MemoL->setObjectName(QString::fromUtf8("MemoL"));
+        memoLbl = new QLabel(frame);
+        memoLbl->setObjectName(QString::fromUtf8("memoLbl"));
 
-        ReferenceL->addWidget(referenceLbl);
+        MemoL->addWidget(memoLbl);
 
-        textEdit = new QTextEdit(frame);
-        textEdit->setObjectName(QString::fromUtf8("textEdit"));
+        memoEdit = new QTextEdit(frame);
+        memoEdit->setObjectName(QString::fromUtf8("memoEdit"));
 
-        ReferenceL->addWidget(textEdit);
+        MemoL->addWidget(memoEdit);
 
 
-        verticalLayout_6->addLayout(ReferenceL);
+        verticalLayout_6->addLayout(MemoL);
 
 
         horizontalLayout_2->addLayout(verticalLayout_6);
@@ -607,12 +613,15 @@ public:
         menuFiel->setObjectName(QString::fromUtf8("menuFiel"));
         menuHelp = new QMenu(menuBar);
         menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
+        menuSetting = new QMenu(menuBar);
+        menuSetting->setObjectName(QString::fromUtf8("menuSetting"));
         MainWindow->setMenuBar(menuBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         MainWindow->setStatusBar(statusBar);
 
         menuBar->addAction(menuFiel->menuAction());
+        menuBar->addAction(menuSetting->menuAction());
         menuBar->addAction(menuHelp->menuAction());
         menuFiel->addAction(actionOpen);
         menuFiel->addAction(actionOpen_Recents);
@@ -627,6 +636,7 @@ public:
         menuFiel->addSeparator();
         menuFiel->addAction(actionExit);
         menuHelp->addAction(actionGithub);
+        menuSetting->addAction(actionRecursive_Traversal);
 
         retranslateUi(MainWindow);
 
@@ -664,6 +674,7 @@ public:
         actionAdd_Setting->setText(QCoreApplication::translate("MainWindow", "Add Setting", nullptr));
         actionOpen_Recents->setText(QCoreApplication::translate("MainWindow", "Open Recents", nullptr));
         actionRemove_Comments->setText(QCoreApplication::translate("MainWindow", "Remove Comments", nullptr));
+        actionRecursive_Traversal->setText(QCoreApplication::translate("MainWindow", "Recursive Traversal", nullptr));
         extensionLbl->setText(QCoreApplication::translate("MainWindow", "Extension", nullptr));
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));
@@ -674,7 +685,7 @@ public:
         subDivLbl->setText(QCoreApplication::translate("MainWindow", "Sub Div Line", nullptr));
         githubLbl->setText(QCoreApplication::translate("MainWindow", "Github Account", nullptr));
         teamLbl->setText(QCoreApplication::translate("MainWindow", "Team", nullptr));
-        referenceLbl->setText(QCoreApplication::translate("MainWindow", "Memo", nullptr));
+        memoLbl->setText(QCoreApplication::translate("MainWindow", "Memo", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(SettingTab), QCoreApplication::translate("MainWindow", "Global", nullptr));
         QTableWidgetItem *___qtablewidgetitem = flagTblWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "Flag", nullptr));
@@ -707,6 +718,7 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(PreviewTab), QCoreApplication::translate("MainWindow", "Preview", nullptr));
         menuFiel->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
         menuHelp->setTitle(QCoreApplication::translate("MainWindow", "Help", nullptr));
+        menuSetting->setTitle(QCoreApplication::translate("MainWindow", "Setting", nullptr));
     } // retranslateUi
 
 };
