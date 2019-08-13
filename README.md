@@ -1,5 +1,4 @@
 <h2>Outline</h2>
-
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/144828b21cf043aa9fc8381b95ec8bae)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jopemachine/CommentHelper&amp;utm_campaign=Badge_Grade)
 
 2019 Personal Project
@@ -15,6 +14,8 @@
 
 
 
+> Windows 10,  64 bit
+>
 > Qt 5.12.4 (MSVC 2017, 32bit)
 >
 > Qt Creator 4.9.2
@@ -90,3 +91,32 @@ constant.h::urls        +=		https://urlexample2.com
 
 
 <h2>Screen shots</h2>
+
+
+
+<img src="ScreenClip.png">
+
+
+
+위 설정으로 만들 수 있는 주석의 예.
+
+```
+// ==============================+=====================================...
+// @ Author : jopemachine
+// @ Last Edited : 2019-08-13, 18:35:15
+// @ Desc : 
+// @     1. 메인 윈도우의 구현 파일이다.
+// @ Issue : 
+// @ Email : jopemachine@naver.com
+// @ Contact : 012-345-6789
+// @ Github Account : gravityc95@gmail.com
+// @ Ref URLs : 
+// @     1. https://github.com/jopemachine/CommentHelper
+// @     2. https://github.com/jopemachine/Gomoku-Qt
+// @ Memo : 
+//  1. 메모 1
+//  2. 메모 2
+//  3. 메모 3
+// ==============================+=====================================...
+```
+
