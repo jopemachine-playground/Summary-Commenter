@@ -1,6 +1,8 @@
 <h2>Outline</h2>
-2019 Personal Project
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/144828b21cf043aa9fc8381b95ec8bae)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jopemachine/CommentHelper&amp;utm_campaign=Badge_Grade)
+
+2019 Personal Project
 
 
 ## Comment Helper
