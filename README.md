@@ -59,7 +59,7 @@ global.Github_Account   =
 
 ```
 # [*.chs]
-constant.h::desc       	+=      상수 값들을 모아놓은 헤더 파일
+constant.h::desc       	+=              상수 값들을 모아놓은 헤더 파일
 mainwindow.cpp::desc	+=		이벤트 처리 메인 윈도우 구현 파일
 gamemanager.cpp::issue	+=		버그 있음
 gamemanager.cpp::urls	+=		https://urlexample.com
