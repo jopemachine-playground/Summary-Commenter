@@ -48,6 +48,8 @@ public:
     QAction *actionrecent2;
     QAction *actionrecent3;
     QAction *actionrecent4;
+    QAction *actionIssue_Numbering;
+    QAction *actionDesc_Numbering;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_2;
     QTabWidget *tabWidget;
@@ -174,6 +176,14 @@ public:
         actionrecent3->setObjectName(QString::fromUtf8("actionrecent3"));
         actionrecent4 = new QAction(MainWindow);
         actionrecent4->setObjectName(QString::fromUtf8("actionrecent4"));
+        actionIssue_Numbering = new QAction(MainWindow);
+        actionIssue_Numbering->setObjectName(QString::fromUtf8("actionIssue_Numbering"));
+        actionIssue_Numbering->setCheckable(true);
+        actionIssue_Numbering->setChecked(true);
+        actionDesc_Numbering = new QAction(MainWindow);
+        actionDesc_Numbering->setObjectName(QString::fromUtf8("actionDesc_Numbering"));
+        actionDesc_Numbering->setCheckable(true);
+        actionDesc_Numbering->setChecked(true);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_2 = new QVBoxLayout(centralWidget);
@@ -649,6 +659,9 @@ public:
         menuOpen_Recents->addAction(actionrecent4);
         menuHelp->addAction(actionGithub);
         menuSetting->addAction(actionRecursive_Traversal);
+        menuSetting->addSeparator();
+        menuSetting->addAction(actionIssue_Numbering);
+        menuSetting->addAction(actionDesc_Numbering);
 
         retranslateUi(MainWindow);
 
@@ -689,6 +702,8 @@ public:
         actionrecent2->setText(QCoreApplication::translate("MainWindow", "recent2", nullptr));
         actionrecent3->setText(QCoreApplication::translate("MainWindow", "recent3", nullptr));
         actionrecent4->setText(QCoreApplication::translate("MainWindow", "recent4", nullptr));
+        actionIssue_Numbering->setText(QCoreApplication::translate("MainWindow", "Issue Numbering", nullptr));
+        actionDesc_Numbering->setText(QCoreApplication::translate("MainWindow", "Desc Numbering", nullptr));
         extensionLbl->setText(QCoreApplication::translate("MainWindow", "Extension", nullptr));
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));

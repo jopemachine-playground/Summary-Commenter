@@ -562,6 +562,9 @@
      <string>Setting</string>
     </property>
     <addaction name="actionRecursive_Traversal"/>
+    <addaction name="separator"/>
+    <addaction name="actionIssue_Numbering"/>
+    <addaction name="actionDesc_Numbering"/>
    </widget>
    <addaction name="menuFiel"/>
    <addaction name="menuSetting"/>
@@ -656,6 +659,28 @@
   <action name="actionrecent4">
    <property name="text">
     <string>recent4</string>
+   </property>
+  </action>
+  <action name="actionIssue_Numbering">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Issue Numbering</string>
+   </property>
+  </action>
+  <action name="actionDesc_Numbering">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Desc Numbering</string>
    </property>
   </action>
  </widget>

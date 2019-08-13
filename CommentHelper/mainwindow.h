@@ -121,10 +121,10 @@ private:
 
     // setting Table
     void setFlagTable();
-    void clearTbl(QTableWidget* table);
+    void clearTbl(QTableWidget* tbl);
 
     // handle tables
-    QTableWidgetItem* searchTable(QTableWidget* table, const QString& key);
+    QTableWidgetItem* searchTable(QTableWidget* tbl, const QString& key);
     void insertItem(QTableWidget* widget, bool keyEditable, const QString& key, const QString& value);
 
     // file save and load
@@ -137,8 +137,10 @@ private:
 
     // make and prepend comment
     void prependComment(FileInfo fileInfo);
-    void processFlag(QTextStream& ts, const QString& key, const QString& value, FlagType flag, bool keyValueSpace);
+    void processFlag(QTextStream& ts, const QString& key, const QString& value, FlagType flag, bool previewMode, bool keyValueSpace);
     void makeComment(QTextStream& ts, const FileInfo& fileName);
+    std::shared_ptr<QString> makeFromTbl(QTableWidget* tbl, bool numbering, const FileInfo& fileInfo);
+
 
     void removeComment(QStringList& strList);
 

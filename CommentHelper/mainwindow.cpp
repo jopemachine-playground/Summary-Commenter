@@ -389,11 +389,11 @@ QTableWidgetItem* MainWindow::searchTable(QTableWidget* table, const QString& ke
 void MainWindow::insertItem(QTableWidget* tbl, bool keyEditable,
                             const QString& key, const QString& value){
 
-    int row = tbl->rowCount();
-    tbl->insertRow(row);
+    int row =   tbl->rowCount();
+                tbl->insertRow(row);
 
-    auto keyColumn = new QTableWidgetItem(key);
-    auto valueColumn = new QTableWidgetItem(value);
+    auto keyColumn      = new QTableWidgetItem(key);
+    auto valueColumn    = new QTableWidgetItem(value);
 
     if(!keyEditable){
         keyColumn->setFlags(keyColumn->flags() & ~Qt::ItemIsEditable);
@@ -465,7 +465,7 @@ void MainWindow::setCHSFile(const QString& chsPath){
         QRegularExpression globalRe("global[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
 
         auto globalMatch = globalRe.match(confQueue->front(), 0,
-                                          QRegularExpression::NormalMatch);
+                                      QRegularExpression::NormalMatch);
 
         if(globalMatch.hasMatch()){
             addGlobalVars(globalMatch.captured("attKey"), globalMatch.captured("attValue"));
@@ -744,7 +744,7 @@ void MainWindow::prependComment(FileInfo fileInfo){
 }
 
 void MainWindow::processFlag(QTextStream& ts, const QString& key, const QString& value,
-                             FlagType flag, bool keyValueSpace = false){
+                             FlagType flag, bool previewMode, bool keyValueSpace){
 
     if(key.trimmed() == "" || key == nullptr){
         return;
@@ -753,8 +753,12 @@ void MainWindow::processFlag(QTextStream& ts, const QString& key, const QString&
     if(ui->flagTblWidget->item(flag, 1)->text() == "1"){
 
         // div line의 경우
-        if(flag == FlagType::SUBDIV || flag == FlagType::SUPDIV){
+        if(IS_DIV(flag)){
             ts << ui->separatorEdit->text() + " " + key + "\n";
+            return;
+        }
+
+        if(!previewMode && value == ""){
             return;
         }
 
@@ -770,6 +774,8 @@ void MainWindow::processFlag(QTextStream& ts, const QString& key, const QString&
 }
 
 void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
+
+    bool isPreviewMode = false;
 
     QString
             edit    = nullptr,
@@ -789,62 +795,19 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
             date    =   "<Date>";
             urls    =   "";
             memo    =   "";
+            isPreviewMode = true;
     }
     // Run에서 사용하는 경우, fileName이 들어온다
     else{
 
-        int hits = 0;
+        edit    = fileInfo.lastModified.toString("yyyy-MM-dd, HH:mm:ss");
+        date    = fileInfo.created.toString("yyyy-MM-dd, HH:mm:ss");
+        desc    = *(makeFromTbl(ui->descTblWidget, ui->actionDesc_Numbering->isChecked(), fileInfo));
+        issue   = *(makeFromTbl(ui->issueTblWidget, ui->actionIssue_Numbering->isChecked(), fileInfo));
+        urls    = *(makeFromTbl(ui->referenceTbl, true, fileInfo));
 
-        // # last modified
-        edit = fileInfo.lastModified.toString("yyyy-MM-dd, HH:mm:ss");
-
-        // # created
-        date = fileInfo.created.toString("yyyy-MM-dd, HH:mm:ss");
-
-        // # desc
-        hits = 0;
-        for(int i = 0; i < ui->descTblWidget->rowCount(); i++){
-            auto fName = ui->descTblWidget->item(i, 0)->text();
-            if(fName == fileInfo.fileName){
-                desc +=
-                        ui->separatorEdit->text() + " @     " +
-                        QString::number(++hits) + ". " +
-                        ui->descTblWidget->item(i, 1)->text()
-                        + "\n";
-            }
-        }
-
-
-        // # issue
-        hits = 0;
-        for(int i = 0; i < ui->issueTblWidget->rowCount(); i++){
-            auto fName = ui->issueTblWidget->item(i, 0)->text();
-            if(fName == fileInfo.fileName){
-                issue +=
-                        ui->separatorEdit->text() + " @     " +
-                        QString::number(++hits) + ". " +
-                        ui->issueTblWidget->item(i, 1)->text()
-                        + "\n";
-            }
-        }
-
-        // # urls
-        hits = 0;
-        for(int i = 0; i < ui->referenceTbl->rowCount(); i++){
-            auto fName = ui->referenceTbl->item(i, 0)->text();
-            if(fName == fileInfo.fileName){
-                urls +=
-                        ui->separatorEdit->text() + " @     " +
-                        QString::number(++hits) + ". " +
-                        ui->referenceTbl->item(i, 1)->text()
-                        + "\n";
-            }
-        }
-
-        // # memo
-
-        auto memoText = ui->memoEdit->toPlainText();
-        auto memos = memoText.split("\n");
+        auto memoText   = ui->memoEdit->toPlainText();
+        auto memos      = memoText.split("\n");
 
         for(auto& text : memos){
             if(text.trimmed() == "") continue;
@@ -852,34 +815,69 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
         }
     }
 
-    processFlag(ts, supd,               "",                     FlagType::SUPDIV,     false);
+    processFlag(ts, supd,               "",                     FlagType::SUPDIV,     isPreviewMode, false);
 
-    processFlag(ts, "@ Author",         ui->authorEdit->text(), FlagType::AUTHOR,     false);
+    processFlag(ts, "@ Author",         ui->authorEdit->text(), FlagType::AUTHOR,     isPreviewMode, false);
 
-    processFlag(ts, "@ Team",           ui->teamEdit->text(),   FlagType::TEAM,       false);
+    processFlag(ts, "@ Team",           ui->teamEdit->text(),   FlagType::TEAM,       isPreviewMode, false);
 
-    processFlag(ts, "@ Created",        date,                   FlagType::CREATEDDATE,false);
+    processFlag(ts, "@ Created",        date,                   FlagType::CREATEDDATE,isPreviewMode, false);
 
-    processFlag(ts, "@ Last Edited",    edit,                   FlagType::LASTEDITED, false);
+    processFlag(ts, "@ Last Edited",    edit,                   FlagType::LASTEDITED, isPreviewMode, false);
 
-    processFlag(ts, "@ Desc",           desc,                   FlagType::DESC,       true );
+    processFlag(ts, "@ Desc",           desc,                   FlagType::DESC,       isPreviewMode, true );
 
-    processFlag(ts, "@ Issue",          issue,                  FlagType::ISSUE,      true );
+    processFlag(ts, "@ Issue",          issue,                  FlagType::ISSUE,      isPreviewMode, true );
 
-    processFlag(ts, "@ Email",          ui->emailEdit->text(),  FlagType::EMAIL,      false);
+    processFlag(ts, "@ Email",          ui->emailEdit->text(),  FlagType::EMAIL,      isPreviewMode, false);
 
-    processFlag(ts, "@ Contact",        ui->telepEdit->text(),  FlagType::TELEP,      false);
+    processFlag(ts, "@ Contact",        ui->telepEdit->text(),  FlagType::TELEP,      isPreviewMode, false);
 
-    processFlag(ts, "@ Github Account", ui->githubEdit->text(), FlagType::GITHUBACC,  false);
+    processFlag(ts, "@ Github Account", ui->githubEdit->text(), FlagType::GITHUBACC,  isPreviewMode, false);
 
-    processFlag(ts, "@ Ref URLs",       urls,                   FlagType::REFURLS,    true );
+    processFlag(ts, "@ Ref URLs",       urls,                   FlagType::REFURLS,    isPreviewMode, true );
 
-    processFlag(ts, "@ Memo",           memo,                   FlagType::MEMO,       true );
+    processFlag(ts, "@ Memo",           memo,                   FlagType::MEMO,       isPreviewMode, true );
 
-    processFlag(ts, subd,               "",                     FlagType::SUBDIV,     false);
+    processFlag(ts, subd,               "",                     FlagType::SUBDIV,     isPreviewMode, false);
 
 
 }
+
+std::shared_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const FileInfo& fileInfo){
+
+    auto ret = std::make_shared<QString>();
+
+    if(numbering){
+
+        int hits = 0;
+        for(int i = 0; i < tbl->rowCount(); i++){
+            auto fName = tbl->item(i, 0)->text();
+            if(fName == fileInfo.fileName){
+                    *ret +=
+                            ui->separatorEdit->text() + " @     " +
+                            QString::number(++hits) + ". " +
+                            tbl->item(i, 1)->text()
+                            + "\n";
+            }
+        }
+    }
+    else{
+
+        for(int i = 0; i < tbl->rowCount(); i++){
+            auto fName = tbl->item(i, 0)->text();
+            if(fName == fileInfo.fileName){
+                    *ret +=
+                            ui->separatorEdit->text() + " @     " +
+                            tbl->item(i, 1)->text()
+                            + "\n";
+            }
+        }
+    }
+
+    return ret;
+}
+
 
 
 void MainWindow::removeComment(QStringList &strList){
