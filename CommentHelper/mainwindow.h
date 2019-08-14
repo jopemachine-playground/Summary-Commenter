@@ -133,7 +133,8 @@ private:
 
     // handle tables
     QTableWidgetItem* searchTable(QTableWidget* tbl, const QString& key);
-    void insertItem(QTableWidget* widget, bool keyEditable, const QString& key, const QString& value);
+    void insertItem(QTableWidget* tbl, bool keyEditable, const QString& key, const QString& value);
+    void removeSelectedItems(QTableWidget* tbl);
 
     // file save and load
     void setCHSFile(const QString& path);

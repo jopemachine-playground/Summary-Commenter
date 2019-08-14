@@ -192,7 +192,7 @@ void MainWindow::on_descAddBtn_clicked()
 
 void MainWindow::on_descRemoveBtn_clicked()
 {
-    ui->descTblWidget->removeRow(ui->descTblWidget->currentRow());
+    removeSelectedItems(ui->descTblWidget);
 }
 
 void MainWindow::on_issueAddBtn_clicked()
@@ -202,7 +202,7 @@ void MainWindow::on_issueAddBtn_clicked()
 
 void MainWindow::on_issueRemoveBtn_clicked()
 {
-    ui->issueTblWidget->removeRow(ui->issueTblWidget->currentRow());
+    removeSelectedItems(ui->issueTblWidget);
 }
 
 void MainWindow::on_addReferenceBtn_clicked()
@@ -212,7 +212,7 @@ void MainWindow::on_addReferenceBtn_clicked()
 
 void MainWindow::on_rmReferenceBtn_clicked()
 {
-    ui->referenceTbl->removeRow(ui->referenceTbl->currentRow());
+    removeSelectedItems(ui->referenceTbl);
 }
 
 void MainWindow::on_copyBtn_clicked()
@@ -416,6 +416,34 @@ void MainWindow::insertItem(QTableWidget* tbl, bool keyEditable,
     tbl->setItem(row, 0, keyColumn);
     tbl->setItem(row, 1, valueColumn);
 
+}
+
+// https://www.qtcentre.org/threads/4885-Remove-selected-rows-from-a-QTableView 참고
+void MainWindow::removeSelectedItems(QTableWidget* tbl){
+
+    //get selections
+    QItemSelection selection = tbl->selectionModel()->selection();
+
+    //find out selected rows
+    QList<int> removeRows;
+    foreach(QModelIndex index, selection.indexes()) {
+        if(!removeRows.contains(index.row())) {
+            removeRows.append(index.row());
+        }
+    }
+
+    //loop through all selected rows
+    for(int i=0;i<removeRows.count();++i)
+    {
+        //decrement all rows after the current - as the row-number will change if we remove the current
+        for(int j=i;j<removeRows.count();++j) {
+            if(removeRows.at(j) > removeRows.at(i)) {
+                removeRows[j]--;
+            }
+        }
+        //remove the selected row
+        tbl->removeRow(removeRows.at(i));
+    }
 }
 
 // ==============================+===============================================================
