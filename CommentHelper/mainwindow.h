@@ -51,6 +51,12 @@ typedef struct{
     QDateTime created;
 } FileInfo;
 
+template<class T>
+using s_ptr = std::shared_ptr<T>;
+
+template<class T>
+using queue = std::queue<T>;
+
 // ==============================+===============================================================
 
 class MainWindow : public QMainWindow
@@ -66,6 +72,8 @@ public:
     void ShowMessageBox(const QString&, const QString&);
 
     bool Open();
+
+    void OpenRecent(const int);
 
     void Run();
 
@@ -119,39 +127,46 @@ private slots:
 
     void on_referenceSortBtn_clicked();
 
+    void on_addExcludeBtn_clicked();
+
+    void on_rmExcludeBtn_clicked();
+
+    void on_sortExcludeBtn_clicked();
+
 private:
 
     // member vars
-    Ui::MainWindow *ui;
-    QString selectedFile;
-    QFile* chLately;
-    std::deque<QString>* pathQue;
+    Ui::MainWindow*                                 ui;
+    QString                                         selectedFile;
+    QFile*                                          chLately;
+    std::deque<QString>*                            pathQue;
 
     // setting Table
-    void setFlagTable();
-    void clearTbl(QTableWidget* tbl);
+    void                        setTable            (QTableWidget*);
+    void                        clearTbl            (QTableWidget*);
+    void                        sortTbl             (QTableWidget*);
+    void                        insertTbl           (QTableWidget*, const QString&, const QString& value = nullptr);
 
     // handle tables
-    QTableWidgetItem* searchTable(QTableWidget* tbl, const QString& key);
-    void insertItem(QTableWidget* tbl, bool keyEditable, const QString& key, const QString& value);
-    void removeSelectedItems(QTableWidget* tbl);
+    QTableWidgetItem*           searchTable         (QTableWidget* tbl, const QString& key);
+    void                        insertItem          (QTableWidget* tbl, bool keyEditable, const QString& key, const QString& value);
+    void                        removeSelectedItems (QTableWidget* tbl);
 
     // file save and load
-    void setCHSFile(const QString& path);
-    void saveCHSFile(const QString& path);
-    void addGlobalVars(const QString& key, const QString& value);
+    void                        setCHSFile          (const QString& path);
+    void                        saveCHSFile         (const QString& path);
+    void                        addGlobalVars       (const QString& key, const QString& value);
 
     // directory traversal recursively and get all file info (except link file)
-    std::shared_ptr<std::queue<FileInfo>> getAllTargetFiles(const QString& dirName);
+    s_ptr<queue<FileInfo>>      getAllTargetFiles(const QString& dirName);
 
     // make and prepend comment
-    void prependComment(FileInfo fileInfo);
-    void processFlag(QTextStream& ts, const QString& key, const QString& value, FlagType flag, bool previewMode, bool keyValueSpace);
-    void makeComment(QTextStream& ts, const FileInfo& fileName);
-    std::shared_ptr<QString> makeFromTbl(QTableWidget* tbl, bool numbering, const FileInfo& fileInfo);
+    void                        prependComment      (FileInfo fileInfo);
+    void                        processFlag         (QTextStream& ts, const QString& key, const QString& value, FlagType flag, bool previewMode, bool keyValueSpace);
+    void                        makeComment         (QTextStream& ts, const FileInfo& fileName);
+    s_ptr<QString>              makeFromTbl         (QTableWidget* tbl, bool numbering, const FileInfo& fileInfo);
 
-
-    void removeComment(QStringList& strList);
+    void                        removeComment       (QStringList& strList);
 
 
 

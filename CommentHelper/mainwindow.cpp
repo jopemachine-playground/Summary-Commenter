@@ -30,14 +30,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QString latest = nullptr;
 
-    setFlagTable();
-
-    ui->descTblWidget   ->horizontalHeader()->setStretchLastSection(true);
-    ui->issueTblWidget  ->horizontalHeader()->setStretchLastSection(true);
-    ui->referenceTbl    ->horizontalHeader()->setStretchLastSection(true);
-    ui->descTblWidget   ->setSelectionBehavior  (   QAbstractItemView::SelectRows   );
-    ui->issueTblWidget  ->setSelectionBehavior  (   QAbstractItemView::SelectRows   );
-    ui->referenceTbl    ->setSelectionBehavior  (   QAbstractItemView::SelectRows   );
+    setTable(ui->flagTblWidget);
+    setTable(ui->descTblWidget);
+    setTable(ui->issueTblWidget);
+    setTable(ui->referenceTbl);
+    setTable(ui->excludeTbl);
 
     if(chLately->exists()){
 
@@ -125,11 +122,20 @@ bool MainWindow::Open(){
     clearTbl(ui->issueTblWidget);
     clearTbl(ui->descTblWidget);
     clearTbl(ui->referenceTbl);
+    clearTbl(ui->excludeTbl);
 
     setCHSFile(selectedFile);
     return true;
 }
 
+void MainWindow::OpenRecent(const int index){
+    clearTbl(ui->issueTblWidget);
+    clearTbl(ui->descTblWidget);
+    clearTbl(ui->referenceTbl);
+    clearTbl(ui->excludeTbl);
+
+    setCHSFile(ui->menuOpen_Recents->actions()[index]->text());
+}
 
 void MainWindow::Run(){
     if(ui->pathEdit->text().trimmed() == ""){
@@ -187,7 +193,7 @@ void MainWindow::ShowMessageBox(const QString& message, const QString& title){
 
 void MainWindow::on_descAddBtn_clicked()
 {
-    insertItem(ui->descTblWidget, true, "fileName", "content");
+    insertTbl(ui->descTblWidget, "File Name", "desc");
 }
 
 void MainWindow::on_descRemoveBtn_clicked()
@@ -197,7 +203,7 @@ void MainWindow::on_descRemoveBtn_clicked()
 
 void MainWindow::on_issueAddBtn_clicked()
 {
-    insertItem(ui->issueTblWidget, true, "fileName", "content");
+    insertTbl(ui->issueTblWidget, "File Name", "issue");
 }
 
 void MainWindow::on_issueRemoveBtn_clicked()
@@ -207,7 +213,7 @@ void MainWindow::on_issueRemoveBtn_clicked()
 
 void MainWindow::on_addReferenceBtn_clicked()
 {
-    insertItem(ui->referenceTbl, true, "fileName", "url");
+    insertTbl(ui->referenceTbl, "File Name", "url");
 }
 
 void MainWindow::on_rmReferenceBtn_clicked()
@@ -322,67 +328,75 @@ void MainWindow::on_actionExecute_triggered()
 
 void MainWindow::on_actionrecent1_triggered()
 {
-    setCHSFile(ui->menuOpen_Recents->actions()[0]->text());
+    OpenRecent(0);
 }
 
 void MainWindow::on_actionrecent2_triggered()
 {
-    setCHSFile(ui->menuOpen_Recents->actions()[1]->text());
+    OpenRecent(1);
 }
 
 void MainWindow::on_actionrecent3_triggered()
 {
-    setCHSFile(ui->menuOpen_Recents->actions()[2]->text());
+    OpenRecent(2);
 }
 
 void MainWindow::on_actionrecent4_triggered()
 {
-    setCHSFile(ui->menuOpen_Recents->actions()[3]->text());
+    OpenRecent(3);
 }
 
 void MainWindow::on_descSortBtn_clicked()
 {
-    ui->descTblWidget->sortByColumn(0, Qt::AscendingOrder);
+    sortTbl(ui->descTblWidget);
 }
 
 void MainWindow::on_issueSortBtn_clicked()
 {
-    ui->issueTblWidget->sortByColumn(0, Qt::AscendingOrder);
+    sortTbl(ui->issueTblWidget);
 }
 
 void MainWindow::on_referenceSortBtn_clicked()
 {
-    ui->referenceTbl->sortByColumn(0, Qt::AscendingOrder);
+    sortTbl(ui->referenceTbl);
 }
+
+void MainWindow::on_sortExcludeBtn_clicked()
+{
+    sortTbl(ui->excludeTbl);
+}
+
+void MainWindow::on_addExcludeBtn_clicked()
+{
+    insertTbl(ui->excludeTbl, "File Name");
+}
+
+void MainWindow::on_rmExcludeBtn_clicked()
+{
+    removeSelectedItems(ui->excludeTbl);
+}
+
 
 // ==============================+===============================================================
 // Private Methods
 // Setting Tables
 
-void MainWindow::setFlagTable(){
-
-    ui->flagTblWidget->horizontalHeader()->setStretchLastSection(true);
-    ui->flagTblWidget->setSelectionBehavior(    QAbstractItemView::SelectRows   );
-
-    // FlagTableWidget Setting
-    insertItem(ui->flagTblWidget, false, "Author",         "0");
-    insertItem(ui->flagTblWidget, false, "Last_Edited",    "0");
-    insertItem(ui->flagTblWidget, false, "Desc",           "0");
-    insertItem(ui->flagTblWidget, false, "Issue",          "0");
-    insertItem(ui->flagTblWidget, false, "Sup_Div_Line",   "0");
-    insertItem(ui->flagTblWidget, false, "Sub_Div_Line",   "0");
-    insertItem(ui->flagTblWidget, false, "Email",          "0");
-    insertItem(ui->flagTblWidget, false, "Telephone",      "0");
-    insertItem(ui->flagTblWidget, false, "Github_Account", "0");
-    insertItem(ui->flagTblWidget, false, "Ref_URLs",       "0");
-    insertItem(ui->flagTblWidget, false, "Created_Date",   "0");
-    insertItem(ui->flagTblWidget, false, "Team",           "0");
-    insertItem(ui->flagTblWidget, false, "Memo",           "0");
-
+void MainWindow::setTable(QTableWidget* tbl){
+    tbl->horizontalHeader()->setStretchLastSection(true);
+    tbl->setSelectionBehavior(    QAbstractItemView::SelectRows   );
 }
 
 void MainWindow::clearTbl(QTableWidget* tbl){
     tbl->setRowCount(0);
+}
+
+void MainWindow::sortTbl(QTableWidget *tbl){
+    tbl->sortByColumn(0, Qt::AscendingOrder);
+}
+
+void MainWindow::insertTbl(QTableWidget *tbl, const QString& key, const QString& value){
+    insertItem(tbl, true, key, value);
+    tbl->selectRow(tbl->rowCount() - 1);
 }
 
 // ==============================+===============================================================
@@ -406,15 +420,20 @@ void MainWindow::insertItem(QTableWidget* tbl, bool keyEditable,
     int row =   tbl->rowCount();
                 tbl->insertRow(row);
 
+    // key
     auto keyColumn      = new QTableWidgetItem(key);
-    auto valueColumn    = new QTableWidgetItem(value);
 
     if(!keyEditable){
         keyColumn->setFlags(keyColumn->flags() & ~Qt::ItemIsEditable);
     }
 
     tbl->setItem(row, 0, keyColumn);
-    tbl->setItem(row, 1, valueColumn);
+
+    // value
+    if(value != nullptr){
+         auto valueColumn    = new QTableWidgetItem(value);
+         tbl->setItem(row, 1, valueColumn);
+    }
 
 }
 
@@ -719,13 +738,19 @@ void MainWindow::addGlobalVars(const QString& key, const QString& value){
 // Private Methods
 // Directory traversal
 
-std::shared_ptr<std::queue<FileInfo>> MainWindow::getAllTargetFiles(const QString &dirName){
+s_ptr<queue<FileInfo>> MainWindow::getAllTargetFiles(const QString &dirName){
 
     // target Extension을 구하고, trim 한다.
-    auto targetExtensions = ui->extensionEdit->text().split(",");
+    QStringList targetExtensions = ui->extensionEdit->text().split(",");
 
     for(auto& i : targetExtensions){
         i = i.trimmed();
+    }
+
+    // 주석을 붙히지 않을 파일 이름의 List
+    QStringList excludeList;
+    for(int i = 0; i < ui->excludeTbl->rowCount(); i++){
+        excludeList.append(ui->excludeTbl->item(i, 0)->text());
     }
 
     auto workQue = std::make_shared<std::queue<FileInfo>>();
@@ -741,8 +766,10 @@ std::shared_ptr<std::queue<FileInfo>> MainWindow::getAllTargetFiles(const QStrin
         // directory 명과 올바르지 않은 path 제외
         if(!it.fileInfo().isDir() && it.filePath() != ""){
 
-            // target 확장자가 아닌 경우 제외
-            if(targetExtensions.contains(it.fileInfo().suffix())){
+            // target 확장자가 아닌 경우와 exclude 리스트에 있는 항목 제외
+            if(targetExtensions.contains(it.fileInfo().suffix()) &&
+                    !excludeList.contains(it.fileName())){
+
                 workQue->push({
                          it.filePath(),
                          it.fileName(),
@@ -893,7 +920,7 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
 
 }
 
-std::shared_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const FileInfo& fileInfo){
+s_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const FileInfo& fileInfo){
 
     auto ret = std::make_shared<QString>();
 
@@ -995,5 +1022,3 @@ void MainWindow::removeComment(QStringList &strList){
 }
 
 // ==============================+===============================================================
-
-
