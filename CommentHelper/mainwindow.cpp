@@ -8,6 +8,7 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #include <QDirIterator>
+#include <QProcess>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -119,21 +120,11 @@ bool MainWindow::Open(){
         return false;
     }
 
-    clearTbl(ui->issueTblWidget);
-    clearTbl(ui->descTblWidget);
-    clearTbl(ui->referenceTbl);
-    clearTbl(ui->excludeTbl);
-
     setCHSFile(selectedFile);
     return true;
 }
 
 void MainWindow::OpenRecent(const int index){
-    clearTbl(ui->issueTblWidget);
-    clearTbl(ui->descTblWidget);
-    clearTbl(ui->referenceTbl);
-    clearTbl(ui->excludeTbl);
-
     setCHSFile(ui->menuOpen_Recents->actions()[index]->text());
 }
 
@@ -376,6 +367,16 @@ void MainWindow::on_rmExcludeBtn_clicked()
     removeSelectedItems(ui->excludeTbl);
 }
 
+void MainWindow::on_actionOpen_Project_Path_triggered()
+{
+    QProcess::startDetached("explorer " + ui->pathEdit->text());
+}
+
+void MainWindow::on_actionRefresh_triggered()
+{
+    setCHSFile(selectedFile);
+}
+
 
 // ==============================+===============================================================
 // Private Methods
@@ -471,6 +472,11 @@ void MainWindow::removeSelectedItems(QTableWidget* tbl){
 
 void MainWindow::setCHSFile(const QString& chsPath){
 
+    clearTbl(ui->issueTblWidget);
+    clearTbl(ui->descTblWidget);
+    clearTbl(ui->referenceTbl);
+    clearTbl(ui->excludeTbl);
+
     setWindowTitle(chsPath);
 
     bool errFlag = false;
@@ -536,7 +542,7 @@ void MainWindow::setCHSFile(const QString& chsPath){
 
         // Desc Setting
 
-        QRegularExpression descRe("(?<attKey>\\w+[.]\\w+)::desc\\s+[+][=]\\s+(?<attValue>.+)");
+        QRegularExpression descRe("(?<attKey>\\w+[.]?\\w+)::desc\\s+[+][=]\\s+(?<attValue>.+)");
 
         auto descMatch = descRe.match(confQueue->front(), 0,
                                       QRegularExpression::NormalMatch);
@@ -551,7 +557,7 @@ void MainWindow::setCHSFile(const QString& chsPath){
 
         // Issue Setting
 
-        QRegularExpression issueRe("(?<attKey>\\w+[.]\\w+)::issue\\s+[+][=]\\s+(?<attValue>.+)");
+        QRegularExpression issueRe("(?<attKey>\\w+[.]?\\w+)::issue\\s+[+][=]\\s+(?<attValue>.+)");
 
         auto issueMatch = issueRe.match(confQueue->front(), 0,
                                         QRegularExpression::NormalMatch);
@@ -566,7 +572,7 @@ void MainWindow::setCHSFile(const QString& chsPath){
 
         // Reference URLs Setting
 
-        QRegularExpression refURLRe("(?<attKey>\\w+[.]\\w+)::refURLs\\s+[+][=]\\s+(?<attValue>.+)");
+        QRegularExpression refURLRe("(?<attKey>\\w+[.]?\\w+)::refURLs\\s+[+][=]\\s+(?<attValue>.+)");
 
         auto refURLsMatch = refURLRe.match(confQueue->front(), 0,
                                            QRegularExpression::NormalMatch);
@@ -578,6 +584,22 @@ void MainWindow::setCHSFile(const QString& chsPath){
             confQueue->pop();
             continue;
         }
+
+        // Excluded files
+
+        QRegularExpression excludingRe("(?<attKey>\\w+[.]?\\w+)::exclude");
+
+        auto excludeMatch = excludingRe.match(confQueue->front(), 0,
+                                           QRegularExpression::NormalMatch);
+
+        if(excludeMatch.hasMatch()){
+            insertItem(ui->excludeTbl, true,
+                       excludeMatch.captured("attKey"), nullptr);
+
+            confQueue->pop();
+            continue;
+        }
+
 
         confQueue->pop();
 
@@ -674,6 +696,12 @@ void MainWindow::saveCHSFile(const QString& path){
                   + url << "\n";
         }
 
+    }
+
+    ts << "\n# Excluded files\n";
+
+    for (int i = 0; i < ui->excludeTbl->rowCount(); i++){
+        ts << ui->excludeTbl->item(i, 0)->text() + "::exclude\n";
     }
 
     selectedFile = path;
@@ -1022,3 +1050,4 @@ void MainWindow::removeComment(QStringList &strList){
 }
 
 // ==============================+===============================================================
+

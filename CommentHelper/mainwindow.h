@@ -133,6 +133,10 @@ private slots:
 
     void on_sortExcludeBtn_clicked();
 
+    void on_actionOpen_Project_Path_triggered();
+
+    void on_actionRefresh_triggered();
+
 private:
 
     // member vars
