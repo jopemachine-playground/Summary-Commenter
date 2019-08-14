@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 // ==============================+===============================================================
+// Import
 
 #include <stack>
 #include <queue>
@@ -12,17 +13,18 @@
 #include <QDateTime>
 
 // ==============================+===============================================================
-
-class QLineEdit;
-class QTableWidget;
-class QTableWidgetItem;
-class QFile;
-class QFileDialog;
-class QTextStream;
+// Forward declare
 
 namespace Ui {
 class MainWindow;
 }
+
+QT_FORWARD_DECLARE_CLASS( QLineEdit );
+QT_FORWARD_DECLARE_CLASS( QTableWidget );
+QT_FORWARD_DECLARE_CLASS( QTableWidgetItem );
+QT_FORWARD_DECLARE_CLASS( QFile );
+QT_FORWARD_DECLARE_CLASS( QFileDialog );
+QT_FORWARD_DECLARE_CLASS( QTextStream );
 
 // ==============================+===============================================================
 

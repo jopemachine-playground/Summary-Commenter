@@ -596,30 +596,37 @@ void MainWindow::saveCHSFile(const QString& path){
 
     for(int i = 0; i < ui->descTblWidget->rowCount(); i++){
 
-        // 중복 값 허용
+        QStringList list = ui->descTblWidget->item(i, 1)->text().split("\n");
 
-        ts << ui->descTblWidget->item(i, 0)->text() + "::desc       +=       "
-              + ui->descTblWidget->item(i, 1)->text() << "\n";
+        for (auto& desc : list){
+            ts << ui->descTblWidget->item(i, 0)->text() + "::desc       +=       "
+                  + desc << "\n";
+        }
     }
 
     ts << "\n# Issue\n";
 
     for(int i = 0; i < ui->issueTblWidget->rowCount(); i++){
 
-        // 중복 값 허용
+        QStringList list = ui->issueTblWidget->item(i, 1)->text().split("\n");
 
-        ts << ui->issueTblWidget->item(i, 0)->text() + "::issue       +=       "
-              + ui->issueTblWidget->item(i, 1)->text() << "\n";
+        for (auto& issue : list){
+            ts << ui->issueTblWidget->item(i, 0)->text() + "::issue       +=       "
+                  + issue << "\n";
+        }
     }
 
     ts << "\n# Reference URLs\n";
 
     for(int i = 0; i < ui->referenceTbl->rowCount(); i++){
 
-        // 중복 값 허용
+        QStringList list = ui->referenceTbl->item(i, 1)->text().split("\n");
 
-        ts << ui->referenceTbl->item(i, 0)->text() + "::refURLs       +=       "
-              + ui->referenceTbl->item(i, 1)->text() << "\n";
+        for (auto& url : list){
+            ts << ui->referenceTbl->item(i, 0)->text() + "::refURLs       +=       "
+                  + url << "\n";
+        }
+
     }
 
     selectedFile = path;
