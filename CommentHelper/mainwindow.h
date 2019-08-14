@@ -111,6 +111,12 @@ private slots:
 
     void on_actionrecent4_triggered();
 
+    void on_descSortBtn_clicked();
+
+    void on_issueSortBtn_clicked();
+
+    void on_referenceSortBtn_clicked();
+
 private:
 
     // member vars

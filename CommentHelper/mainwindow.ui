@@ -389,6 +389,13 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QPushButton" name="descSortBtn">
+              <property name="text">
+               <string>Sort By File Name</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>
@@ -432,6 +439,13 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QPushButton" name="issueSortBtn">
+              <property name="text">
+               <string>Sort By File Name</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>
@@ -472,6 +486,13 @@
              <widget class="QPushButton" name="rmReferenceBtn">
               <property name="text">
                <string>Remove</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="referenceSortBtn">
+              <property name="text">
+               <string>Sort By File Name</string>
               </property>
              </widget>
             </item>

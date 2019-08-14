@@ -112,6 +112,7 @@ public:
     QHBoxLayout *descTabL2;
     QPushButton *descAddBtn;
     QPushButton *descRemoveBtn;
+    QPushButton *descSortBtn;
     QWidget *IssueTab;
     QHBoxLayout *horizontalLayout_10;
     QVBoxLayout *issueTabL;
@@ -119,6 +120,7 @@ public:
     QHBoxLayout *horizontalLayout_8;
     QPushButton *issueAddBtn;
     QPushButton *issueRemoveBtn;
+    QPushButton *issueSortBtn;
     QWidget *referenceTab;
     QVBoxLayout *verticalLayout_10;
     QVBoxLayout *verticalLayout_9;
@@ -126,6 +128,7 @@ public:
     QHBoxLayout *ReferenceL_2;
     QPushButton *addReferenceBtn;
     QPushButton *rmReferenceBtn;
+    QPushButton *referenceSortBtn;
     QWidget *PreviewTab;
     QVBoxLayout *verticalLayout_5;
     QVBoxLayout *verticalLayout_3;
@@ -498,6 +501,11 @@ public:
 
         descTabL2->addWidget(descRemoveBtn);
 
+        descSortBtn = new QPushButton(DescTab);
+        descSortBtn->setObjectName(QString::fromUtf8("descSortBtn"));
+
+        descTabL2->addWidget(descSortBtn);
+
 
         descTabL1->addLayout(descTabL2);
 
@@ -538,6 +546,11 @@ public:
 
         horizontalLayout_8->addWidget(issueRemoveBtn);
 
+        issueSortBtn = new QPushButton(IssueTab);
+        issueSortBtn->setObjectName(QString::fromUtf8("issueSortBtn"));
+
+        horizontalLayout_8->addWidget(issueSortBtn);
+
 
         issueTabL->addLayout(horizontalLayout_8);
 
@@ -577,6 +590,11 @@ public:
         rmReferenceBtn->setObjectName(QString::fromUtf8("rmReferenceBtn"));
 
         ReferenceL_2->addWidget(rmReferenceBtn);
+
+        referenceSortBtn = new QPushButton(referenceTab);
+        referenceSortBtn->setObjectName(QString::fromUtf8("referenceSortBtn"));
+
+        ReferenceL_2->addWidget(referenceSortBtn);
 
 
         verticalLayout_9->addLayout(ReferenceL_2);
@@ -665,7 +683,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(4);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -727,6 +745,7 @@ public:
         ___qtablewidgetitem3->setText(QCoreApplication::translate("MainWindow", "Description", nullptr));
         descAddBtn->setText(QCoreApplication::translate("MainWindow", "Add", nullptr));
         descRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove", nullptr));
+        descSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(DescTab), QCoreApplication::translate("MainWindow", "Desc", nullptr));
         QTableWidgetItem *___qtablewidgetitem4 = issueTblWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem4->setText(QCoreApplication::translate("MainWindow", "File Name", nullptr));
@@ -734,6 +753,7 @@ public:
         ___qtablewidgetitem5->setText(QCoreApplication::translate("MainWindow", "Issue", nullptr));
         issueAddBtn->setText(QCoreApplication::translate("MainWindow", "Add", nullptr));
         issueRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove", nullptr));
+        issueSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(IssueTab), QCoreApplication::translate("MainWindow", "Issue", nullptr));
         QTableWidgetItem *___qtablewidgetitem6 = referenceTbl->horizontalHeaderItem(0);
         ___qtablewidgetitem6->setText(QCoreApplication::translate("MainWindow", "Reference", nullptr));
@@ -741,6 +761,7 @@ public:
         ___qtablewidgetitem7->setText(QCoreApplication::translate("MainWindow", "URLs", nullptr));
         addReferenceBtn->setText(QCoreApplication::translate("MainWindow", "Add", nullptr));
         rmReferenceBtn->setText(QCoreApplication::translate("MainWindow", "Remove", nullptr));
+        referenceSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(referenceTab), QCoreApplication::translate("MainWindow", "Reference", nullptr));
         copyBtn->setText(QCoreApplication::translate("MainWindow", "Copy", nullptr));
         executeBtn->setText(QCoreApplication::translate("MainWindow", "Execute", nullptr));

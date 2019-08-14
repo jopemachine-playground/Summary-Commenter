@@ -340,6 +340,20 @@ void MainWindow::on_actionrecent4_triggered()
     setCHSFile(ui->menuOpen_Recents->actions()[3]->text());
 }
 
+void MainWindow::on_descSortBtn_clicked()
+{
+    ui->descTblWidget->sortByColumn(0, Qt::AscendingOrder);
+}
+
+void MainWindow::on_issueSortBtn_clicked()
+{
+    ui->issueTblWidget->sortByColumn(0, Qt::AscendingOrder);
+}
+
+void MainWindow::on_referenceSortBtn_clicked()
+{
+    ui->referenceTbl->sortByColumn(0, Qt::AscendingOrder);
+}
 
 // ==============================+===============================================================
 // Private Methods
@@ -801,8 +815,8 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
     else{
 
         edit    = fileInfo.lastModified.toString("yyyy-MM-dd, HH:mm:ss");
-        date    = fileInfo.created.toString("yyyy-MM-dd, HH:mm:ss");
-        desc    = *(makeFromTbl(ui->descTblWidget, ui->actionDesc_Numbering->isChecked(), fileInfo));
+        date    = fileInfo.created     .toString("yyyy-MM-dd, HH:mm:ss");
+        desc    = *(makeFromTbl(ui->descTblWidget,  ui->actionDesc_Numbering ->isChecked(), fileInfo));
         issue   = *(makeFromTbl(ui->issueTblWidget, ui->actionIssue_Numbering->isChecked(), fileInfo));
         urls    = *(makeFromTbl(ui->referenceTbl, true, fileInfo));
 
@@ -946,4 +960,5 @@ void MainWindow::removeComment(QStringList &strList){
 }
 
 // ==============================+===============================================================
+
 
