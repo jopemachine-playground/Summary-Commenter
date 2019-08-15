@@ -52,6 +52,7 @@ public:
     QAction *actionDesc_Numbering;
     QAction *actionOpen_Project_Path;
     QAction *actionRefresh;
+    QAction *actionSave_md;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_2;
     QTabWidget *tabWidget;
@@ -147,10 +148,11 @@ public:
     QPushButton *copyBtn;
     QPushButton *executeBtn;
     QMenuBar *menuBar;
-    QMenu *menuFiel;
+    QMenu *menuFile;
     QMenu *menuOpen_Recents;
     QMenu *menuHelp;
     QMenu *menuSetting;
+    QMenu *menuExecute;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -201,6 +203,8 @@ public:
         actionOpen_Project_Path->setObjectName(QString::fromUtf8("actionOpen_Project_Path"));
         actionRefresh = new QAction(MainWindow);
         actionRefresh->setObjectName(QString::fromUtf8("actionRefresh"));
+        actionSave_md = new QAction(MainWindow);
+        actionSave_md->setObjectName(QString::fromUtf8("actionSave_md"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_2 = new QVBoxLayout(centralWidget);
@@ -782,36 +786,37 @@ public:
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 755, 21));
-        menuFiel = new QMenu(menuBar);
-        menuFiel->setObjectName(QString::fromUtf8("menuFiel"));
-        menuOpen_Recents = new QMenu(menuFiel);
+        menuFile = new QMenu(menuBar);
+        menuFile->setObjectName(QString::fromUtf8("menuFile"));
+        menuOpen_Recents = new QMenu(menuFile);
         menuOpen_Recents->setObjectName(QString::fromUtf8("menuOpen_Recents"));
         menuHelp = new QMenu(menuBar);
         menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         menuSetting = new QMenu(menuBar);
         menuSetting->setObjectName(QString::fromUtf8("menuSetting"));
+        menuExecute = new QMenu(menuBar);
+        menuExecute->setObjectName(QString::fromUtf8("menuExecute"));
         MainWindow->setMenuBar(menuBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         MainWindow->setStatusBar(statusBar);
 
-        menuBar->addAction(menuFiel->menuAction());
+        menuBar->addAction(menuFile->menuAction());
+        menuBar->addAction(menuExecute->menuAction());
         menuBar->addAction(menuSetting->menuAction());
         menuBar->addAction(menuHelp->menuAction());
-        menuFiel->addAction(actionOpen);
-        menuFiel->addAction(actionOpen_Project_Path);
-        menuFiel->addAction(actionOpen_and_run);
-        menuFiel->addAction(menuOpen_Recents->menuAction());
-        menuFiel->addSeparator();
-        menuFiel->addAction(actionRefresh);
-        menuFiel->addSeparator();
-        menuFiel->addAction(actionSave);
-        menuFiel->addAction(actionSave_as);
-        menuFiel->addSeparator();
-        menuFiel->addAction(actionExecute);
-        menuFiel->addAction(actionRemove_Comments);
-        menuFiel->addSeparator();
-        menuFiel->addAction(actionExit);
+        menuFile->addAction(actionOpen);
+        menuFile->addAction(actionOpen_and_run);
+        menuFile->addAction(menuOpen_Recents->menuAction());
+        menuFile->addAction(actionOpen_Project_Path);
+        menuFile->addSeparator();
+        menuFile->addAction(actionRefresh);
+        menuFile->addSeparator();
+        menuFile->addAction(actionSave);
+        menuFile->addAction(actionSave_as);
+        menuFile->addAction(actionSave_md);
+        menuFile->addSeparator();
+        menuFile->addAction(actionExit);
         menuOpen_Recents->addAction(actionrecent1);
         menuOpen_Recents->addAction(actionrecent2);
         menuOpen_Recents->addAction(actionrecent3);
@@ -821,6 +826,8 @@ public:
         menuSetting->addSeparator();
         menuSetting->addAction(actionIssue_Numbering);
         menuSetting->addAction(actionDesc_Numbering);
+        menuExecute->addAction(actionExecute);
+        menuExecute->addAction(actionRemove_Comments);
 
         retranslateUi(MainWindow);
 
@@ -874,6 +881,7 @@ public:
 #if QT_CONFIG(shortcut)
         actionRefresh->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+R", nullptr));
 #endif // QT_CONFIG(shortcut)
+        actionSave_md->setText(QCoreApplication::translate("MainWindow", "Export as Markdown", nullptr));
         extensionLbl->setText(QCoreApplication::translate("MainWindow", "Extension", nullptr));
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));
@@ -978,42 +986,43 @@ public:
         ___qtablewidgetitem41->setText(QCoreApplication::translate("MainWindow", "File Name", nullptr));
         QTableWidgetItem *___qtablewidgetitem42 = descTblWidget->horizontalHeaderItem(1);
         ___qtablewidgetitem42->setText(QCoreApplication::translate("MainWindow", "Description", nullptr));
-        descAddBtn->setText(QCoreApplication::translate("MainWindow", "Add", nullptr));
-        descRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove", nullptr));
+        descAddBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
+        descRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Del)", nullptr));
         descSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(DescTab), QCoreApplication::translate("MainWindow", "Desc", nullptr));
         QTableWidgetItem *___qtablewidgetitem43 = issueTblWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem43->setText(QCoreApplication::translate("MainWindow", "File Name", nullptr));
         QTableWidgetItem *___qtablewidgetitem44 = issueTblWidget->horizontalHeaderItem(1);
         ___qtablewidgetitem44->setText(QCoreApplication::translate("MainWindow", "Issue", nullptr));
-        issueAddBtn->setText(QCoreApplication::translate("MainWindow", "Add", nullptr));
-        issueRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove", nullptr));
+        issueAddBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
+        issueRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Del)", nullptr));
         issueSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(IssueTab), QCoreApplication::translate("MainWindow", "Issue", nullptr));
         QTableWidgetItem *___qtablewidgetitem45 = referenceTbl->horizontalHeaderItem(0);
         ___qtablewidgetitem45->setText(QCoreApplication::translate("MainWindow", "File Name", nullptr));
         QTableWidgetItem *___qtablewidgetitem46 = referenceTbl->horizontalHeaderItem(1);
         ___qtablewidgetitem46->setText(QCoreApplication::translate("MainWindow", "URLs", nullptr));
-        addReferenceBtn->setText(QCoreApplication::translate("MainWindow", "Add", nullptr));
-        rmReferenceBtn->setText(QCoreApplication::translate("MainWindow", "Remove", nullptr));
+        addReferenceBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
+        rmReferenceBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Del)", nullptr));
         referenceSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(referenceTab), QCoreApplication::translate("MainWindow", "Reference", nullptr));
         QTableWidgetItem *___qtablewidgetitem47 = excludeTbl->horizontalHeaderItem(0);
         ___qtablewidgetitem47->setText(QCoreApplication::translate("MainWindow", "File Name to exclude", nullptr));
-        addExcludeBtn->setText(QCoreApplication::translate("MainWindow", "Add", nullptr));
-        rmExcludeBtn->setText(QCoreApplication::translate("MainWindow", "Remove", nullptr));
+        addExcludeBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
+        rmExcludeBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Del)", nullptr));
         sortExcludeBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(excludeTab), QCoreApplication::translate("MainWindow", "Exclude", nullptr));
 #if QT_CONFIG(tooltip)
         previewTextEdit->setToolTip(QCoreApplication::translate("MainWindow", "<html><head/><body><p>Check the comments to add</p></body></html>", nullptr));
 #endif // QT_CONFIG(tooltip)
-        copyBtn->setText(QCoreApplication::translate("MainWindow", "Copy", nullptr));
-        executeBtn->setText(QCoreApplication::translate("MainWindow", "Run", nullptr));
+        copyBtn->setText(QCoreApplication::translate("MainWindow", "Copy (C)", nullptr));
+        executeBtn->setText(QCoreApplication::translate("MainWindow", "Run (F5)", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(PreviewTab), QCoreApplication::translate("MainWindow", "Preview", nullptr));
-        menuFiel->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
+        menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
         menuOpen_Recents->setTitle(QCoreApplication::translate("MainWindow", "Open Recents", nullptr));
         menuHelp->setTitle(QCoreApplication::translate("MainWindow", "Help", nullptr));
         menuSetting->setTitle(QCoreApplication::translate("MainWindow", "Setting", nullptr));
+        menuExecute->setTitle(QCoreApplication::translate("MainWindow", "Execute", nullptr));
     } // retranslateUi
 
 };

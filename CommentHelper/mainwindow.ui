@@ -573,14 +573,14 @@
             <item>
              <widget class="QPushButton" name="descAddBtn">
               <property name="text">
-               <string>Add</string>
+               <string>Add (+)</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="descRemoveBtn">
               <property name="text">
-               <string>Remove</string>
+               <string>Remove (Del)</string>
               </property>
              </widget>
             </item>
@@ -623,14 +623,14 @@
             <item>
              <widget class="QPushButton" name="issueAddBtn">
               <property name="text">
-               <string>Add</string>
+               <string>Add (+)</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="issueRemoveBtn">
               <property name="text">
-               <string>Remove</string>
+               <string>Remove (Del)</string>
               </property>
              </widget>
             </item>
@@ -673,14 +673,14 @@
             <item>
              <widget class="QPushButton" name="addReferenceBtn">
               <property name="text">
-               <string>Add</string>
+               <string>Add (+)</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="rmReferenceBtn">
               <property name="text">
-               <string>Remove</string>
+               <string>Remove (Del)</string>
               </property>
              </widget>
             </item>
@@ -718,14 +718,14 @@
             <item>
              <widget class="QPushButton" name="addExcludeBtn">
               <property name="text">
-               <string>Add</string>
+               <string>Add (+)</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="rmExcludeBtn">
               <property name="text">
-               <string>Remove</string>
+               <string>Remove (Del)</string>
               </property>
              </widget>
             </item>
@@ -764,14 +764,14 @@
             <item>
              <widget class="QPushButton" name="copyBtn">
               <property name="text">
-               <string>Copy</string>
+               <string>Copy (C)</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="executeBtn">
               <property name="text">
-               <string>Run</string>
+               <string>Run (F5)</string>
               </property>
              </widget>
             </item>
@@ -794,7 +794,7 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFiel">
+   <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
     </property>
@@ -808,17 +808,15 @@
      <addaction name="actionrecent4"/>
     </widget>
     <addaction name="actionOpen"/>
-    <addaction name="actionOpen_Project_Path"/>
     <addaction name="actionOpen_and_run"/>
     <addaction name="menuOpen_Recents"/>
+    <addaction name="actionOpen_Project_Path"/>
     <addaction name="separator"/>
     <addaction name="actionRefresh"/>
     <addaction name="separator"/>
     <addaction name="actionSave"/>
     <addaction name="actionSave_as"/>
-    <addaction name="separator"/>
-    <addaction name="actionExecute"/>
-    <addaction name="actionRemove_Comments"/>
+    <addaction name="actionSave_md"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -837,7 +835,15 @@
     <addaction name="actionIssue_Numbering"/>
     <addaction name="actionDesc_Numbering"/>
    </widget>
-   <addaction name="menuFiel"/>
+   <widget class="QMenu" name="menuExecute">
+    <property name="title">
+     <string>Execute</string>
+    </property>
+    <addaction name="actionExecute"/>
+    <addaction name="actionRemove_Comments"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuExecute"/>
    <addaction name="menuSetting"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -971,6 +977,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionSave_md">
+   <property name="text">
+    <string>Export as Markdown</string>
    </property>
   </action>
  </widget>

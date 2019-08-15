@@ -137,6 +137,8 @@ private slots:
 
     void on_actionRefresh_triggered();
 
+    void on_actionSave_md_triggered();
+
 private:
 
     // member vars
@@ -150,6 +152,7 @@ private:
     void                        clearTbl            (QTableWidget*);
     void                        sortTbl             (QTableWidget*);
     void                        insertTbl           (QTableWidget*, const QString&, const QString& value = nullptr);
+    void                        setShortCut         ();
 
     // handle tables
     QTableWidgetItem*           searchTable         (QTableWidget* tbl, const QString& key);
@@ -161,6 +164,7 @@ private:
     void                        saveCHSFile         (const QString& path);
     void                        addGlobalVars       (const QString& key, const QString& value);
     void                        setSettingFlags     (const QString& flagName, bool flag);
+    void                        saveMDFile          (QTextStream& ts, const QTableWidget* tbl, const QString& tblName);
 
     // directory traversal recursively and get all file info (except link file)
     s_ptr<queue<FileInfo>>      getAllTargetFiles(const QString& dirName);

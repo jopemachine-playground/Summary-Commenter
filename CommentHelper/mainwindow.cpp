@@ -37,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setTable(ui->referenceTbl);
     setTable(ui->excludeTbl);
 
+    setShortCut();
+
     if(chLately->exists()){
 
         chLately->open( QFile::ReadWrite | QFile::Text  );
@@ -185,7 +187,7 @@ void MainWindow::ShowMessageBox(const QString& message, const QString& title){
 void MainWindow::on_descAddBtn_clicked()
 {
     QStringList exts = ui->extensionEdit->text().split(",");
-    insertTbl(ui->descTblWidget, "fileName." + exts[0], "desc");
+    insertTbl(ui->descTblWidget, "fileName." + exts[0], "");
 }
 
 void MainWindow::on_descRemoveBtn_clicked()
@@ -196,7 +198,7 @@ void MainWindow::on_descRemoveBtn_clicked()
 void MainWindow::on_issueAddBtn_clicked()
 {
     QStringList exts = ui->extensionEdit->text().split(",");
-    insertTbl(ui->issueTblWidget, "fileName." + exts[0], "issue");
+    insertTbl(ui->issueTblWidget, "fileName." + exts[0], "");
 }
 
 void MainWindow::on_issueRemoveBtn_clicked()
@@ -207,7 +209,7 @@ void MainWindow::on_issueRemoveBtn_clicked()
 void MainWindow::on_addReferenceBtn_clicked()
 {
     QStringList exts = ui->extensionEdit->text().split(",");
-    insertTbl(ui->referenceTbl, "fileName." + exts[0], "url");
+    insertTbl(ui->referenceTbl, "fileName." + exts[0], "");
 }
 
 void MainWindow::on_rmReferenceBtn_clicked()
@@ -381,6 +383,32 @@ void MainWindow::on_actionRefresh_triggered()
     setCHSFile(selectedFile);
 }
 
+void MainWindow::on_actionSave_md_triggered()
+{
+    QFile md(ui->pathEdit->text() + "\\" + "ch_readme.md");
+
+    // 파일이 존재하지 않을 땐 경로에 파일을 생성한다.
+    md.open(QFile::WriteOnly|QFile::Text);
+
+    QTextStream ts(&md);
+
+    ts << "## Desc\n";
+
+    saveMDFile(ts, ui->descTblWidget, "Desc");
+
+    ts << "\n## Issue\n";
+
+    saveMDFile(ts, ui->issueTblWidget, "Issue");
+
+    ts << "\n## Reference\n";
+
+    saveMDFile(ts, ui->referenceTbl, "Reference");
+
+    md.close();
+
+    ShowMessageBox("work done", "done!");
+}
+
 
 // ==============================+===============================================================
 // Private Methods
@@ -402,6 +430,29 @@ void MainWindow::sortTbl(QTableWidget *tbl){
 void MainWindow::insertTbl(QTableWidget *tbl, const QString& key, const QString& value){
     insertItem(tbl, true, key, value);
     tbl->selectRow(tbl->rowCount() - 1);
+    // tbl->item(tbl->rowCount() - 1, 0)->setSelected(true);
+}
+
+void MainWindow::setShortCut()
+{
+
+    // Add Buttons
+    ui->descAddBtn->setShortcut(QKeySequence(Qt::Key_Plus));
+    ui->issueAddBtn->setShortcut(QKeySequence(Qt::Key_Plus));
+    ui->addReferenceBtn->setShortcut(QKeySequence(Qt::Key_Plus));
+    ui->addExcludeBtn->setShortcut(QKeySequence(Qt::Key_Plus));
+
+    // Delete Buttons
+    ui->descRemoveBtn->setShortcut(QKeySequence::Delete);
+    ui->issueRemoveBtn->setShortcut(QKeySequence::Delete);
+    ui->rmReferenceBtn->setShortcut(QKeySequence::Delete);
+    ui->rmExcludeBtn->setShortcut(QKeySequence::Delete);
+
+    // Sort Buttons
+
+    // Other Buttons
+    ui->copyBtn->setShortcut(QKeySequence(Qt::Key_C));
+
 }
 
 // ==============================+===============================================================
@@ -798,6 +849,58 @@ void MainWindow::setSettingFlags(const QString &flagName, bool flag)
     else {
         qDebug() << "Wrong Setting value";
     }
+}
+
+void MainWindow::saveMDFile(QTextStream& ts, const QTableWidget *tbl, const QString &tblName)
+{
+
+    ts << "| File Name | " + tblName + " | \n";
+    ts << "|---|:---:|          \n";
+
+    bool prevSameKey = false;
+    bool nextSameKey = false;
+
+    for(int i = 0; i < tbl->rowCount(); i++){
+        // 다음 오는 키가 동일한 값인지 판단
+        if(i == tbl->rowCount() - 1){
+            nextSameKey = false;
+        }
+        else{
+            if(tbl->item(i, 0)->text() == tbl->item(i + 1, 0)->text()){
+                nextSameKey = true;
+            }
+            else{
+                nextSameKey = false;
+            }
+        }
+
+        // 이전의 키가 동일한 키인지 판단
+        if(i == 0){
+            prevSameKey = false;
+        }
+        else{
+            if(tbl->item(i, 0)->text() == tbl->item(i - 1, 0)->text()){
+                prevSameKey = true;
+            }
+            else{
+                prevSameKey = false;
+            }
+        }
+
+        if(nextSameKey && !prevSameKey){
+            ts << "| " + tbl->item(i, 0)->text() + " | " + tbl->item(i, 1)->text() + " ";
+        }
+        else if(nextSameKey && prevSameKey){
+            ts << tbl->item(i, 1)->text() + " ";
+        }
+        else if(!nextSameKey && prevSameKey){
+            ts << tbl->item(i, 1)->text() + " |\n";
+        }
+        else{
+            ts << "| " + tbl->item(i, 0)->text() + " | " + tbl->item(i, 1)->text() + "|\n";
+        }
+    }
+
 }
 
 
