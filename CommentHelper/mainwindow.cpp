@@ -184,7 +184,8 @@ void MainWindow::ShowMessageBox(const QString& message, const QString& title){
 
 void MainWindow::on_descAddBtn_clicked()
 {
-    insertTbl(ui->descTblWidget, "File Name", "desc");
+    QStringList exts = ui->extensionEdit->text().split(",");
+    insertTbl(ui->descTblWidget, "fileName." + exts[0], "desc");
 }
 
 void MainWindow::on_descRemoveBtn_clicked()
@@ -194,7 +195,8 @@ void MainWindow::on_descRemoveBtn_clicked()
 
 void MainWindow::on_issueAddBtn_clicked()
 {
-    insertTbl(ui->issueTblWidget, "File Name", "issue");
+    QStringList exts = ui->extensionEdit->text().split(",");
+    insertTbl(ui->issueTblWidget, "fileName." + exts[0], "issue");
 }
 
 void MainWindow::on_issueRemoveBtn_clicked()
@@ -204,7 +206,8 @@ void MainWindow::on_issueRemoveBtn_clicked()
 
 void MainWindow::on_addReferenceBtn_clicked()
 {
-    insertTbl(ui->referenceTbl, "File Name", "url");
+    QStringList exts = ui->extensionEdit->text().split(",");
+    insertTbl(ui->referenceTbl, "fileName." + exts[0], "url");
 }
 
 void MainWindow::on_rmReferenceBtn_clicked()
@@ -359,7 +362,8 @@ void MainWindow::on_sortExcludeBtn_clicked()
 
 void MainWindow::on_addExcludeBtn_clicked()
 {
-    insertTbl(ui->excludeTbl, "File Name");
+    QStringList exts = ui->extensionEdit->text().split(",");
+    insertTbl(ui->excludeTbl, "fileName." + exts[0]);
 }
 
 void MainWindow::on_rmExcludeBtn_clicked()
@@ -513,6 +517,18 @@ void MainWindow::setCHSFile(const QString& chsPath){
             continue;
         }
 
+        // Setting
+        QRegularExpression settingRe("setting[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
+
+        auto settingMatch = settingRe.match(confQueue->front(), 0,
+                                      QRegularExpression::NormalMatch);
+
+        if(settingMatch.hasMatch()){
+            setSettingFlags(settingMatch.captured("attKey"), settingMatch.captured("attValue").toInt());
+            confQueue->pop();
+            continue;
+        }
+
         // Flag Setting
 
         QRegularExpression flagRe("flag[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
@@ -624,6 +640,12 @@ void MainWindow::saveCHSFile(const QString& path){
     QTextStream ts(&selectFile);
 
     ts << CSH_START_COMMENT << "\n";
+
+    ts << "\n# Setting\n";
+
+    ts << "setting.descNumbering        =   "         + QString::number(ui->actionDesc_Numbering->isChecked())       + "\n";
+    ts << "setting.issueNumbering       =   "         + QString::number(ui->actionIssue_Numbering->isChecked())      + "\n";
+    ts << "setting.recursiveTraversal   =   "         + QString::number(ui->actionRecursive_Traversal->isChecked())  + "\n";
 
     ts << "\n# Flags\n";
 
@@ -761,6 +783,23 @@ void MainWindow::addGlobalVars(const QString& key, const QString& value){
 
     qDebug() << "wrong Info included in addGlobalVars, value: " << key;
 }
+
+void MainWindow::setSettingFlags(const QString &flagName, bool flag)
+{
+    if      (flagName   == "descNumbering"){
+        ui->actionDesc_Numbering->setChecked(flag);
+    }
+    else if (flagName   == "issueNumbering"){
+        ui->actionIssue_Numbering->setChecked(flag);
+    }
+    else if (flagName   == "recursiveTraversal"){
+        ui->actionRecursive_Traversal->setChecked(flag);
+    }
+    else {
+        qDebug() << "Wrong Setting value";
+    }
+}
+
 
 // ==============================+===============================================================
 // Private Methods

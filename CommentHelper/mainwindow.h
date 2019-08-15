@@ -160,6 +160,7 @@ private:
     void                        setCHSFile          (const QString& path);
     void                        saveCHSFile         (const QString& path);
     void                        addGlobalVars       (const QString& key, const QString& value);
+    void                        setSettingFlags     (const QString& flagName, bool flag);
 
     // directory traversal recursively and get all file info (except link file)
     s_ptr<queue<FileInfo>>      getAllTargetFiles(const QString& dirName);
