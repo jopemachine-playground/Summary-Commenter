@@ -841,6 +841,7 @@
     </property>
     <addaction name="actionExecute"/>
     <addaction name="actionRemove_Comments"/>
+    <addaction name="actionRemove_Comments_From_All_File"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuExecute"/>
@@ -904,7 +905,7 @@
   </action>
   <action name="actionRemove_Comments">
    <property name="text">
-    <string>Remove Comments</string>
+    <string>Remove Worked Comments</string>
    </property>
   </action>
   <action name="actionRecursive_Traversal">
@@ -982,6 +983,11 @@
   <action name="actionSave_md">
    <property name="text">
     <string>Export as Markdown</string>
+   </property>
+  </action>
+  <action name="actionRemove_Comments_From_All_File">
+   <property name="text">
+    <string>Remove Comments From All Files</string>
    </property>
   </action>
  </widget>

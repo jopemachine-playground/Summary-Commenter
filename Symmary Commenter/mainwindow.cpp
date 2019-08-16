@@ -244,8 +244,8 @@ void MainWindow::on_actionSave_triggered()
     if(selectedFile == "") {
 
         selectedFile = QFileDialog::getSaveFileName(this,
-                                  tr("Save setting file"), "",
-                                  tr("Comment helper setting (*.chs);;All Files (*)"));
+                                                    tr("Save setting file"), "",
+                                                    tr("Comment helper setting (*.chs);;All Files (*)"));
 
         setWindowTitle(selectedFile);
     }
@@ -277,8 +277,8 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 void MainWindow::on_actionSave_as_triggered()
 {
     selectedFile = QFileDialog::getSaveFileName(this,
-                              tr("save setting file"), "",
-                              tr("comment helper setting (*.chs);;All Files (*)"));
+                                                tr("save setting file"), "",
+                                                tr("comment helper setting (*.chs);;All Files (*)"));
 
     setWindowTitle(selectedFile);
 
@@ -409,6 +409,14 @@ void MainWindow::on_actionSave_md_triggered()
     ShowMessageBox("work done", "done!");
 }
 
+void MainWindow::on_actionRemove_Comments_From_All_File_triggered()
+{
+
+    removeComment(*(new QStringList()));
+
+    ShowMessageBox("done!", "Complete");
+}
+
 
 // ==============================+===============================================================
 // Private Methods
@@ -474,7 +482,7 @@ void MainWindow::insertItem(QTableWidget* tbl, bool keyEditable,
                             const QString& key, const QString& value){
 
     int row =   tbl->rowCount();
-                tbl->insertRow(row);
+    tbl->insertRow(row);
 
     // key
     auto keyColumn      = new QTableWidgetItem(key);
@@ -487,8 +495,8 @@ void MainWindow::insertItem(QTableWidget* tbl, bool keyEditable,
 
     // value
     if(value != nullptr){
-         auto valueColumn    = new QTableWidgetItem(value);
-         tbl->setItem(row, 1, valueColumn);
+        auto valueColumn    = new QTableWidgetItem(value);
+        tbl->setItem(row, 1, valueColumn);
     }
 
 }
@@ -572,7 +580,7 @@ void MainWindow::setCHSFile(const QString& chsPath){
         QRegularExpression settingRe("setting[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
 
         auto settingMatch = settingRe.match(confQueue->front(), 0,
-                                      QRegularExpression::NormalMatch);
+                                            QRegularExpression::NormalMatch);
 
         if(settingMatch.hasMatch()){
             setSettingFlags(settingMatch.captured("attKey"), settingMatch.captured("attValue").toInt());
@@ -599,7 +607,7 @@ void MainWindow::setCHSFile(const QString& chsPath){
         QRegularExpression globalRe("global[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
 
         auto globalMatch = globalRe.match(confQueue->front(), 0,
-                                      QRegularExpression::NormalMatch);
+                                          QRegularExpression::NormalMatch);
 
         if(globalMatch.hasMatch()){
             addGlobalVars(globalMatch.captured("attKey"), globalMatch.captured("attValue"));
@@ -657,7 +665,7 @@ void MainWindow::setCHSFile(const QString& chsPath){
         QRegularExpression excludingRe("(?<attKey>\\w+[.]?\\w+)::exclude");
 
         auto excludeMatch = excludingRe.match(confQueue->front(), 0,
-                                           QRegularExpression::NormalMatch);
+                                              QRegularExpression::NormalMatch);
 
         if(excludeMatch.hasMatch()){
             insertItem(ui->excludeTbl, true,
@@ -950,11 +958,11 @@ s_ptr<queue<FileInfo>> MainWindow::getAllTargetFiles(const QString &dirName){
                     !excludeList.contains(it.fileName())){
 
                 workQue->push({
-                         it.filePath(),
-                         it.fileName(),
-                         it.fileInfo().lastModified(),
-                         it.fileInfo().birthTime()
-                });
+                                  it.filePath(),
+                                  it.fileName(),
+                                  it.fileInfo().lastModified(),
+                                  it.fileInfo().birthTime()
+                              });
             }
         }
 
@@ -1049,13 +1057,13 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
 
     // 함수를 preview tab에서 사용하는 경우
     if(fileInfo.fileName == nullptr){
-            edit    =   "<Edited>";
-            desc    =   "";
-            issue   =   "";
-            date    =   "<Date>";
-            urls    =   "";
-            memo    =   "";
-            isPreviewMode = true;
+        edit    =   "<Edited>";
+        desc    =   "";
+        issue   =   "";
+        date    =   "<Date>";
+        urls    =   "";
+        memo    =   "";
+        isPreviewMode = true;
     }
     // Run에서 사용하는 경우, fileName이 들어온다
     else{
@@ -1114,11 +1122,11 @@ s_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const 
         for(int i = 0; i < tbl->rowCount(); i++){
             auto fName = tbl->item(i, 0)->text();
             if(fName == fileInfo.fileName){
-                    *ret +=
-                            ui->separatorEdit->text() + " @     " +
-                            QString::number(++hits) + ". " +
-                            tbl->item(i, 1)->text()
-                            + "\n";
+                *ret +=
+                        ui->separatorEdit->text() + " @     " +
+                        QString::number(++hits) + ". " +
+                        tbl->item(i, 1)->text()
+                        + "\n";
             }
         }
     }
@@ -1127,10 +1135,10 @@ s_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const 
         for(int i = 0; i < tbl->rowCount(); i++){
             auto fName = tbl->item(i, 0)->text();
             if(fName == fileInfo.fileName){
-                    *ret +=
-                            ui->separatorEdit->text() + " @     " +
-                            tbl->item(i, 1)->text()
-                            + "\n";
+                *ret +=
+                        ui->separatorEdit->text() + " @     " +
+                        tbl->item(i, 1)->text()
+                        + "\n";
             }
         }
     }
@@ -1166,8 +1174,9 @@ void MainWindow::removeComment(QStringList &strList){
             // target 확장자가 아닌 경우 제외
             if(targetExtensions.contains(it.fileInfo().suffix())){
 
-                // 리스트가 해당 원소를 포함하는 경우 주석을 제거
-                if(strList.contains(it.fileName())){
+                // 리스트가 해당 원소를 포함하는 경우, 또는
+                // 리스트의 길이가 0인 경우 (모두 제거) 주석을 제거
+                if(strList.length() == 0 || strList.contains(it.fileName())){
 
                     QFile target(it.filePath());
                     QString bufferStr = "";
@@ -1204,6 +1213,7 @@ void MainWindow::removeComment(QStringList &strList){
     }
 
 }
+
 
 // ==============================+===============================================================
 

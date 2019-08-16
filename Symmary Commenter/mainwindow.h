@@ -139,6 +139,8 @@ private slots:
 
     void on_actionSave_md_triggered();
 
+    void on_actionRemove_Comments_From_All_File_triggered();
+
 private:
 
     // member vars
