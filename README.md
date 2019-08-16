@@ -4,7 +4,7 @@
 2019 Personal Project
 
 
-## Comment Helper
+## Summary Commenter
 
 지정한 프로젝트 내 타겟 확장자 파일들에 지정한 주석을 추가하는 일종의 매크로 프로그램
 
@@ -22,9 +22,13 @@
 
 
 
+## How to use
+
+
+
 ## How to work
 
-**chs 파일** : comment helper가 사용하는 설정 파일. 정규식을 이용해 읽어들임. 기본적으로 아래 값 들을 갖고 있고,  
+**chs 파일** : SummaryCommenter가 사용하는 설정 파일. 정규식을 이용해 읽어들임. 기본적으로 아래 값 들을 갖고 있고,  
 `{ fileName }::[ desc | issue | urls ] += { content }` 형식으로 값을 작성해,  해당 파일 주석에 값을 추가할 수 있음.
 
 ```
@@ -85,16 +89,15 @@ constant.h::urls        +=		https://urlexample2.com
 
 * 지정한 디렉토리 내에 중복되는 이름을 가진 파일이 없다고 가정하고 작동한다. 중복되는 이름이 있는 파일이 있는 경우, Desc, Issue 등이 파일에 제대로 추가되지 않을 수 있음.
 * 지정 디렉토리 폴더에 chproj 파일이 존재해야만 주석을 삭제하는 기능을 사용할 수 있다. 
-* 주석을 삭제하는 기능은 chproj 파일에 명시된 파일들의 맨 처음 나온 주석을 제거한다. comment helper가 추가한 주석 위에 다른 주석이 달려 있다면, comment helper가 추가한 주석이 제거되지 않을 수 있음.
+* 주석을 삭제하는 기능은 chproj 파일에 명시된 파일들의 맨 처음 나온 주석을 제거한다. SummaryCommenter가 추가한 주석 위에 다른 주석이 달려 있다면, SummaryCommenter가 추가한 주석이 제거되지 않을 수 있음.
 * chproj 파일을 임의로 삭제하거나 변경하면, 주석 업데이트 시 중복 주석이 추가될 수 있음
 * 디렉토리 내 모든 소스 파일 이름에 띄어쓰기 등의 공백이 없다고 가정한다. 이름에 공백이 있으면 Desc, Issue 등이 파일에 제대로 추가되지 않을 수 있음.
 
 
 
 <h2>Screen shots</h2>
-
 <p align="center">
-<img src="ScreenClip.png">
+<img src="Screenshots/2.png">
 </p>
 
 
@@ -127,5 +130,5 @@ constant.h::urls        +=		https://urlexample2.com
 * Desc 탭
 
 <p align="center">
-<img src="ScreenClip2.png">
+<img src="Screenshots/1.png">
 </p>
