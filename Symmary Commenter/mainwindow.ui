@@ -214,7 +214,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QTextEdit" name="supDivEdit"/>
+                <widget class="QPlainTextEdit" name="supDivEdit"/>
                </item>
               </layout>
              </item>
@@ -228,7 +228,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QTextEdit" name="subDivEdit"/>
+                <widget class="QPlainTextEdit" name="subDivEdit"/>
                </item>
               </layout>
              </item>

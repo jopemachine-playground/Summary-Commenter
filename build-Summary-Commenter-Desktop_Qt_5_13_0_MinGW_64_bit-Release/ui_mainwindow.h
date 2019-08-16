@@ -87,10 +87,10 @@ public:
     QLineEdit *telepEdit;
     QHBoxLayout *SupDivLineL;
     QLabel *supDivLbl;
-    QTextEdit *supDivEdit;
+    QPlainTextEdit *supDivEdit;
     QHBoxLayout *SubDivLineL;
     QLabel *subDivLbl;
-    QTextEdit *subDivEdit;
+    QPlainTextEdit *subDivEdit;
     QFrame *line;
     QVBoxLayout *verticalLayout_6;
     QHBoxLayout *GithubL;
@@ -360,7 +360,7 @@ public:
 
         SupDivLineL->addWidget(supDivLbl);
 
-        supDivEdit = new QTextEdit(frame);
+        supDivEdit = new QPlainTextEdit(frame);
         supDivEdit->setObjectName(QString::fromUtf8("supDivEdit"));
 
         SupDivLineL->addWidget(supDivEdit);
@@ -376,7 +376,7 @@ public:
 
         SubDivLineL->addWidget(subDivLbl);
 
-        subDivEdit = new QTextEdit(frame);
+        subDivEdit = new QPlainTextEdit(frame);
         subDivEdit->setObjectName(QString::fromUtf8("subDivEdit"));
 
         SubDivLineL->addWidget(subDivEdit);

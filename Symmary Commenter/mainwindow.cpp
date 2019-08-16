@@ -722,12 +722,17 @@ void MainWindow::saveCHSFile(const QString& path){
 
     ts << "\n# Globals\n";
 
+    // ui->subDivEdit->toPlainText()
+
+    QString subDs = ui->subDivEdit->toPlainText().replace("\n",",");
+    QString supDs = ui->supDivEdit->toPlainText().replace("\n",",");
+
     ts << "global.Extension        =  " <<   ui->extensionEdit->text()      << "\n";
     ts << "global.Project_Path     =  " <<   ui->pathEdit->text()           << "\n";
     ts << "global.Author           =  " <<   ui->authorEdit->text()         << "\n";
     ts << "global.Separator        =  " <<   ui->separatorEdit->text()      << "\n";
-    ts << "global.Sub_Div_Line     =  " <<   ui->subDivEdit->toPlainText()  << "\n";
-    ts << "global.Sup_Div_Line     =  " <<   ui->supDivEdit->toPlainText()  << "\n";
+    ts << "global.Sub_Div_Line     =  " <<   subDs                          << "\n";
+    ts << "global.Sup_Div_Line     =  " <<   supDs                          << "\n";
     ts << "global.Email            =  " <<   ui->emailEdit->text()          << "\n";
     ts << "global.Telephone        =  " <<   ui->telepEdit->text()          << "\n";
     ts << "global.Github_Account   =  " <<   ui->githubEdit->text()         << "\n";
@@ -802,11 +807,15 @@ void MainWindow::addGlobalVars(const QString& key, const QString& value){
         return;
     }
     if(key == "Sub_Div_Line"){
-        ui->subDivEdit  ->setText(value);
+        QString& subD = const_cast<QString&>(value);
+        subD.replace(",","\n");
+        ui->subDivEdit  ->setPlainText(value);
         return;
     }
     if(key == "Sup_Div_Line"){
-        ui->supDivEdit  ->setText(value);
+        QString& supD = const_cast<QString&>(value);
+        supD.replace(",","\n");
+        ui->supDivEdit  ->setPlainText(value);
         return;
     }
     if(key == "Email"){
@@ -1000,7 +1009,12 @@ void MainWindow::processFlag(QTextStream& ts, const QString& key, const QString&
 
         // div line의 경우
         if(IS_DIV(flag)){
-            ts << ui->separatorEdit->text() + " " + key + "\n";
+
+            QStringList list = key.split("\n");
+
+            for(auto line : list){
+                ts << ui->separatorEdit->text() + " " + line + "\n";
+            }
             return;
         }
 
