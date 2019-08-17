@@ -962,6 +962,7 @@ public:
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));
         separatorLbl->setText(QCoreApplication::translate("MainWindow", "Separator", nullptr));
+        separatorEdit->setText(QCoreApplication::translate("MainWindow", "// @", nullptr));
         sTagLbl->setText(QCoreApplication::translate("MainWindow", "Start Tag", nullptr));
         eTagLbl->setText(QCoreApplication::translate("MainWindow", "End Tag", nullptr));
         eTagEdit->setText(QString());

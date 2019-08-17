@@ -14,7 +14,6 @@
 #include "ui_mainwindow.h"
 #include "constant.h"
 
-
 // ==============================+===============================================================
 // Public Method
 
@@ -31,11 +30,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QString latest = nullptr;
 
-    setTable(ui->flagTblWidget);
-    setTable(ui->descTblWidget);
-    setTable(ui->issueTblWidget);
-    setTable(ui->referenceTbl);
-    setTable(ui->excludeTbl);
+    setTable(FlagTable_t);
+    setTable(DescTable_t);
+    setTable(IssueTable_t);
+    setTable(RefTable_t);
+    setTable(ExcludeTable_t);
     setAcceptDrops(true);
     setShortCut();
 
@@ -131,19 +130,19 @@ void MainWindow::OpenRecent(const int index){
 }
 
 void MainWindow::Run(){
-    if(ui->pathEdit->text().trimmed() == ""){
+    if(ProjectPath_t.trimmed() == ""){
         ShowMessageBox("No directory include!", "No directory");
         return;
     }
 
-    auto que = getAllTargetFiles(ui->pathEdit->text());
+    auto que = getAllTargetFiles(ProjectPath_t);
 
     // chproj는 지정 프로젝트 경로에서 주석을 추가해놓은 설정 파일이다.
     // chproj가 삭제되면 run 재 실행 시 해당 파일들에 주석이 한 번 더 들어가게 된다.
     QString chprojContent = "";
 
     // 리눅스의 경우 \\ 대신 / 를 써야한다
-    QFile chprojFile(ui->pathEdit->text() + "\\" + "chproj");
+    QFile chprojFile(ProjectPath_t + "\\" + "chproj");
 
     // 설정파일이 존재하면 파일을 읽어들여 주석을 지울 파일들의 리스트를 만든다
     if(chprojFile.exists()){
@@ -186,35 +185,35 @@ void MainWindow::ShowMessageBox(const QString& message, const QString& title){
 
 void MainWindow::on_descAddBtn_clicked()
 {
-    QStringList exts = ui->extensionEdit->text().split(",");
-    insertTbl(ui->descTblWidget, "fileName." + exts[0], "");
+    QStringList exts = Extension_t.split(",");
+    insertTbl(DescTable_t, "fileName." + exts[0], "");
 }
 
 void MainWindow::on_descRemoveBtn_clicked()
 {
-    removeSelectedItems(ui->descTblWidget);
+    removeSelectedItems(DescTable_t);
 }
 
 void MainWindow::on_issueAddBtn_clicked()
 {
-    QStringList exts = ui->extensionEdit->text().split(",");
-    insertTbl(ui->issueTblWidget, "fileName." + exts[0], "");
+    QStringList exts = Extension_t.split(",");
+    insertTbl(IssueTable_t, "fileName." + exts[0], "");
 }
 
 void MainWindow::on_issueRemoveBtn_clicked()
 {
-    removeSelectedItems(ui->issueTblWidget);
+    removeSelectedItems(IssueTable_t);
 }
 
 void MainWindow::on_addReferenceBtn_clicked()
 {
-    QStringList exts = ui->extensionEdit->text().split(",");
-    insertTbl(ui->referenceTbl, "fileName." + exts[0], "");
+    QStringList exts = Extension_t.split(",");
+    insertTbl(RefTable_t, "fileName." + exts[0], "");
 }
 
 void MainWindow::on_rmReferenceBtn_clicked()
 {
-    removeSelectedItems(ui->referenceTbl);
+    removeSelectedItems(RefTable_t);
 }
 
 void MainWindow::on_copyBtn_clicked()
@@ -298,7 +297,7 @@ void MainWindow::on_actionRemove_Comments_triggered()
     QString chprojContent = "";
 
     // 리눅스의 경우 \\ 대신 / 를 써야한다
-    QFile chprojFile(ui->pathEdit->text() + "\\" + "chproj");
+    QFile chprojFile(ProjectPath_t + "\\" + "chproj");
 
     // 설정파일이 존재하면 파일을 읽어들여 주석을 지울 파일들의 리스트를 만든다
     if(chprojFile.exists()){
@@ -344,38 +343,38 @@ void MainWindow::on_actionrecent4_triggered()
 
 void MainWindow::on_descSortBtn_clicked()
 {
-    sortTbl(ui->descTblWidget);
+    sortTbl(DescTable_t);
 }
 
 void MainWindow::on_issueSortBtn_clicked()
 {
-    sortTbl(ui->issueTblWidget);
+    sortTbl(IssueTable_t);
 }
 
 void MainWindow::on_referenceSortBtn_clicked()
 {
-    sortTbl(ui->referenceTbl);
+    sortTbl(RefTable_t);
 }
 
 void MainWindow::on_sortExcludeBtn_clicked()
 {
-    sortTbl(ui->excludeTbl);
+    sortTbl(ExcludeTable_t);
 }
 
 void MainWindow::on_addExcludeBtn_clicked()
 {
-    QStringList exts = ui->extensionEdit->text().split(",");
-    insertTbl(ui->excludeTbl, "fileName." + exts[0]);
+    QStringList exts = Extension_t.split(",");
+    insertTbl(ExcludeTable_t, "fileName." + exts[0]);
 }
 
 void MainWindow::on_rmExcludeBtn_clicked()
 {
-    removeSelectedItems(ui->excludeTbl);
+    removeSelectedItems(ExcludeTable_t);
 }
 
 void MainWindow::on_actionOpen_Project_Path_triggered()
 {
-    QProcess::startDetached("explorer " + ui->pathEdit->text());
+    QProcess::startDetached("explorer " + ProjectPath_t);
 }
 
 void MainWindow::on_actionRefresh_triggered()
@@ -385,7 +384,7 @@ void MainWindow::on_actionRefresh_triggered()
 
 void MainWindow::on_actionSave_md_triggered()
 {
-    QFile md(ui->pathEdit->text() + "\\" + "ch_readme.md");
+    QFile md(ProjectPath_t + "\\" + "ch_readme.md");
 
     // 파일이 존재하지 않을 땐 경로에 파일을 생성한다.
     md.open(QFile::WriteOnly|QFile::Text);
@@ -394,15 +393,15 @@ void MainWindow::on_actionSave_md_triggered()
 
     ts << "## Description\n";
 
-    makeMDForm(ts, ui->descTblWidget, "Description");
+    makeMDForm(ts, DescTable_t,     "Description");
 
     ts << "\n## Issue\n";
 
-    makeMDForm(ts, ui->issueTblWidget, "Issue");
+    makeMDForm(ts, IssueTable_t,    "Issue");
 
     ts << "\n## Reference\n";
 
-    makeMDForm(ts, ui->referenceTbl, "Reference");
+    makeMDForm(ts, RefTable_t,      "Reference");
 
     md.close();
 
@@ -485,16 +484,16 @@ void MainWindow::dropEvent(QDropEvent *e)
 
         switch(ui->tabWidget->currentIndex()){
 
-        case tab_index::TAB_DESCRIPT: insertTbl(ui->descTblWidget, name, " ");
+        case tab_index::TAB_DESCRIPT:   insertTbl(DescTable_t,  name, " ");
         break;
 
-        case tab_index::TAB_ISSUE: insertTbl(ui->issueTblWidget, name, " ");
+        case tab_index::TAB_ISSUE:      insertTbl(IssueTable_t, name, " ");
         break;
 
-        case tab_index::TAB_EXCLUDE: insertTbl(ui->excludeTbl, name);
+        case tab_index::TAB_REF:        insertTbl(RefTable_t,   name, " ");
         break;
 
-        case tab_index::TAB_REF: insertTbl(ui->referenceTbl, name, " ");
+        case tab_index::TAB_EXCLUDE:    insertTbl(ExcludeTable_t, name);
         break;
 
         };
@@ -573,10 +572,10 @@ void MainWindow::removeSelectedItems(QTableWidget* tbl){
 
 void MainWindow::setCHSFile(const QString& chsPath){
 
-    clearTbl(ui->issueTblWidget);
-    clearTbl(ui->descTblWidget);
-    clearTbl(ui->referenceTbl);
-    clearTbl(ui->excludeTbl);
+    clearTbl(IssueTable_t);
+    clearTbl(DescTable_t);
+    clearTbl(RefTable_t);
+    clearTbl(ExcludeTable_t);
 
     setWindowTitle(chsPath);
 
@@ -634,7 +633,7 @@ void MainWindow::setCHSFile(const QString& chsPath){
                                       QRegularExpression::NormalMatch);
 
         if(flagMatch.hasMatch()){
-            auto item = searchTable(ui->flagTblWidget, flagMatch.captured("attKey"));
+            auto item = searchTable(FlagTable_t, flagMatch.captured("attKey"));
             item->setText(flagMatch.captured("attValue"));
             confQueue->pop();
             continue;
@@ -661,7 +660,7 @@ void MainWindow::setCHSFile(const QString& chsPath){
                                       QRegularExpression::NormalMatch);
 
         if(descMatch.hasMatch()){
-            insertItem(ui->descTblWidget, true,
+            insertItem(DescTable_t, true,
                        descMatch.captured("attKey"), descMatch.captured("attValue"));
 
             confQueue->pop();
@@ -676,7 +675,7 @@ void MainWindow::setCHSFile(const QString& chsPath){
                                         QRegularExpression::NormalMatch);
 
         if(issueMatch.hasMatch()){
-            insertItem(ui->issueTblWidget, true,
+            insertItem(IssueTable_t, true,
                        issueMatch.captured("attKey"), issueMatch.captured("attValue"));
 
             confQueue->pop();
@@ -691,7 +690,7 @@ void MainWindow::setCHSFile(const QString& chsPath){
                                            QRegularExpression::NormalMatch);
 
         if(refURLsMatch.hasMatch()){
-            insertItem(ui->referenceTbl, true,
+            insertItem(RefTable_t, true,
                        refURLsMatch.captured("attKey"), refURLsMatch.captured("attValue"));
 
             confQueue->pop();
@@ -706,7 +705,7 @@ void MainWindow::setCHSFile(const QString& chsPath){
                                               QRegularExpression::NormalMatch);
 
         if(excludeMatch.hasMatch()){
-            insertItem(ui->excludeTbl, true,
+            insertItem(ExcludeTable_t, true,
                        excludeMatch.captured("attKey"), nullptr);
 
             confQueue->pop();
@@ -743,14 +742,13 @@ void MainWindow::saveCHSFile(const QString& path){
     ts << "setting.descNumbering        =   "         + QString::number(ui->actionDesc_Numbering->isChecked())       + "\n";
     ts << "setting.issueNumbering       =   "         + QString::number(ui->actionIssue_Numbering->isChecked())      + "\n";
     ts << "setting.recursiveTraversal   =   "         + QString::number(ui->actionRecursive_Traversal->isChecked())  + "\n";
-
-    ts << "setting.divBySeparator   =   "         + QString::number(ui->actionDivide_by_Separator->isChecked())  + "\n";
-    ts << "setting.divByStartEndTag   =   "         + QString::number(ui->actionDivide_by_Start_End_tag->isChecked())  + "\n";
+    ts << "setting.divBySeparator       =   "         + QString::number(ui->actionDivide_by_Separator->isChecked())  + "\n";
+    ts << "setting.divByStartEndTag     =   "         + QString::number(ui->actionDivide_by_Start_End_tag->isChecked())  + "\n";
 
     ts << "\n# Flags\n";
 
-    ui->flagTblWidget->selectAll();
-    QList<QTableWidgetItem *> selectedCells = ui->flagTblWidget->selectedItems();
+    FlagTable_t->selectAll();
+    QList<QTableWidgetItem *> selectedCells = FlagTable_t->selectedItems();
 
     QString key;
     for(int i = 0; i < selectedCells.length(); i++){
@@ -764,64 +762,62 @@ void MainWindow::saveCHSFile(const QString& path){
         }
     }
 
-    ui->flagTblWidget->clearSelection();
+    FlagTable_t->clearSelection();
 
-    auto memo = ui->memoEdit->toPlainText();
+    auto memo = Memo_t;
     memo.replace("\n", ",");
 
     ts << "\n# Globals\n";
 
-    // ui->subDivEdit->toPlainText()
+    QString subDs = SubDiv_t.replace("\n",",");
+    QString supDs = SupDiv_t.replace("\n",",");
 
-    QString subDs = ui->subDivEdit->toPlainText().replace("\n",",");
-    QString supDs = ui->supDivEdit->toPlainText().replace("\n",",");
-
-    ts << "global.Extension        =  " <<   ui->extensionEdit->text()      << "\n";
-    ts << "global.Project_Path     =  " <<   ui->pathEdit->text()           << "\n";
-    ts << "global.Author           =  " <<   ui->authorEdit->text()         << "\n";
-    ts << "global.Separator        =  " <<   ui->separatorEdit->text()      << "\n";
-    ts << "global.StartTag         =  " <<   ui->sTagEdit->text()           << "\n";
-    ts << "global.EndTag           =  " <<   ui->eTagEdit->text()           << "\n";
-    ts << "global.Sub_Div_Line     =  " <<   subDs                          << "\n";
-    ts << "global.Sup_Div_Line     =  " <<   supDs                          << "\n";
-    ts << "global.Email            =  " <<   ui->emailEdit->text()          << "\n";
-    ts << "global.Telephone        =  " <<   ui->telepEdit->text()          << "\n";
-    ts << "global.Github_Account   =  " <<   ui->githubEdit->text()         << "\n";
-    ts << "global.Team             =  " <<   ui->teamEdit->text()           << "\n";
-    ts << "global.Memo             =  " <<   memo                           << "\n";
+    ts << "global.Extension        =  " <<   Extension_t      << "\n";
+    ts << "global.Project_Path     =  " <<   ProjectPath_t    << "\n";
+    ts << "global.Author           =  " <<   Author_t         << "\n";
+    ts << "global.Separator        =  " <<   Separator_t      << "\n";
+    ts << "global.StartTag         =  " <<   StartTag_t       << "\n";
+    ts << "global.EndTag           =  " <<   EndTag_t         << "\n";
+    ts << "global.Sub_Div_Line     =  " <<   subDs            << "\n";
+    ts << "global.Sup_Div_Line     =  " <<   supDs            << "\n";
+    ts << "global.Email            =  " <<   Email_t          << "\n";
+    ts << "global.Telephone        =  " <<   Telep_t          << "\n";
+    ts << "global.Github_Account   =  " <<   GithubAcc_t      << "\n";
+    ts << "global.Team             =  " <<   Team_t           << "\n";
+    ts << "global.Memo             =  " <<   memo             << "\n";
 
     ts << "\n# Desc\n";
 
-    for(int i = 0; i < ui->descTblWidget->rowCount(); i++){
+    for(int i = 0; i < DescTable_t->rowCount(); i++){
 
-        QStringList list = ui->descTblWidget->item(i, 1)->text().split("\n");
+        QStringList list = DescTable_t->item(i, 1)->text().split("\n");
 
         for (auto& desc : list){
-            ts << ui->descTblWidget->item(i, 0)->text() + "::desc       +=       "
+            ts << DescTable_t->item(i, 0)->text() + "::desc       +=       "
                   + desc << "\n";
         }
     }
 
     ts << "\n# Issue\n";
 
-    for(int i = 0; i < ui->issueTblWidget->rowCount(); i++){
+    for(int i = 0; i < IssueTable_t->rowCount(); i++){
 
-        QStringList list = ui->issueTblWidget->item(i, 1)->text().split("\n");
+        QStringList list = IssueTable_t->item(i, 1)->text().split("\n");
 
         for (auto& issue : list){
-            ts << ui->issueTblWidget->item(i, 0)->text() + "::issue       +=       "
+            ts << IssueTable_t->item(i, 0)->text() + "::issue       +=       "
                   + issue << "\n";
         }
     }
 
     ts << "\n# Reference URLs\n";
 
-    for(int i = 0; i < ui->referenceTbl->rowCount(); i++){
+    for(int i = 0; i < RefTable_t->rowCount(); i++){
 
-        QStringList list = ui->referenceTbl->item(i, 1)->text().split("\n");
+        QStringList list = RefTable_t->item(i, 1)->text().split("\n");
 
         for (auto& url : list){
-            ts << ui->referenceTbl->item(i, 0)->text() + "::refURLs       +=       "
+            ts << RefTable_t->item(i, 0)->text() + "::refURLs       +=       "
                   + url << "\n";
         }
 
@@ -829,8 +825,8 @@ void MainWindow::saveCHSFile(const QString& path){
 
     ts << "\n# Excluded files\n";
 
-    for (int i = 0; i < ui->excludeTbl->rowCount(); i++){
-        ts << ui->excludeTbl->item(i, 0)->text() + "::exclude\n";
+    for (int i = 0; i < ExcludeTable_t->rowCount(); i++){
+        ts << ExcludeTable_t->item(i, 0)->text() + "::exclude\n";
     }
 
     selectedFile = path;
@@ -929,7 +925,7 @@ void MainWindow::makeMDForm(QTextStream& ts, const QTableWidget *tbl, const QStr
 {
 
     ts << "| File Name | " + tblName + " | \n";
-    ts << "|---|:---:|          \n";
+    ts << "|---|---|          \n";
 
     bool prevSameKey = false;
     bool nextSameKey = false;
@@ -985,7 +981,7 @@ void MainWindow::makeMDForm(QTextStream& ts, const QTableWidget *tbl, const QStr
 s_ptr<queue<FileInfo>> MainWindow::getAllTargetFiles(const QString &dirName){
 
     // target Extension을 구하고, trim 한다.
-    QStringList targetExtensions = ui->extensionEdit->text().split(",");
+    QStringList targetExtensions = Extension_t.split(",");
 
     for(auto& i : targetExtensions){
         i = i.trimmed();
@@ -993,8 +989,8 @@ s_ptr<queue<FileInfo>> MainWindow::getAllTargetFiles(const QString &dirName){
 
     // 주석을 붙히지 않을 파일 이름의 List
     QStringList excludeList;
-    for(int i = 0; i < ui->excludeTbl->rowCount(); i++){
-        excludeList.append(ui->excludeTbl->item(i, 0)->text());
+    for(int i = 0; i < ExcludeTable_t->rowCount(); i++){
+        excludeList.append(ExcludeTable_t->item(i, 0)->text());
     }
 
     auto workQue = std::make_shared<std::queue<FileInfo>>();
@@ -1074,15 +1070,9 @@ void MainWindow::processFlag(QTextStream& ts, const QString& key, const QString&
         return;
     }
 
-    QString sep = "";
+    QString sep = Separator_t;
 
-    if(ui->actionDivide_by_Separator->isChecked()){
-        if(ui->separatorEdit->text().trimmed() != ""){
-            sep = ui->separatorEdit->text() + " ";
-        }
-    }
-
-    if(ui->flagTblWidget->item(flag, 1)->text() == "1"){
+    if(FlagTable_t->item(flag, 1)->text() == "1"){
 
         // div line의 경우
         if(IS_DIV(flag)){
@@ -1116,8 +1106,8 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
             date    = nullptr,
             urls    = nullptr,
             memo    = nullptr,
-            subd    = ui->subDivEdit->toPlainText(),
-            supd    = ui->supDivEdit->toPlainText();
+            subd    = SubDiv_t,
+            supd    = SupDiv_t;
 
     // 함수를 preview tab에서 사용하는 경우
     if(fileInfo.fileName == nullptr){
@@ -1134,48 +1124,48 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
 
         edit    = fileInfo.lastModified.toString("yyyy-MM-dd, HH:mm:ss");
         date    = fileInfo.created     .toString("yyyy-MM-dd, HH:mm:ss");
-        desc    = *(makeFromTbl(ui->descTblWidget,  ui->actionDesc_Numbering ->isChecked(), fileInfo));
-        issue   = *(makeFromTbl(ui->issueTblWidget, ui->actionIssue_Numbering->isChecked(), fileInfo));
-        urls    = *(makeFromTbl(ui->referenceTbl, true, fileInfo));
+        desc    = *(makeFromTbl(DescTable_t,  ui->actionDesc_Numbering ->isChecked(), fileInfo));
+        issue   = *(makeFromTbl(IssueTable_t, ui->actionIssue_Numbering->isChecked(), fileInfo));
+        urls    = *(makeFromTbl(RefTable_t, true, fileInfo));
 
-        auto memoText   = ui->memoEdit->toPlainText();
+        auto memoText   = Memo_t;
         auto memos      = memoText.split("\n");
 
         for(auto& text : memos){
             if(text.trimmed() == "") continue;
-            memo.append(ui->separatorEdit->text() + "  " + text + "\n");
+            memo.append(Separator_t + "  " + text + "\n");
         }
     }
 
-    if(ui->actionDivide_by_Start_End_tag->isChecked()) ts << ui->sTagEdit->text() + "\n";
+    if(ui->actionDivide_by_Start_End_tag->isChecked()) ts << StartTag_t + "\n";
 
-    processFlag(ts, supd,               "",                     FlagType::SUPDIV,     isPreviewMode, false);
+    processFlag(ts, supd,             "",          FlagType::SUPDIV,     isPreviewMode, false);
 
-    processFlag(ts, "@ Author",         ui->authorEdit->text(), FlagType::AUTHOR,     isPreviewMode, false);
+    processFlag(ts, "Author",         Author_t,    FlagType::AUTHOR,     isPreviewMode, false);
 
-    processFlag(ts, "@ Team",           ui->teamEdit->text(),   FlagType::TEAM,       isPreviewMode, false);
+    processFlag(ts, "Team",           Team_t,      FlagType::TEAM,       isPreviewMode, false);
 
-    processFlag(ts, "@ Created",        date,                   FlagType::CREATEDDATE,isPreviewMode, false);
+    processFlag(ts, "Created",        date,        FlagType::CREATEDDATE,isPreviewMode, false);
 
-    processFlag(ts, "@ Last Edited",    edit,                   FlagType::LASTEDITED, isPreviewMode, false);
+    processFlag(ts, "Last Edited",    edit,        FlagType::LASTEDITED, isPreviewMode, false);
 
-    processFlag(ts, "@ Desc",           desc,                   FlagType::DESC,       isPreviewMode, true );
+    processFlag(ts, "Desc",           desc,        FlagType::DESC,       isPreviewMode, true );
 
-    processFlag(ts, "@ Issue",          issue,                  FlagType::ISSUE,      isPreviewMode, true );
+    processFlag(ts, "Issue",          issue,       FlagType::ISSUE,      isPreviewMode, true );
 
-    processFlag(ts, "@ Email",          ui->emailEdit->text(),  FlagType::EMAIL,      isPreviewMode, false);
+    processFlag(ts, "Email",          Email_t,     FlagType::EMAIL,      isPreviewMode, false);
 
-    processFlag(ts, "@ Contact",        ui->telepEdit->text(),  FlagType::TELEP,      isPreviewMode, false);
+    processFlag(ts, "Contact",        Telep_t,     FlagType::TELEP,      isPreviewMode, false);
 
-    processFlag(ts, "@ Github Account", ui->githubEdit->text(), FlagType::GITHUBACC,  isPreviewMode, false);
+    processFlag(ts, "Github Account", GithubAcc_t, FlagType::GITHUBACC,  isPreviewMode, false);
 
-    processFlag(ts, "@ Ref URLs",       urls,                   FlagType::REFURLS,    isPreviewMode, true );
+    processFlag(ts, "Ref URLs",       urls,        FlagType::REFURLS,    isPreviewMode, true );
 
-    processFlag(ts, "@ Memo",           memo,                   FlagType::MEMO,       isPreviewMode, true );
+    processFlag(ts, "Memo",           memo,        FlagType::MEMO,       isPreviewMode, true );
 
-    processFlag(ts, subd,               "",                     FlagType::SUBDIV,     isPreviewMode, false);
+    processFlag(ts, subd,             "",          FlagType::SUBDIV,     isPreviewMode, false);
 
-    if(ui->actionDivide_by_Start_End_tag->isChecked()) ts << ui->eTagEdit->text();
+    if(ui->actionDivide_by_Start_End_tag->isChecked()) ts << EndTag_t;
 
 }
 
@@ -1196,7 +1186,7 @@ s_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const 
 
             if(fName == fileInfo.fileName){
                 *ret +=
-                        ui->separatorEdit->text() + "@     " +
+                        Separator_t + "   " +
                         QString::number(++hits) + ". " +
                         tbl->item(i, 1)->text()
                         + "\n";
@@ -1215,7 +1205,7 @@ s_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const 
 
             if(fName == fileInfo.fileName){
                 *ret +=
-                        ui->separatorEdit->text() + "@     " +
+                        Separator_t + "   " +
                         tbl->item(i, 1)->text()
                         + "\n";
             }
@@ -1229,7 +1219,7 @@ s_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const 
 
 void MainWindow::removeComment(QStringList &strList){
 
-    auto targetExtensions = ui->extensionEdit->text().split(",");
+    auto targetExtensions = Extension_t.split(",");
 
     for(auto& i : targetExtensions){
         i = i.trimmed();
@@ -1243,7 +1233,7 @@ void MainWindow::removeComment(QStringList &strList){
                 QDirIterator::IteratorFlag::Subdirectories :
                 QDirIterator::IteratorFlag::NoIteratorFlags;
 
-    QDirIterator it(ui->pathEdit->text(), flag);
+    QDirIterator it(ProjectPath_t, flag);
 
     while(true){
 
@@ -1266,13 +1256,13 @@ void MainWindow::removeComment(QStringList &strList){
                     target.open(QFile::ReadWrite|QFile::Text);
 
 
-                    auto  isEndPoint =
+                    auto isEndPoint =
                             [&](QString line) -> bool {
                                 if(ui->actionDivide_by_Start_End_tag->isChecked()){
-                                    return line.left(ui->eTagEdit->text().length()) == ui->eTagEdit->text();
+                                    return line.left(EndTag_t.length()) == EndTag_t;
                                 }
                                 else {
-                                    return line.left(ui->separatorEdit->text().length()) != ui->separatorEdit->text();
+                                    return line.left(Separator_t.length()) != Separator_t;
                                 }
                             };
 
