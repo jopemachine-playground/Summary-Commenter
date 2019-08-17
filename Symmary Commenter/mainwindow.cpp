@@ -744,6 +744,9 @@ void MainWindow::saveCHSFile(const QString& path){
     ts << "setting.issueNumbering       =   "         + QString::number(ui->actionIssue_Numbering->isChecked())      + "\n";
     ts << "setting.recursiveTraversal   =   "         + QString::number(ui->actionRecursive_Traversal->isChecked())  + "\n";
 
+    ts << "setting.divBySeparator   =   "         + QString::number(ui->actionDivide_by_Separator->isChecked())  + "\n";
+    ts << "setting.divByStartEndTag   =   "         + QString::number(ui->actionDivide_by_Start_End_tag->isChecked())  + "\n";
+
     ts << "\n# Flags\n";
 
     ui->flagTblWidget->selectAll();
@@ -777,6 +780,8 @@ void MainWindow::saveCHSFile(const QString& path){
     ts << "global.Project_Path     =  " <<   ui->pathEdit->text()           << "\n";
     ts << "global.Author           =  " <<   ui->authorEdit->text()         << "\n";
     ts << "global.Separator        =  " <<   ui->separatorEdit->text()      << "\n";
+    ts << "global.StartTag         =  " <<   ui->sTagEdit->text()           << "\n";
+    ts << "global.EndTag           =  " <<   ui->eTagEdit->text()           << "\n";
     ts << "global.Sub_Div_Line     =  " <<   subDs                          << "\n";
     ts << "global.Sup_Div_Line     =  " <<   supDs                          << "\n";
     ts << "global.Email            =  " <<   ui->emailEdit->text()          << "\n";
@@ -886,6 +891,14 @@ void MainWindow::addGlobalVars(const QString& key, const QString& value){
         ui->memoEdit     ->setText(memo);
         return;
     }
+    if(key == "StartTag"){
+        ui->sTagEdit    ->setText(value);
+        return;
+    }
+    if(key == "EndTag"){
+        ui->eTagEdit    ->setText(value);
+        return;
+    }
 
     qDebug() << "wrong Info included in addGlobalVars, value: " << key;
 }
@@ -900,6 +913,12 @@ void MainWindow::setSettingFlags(const QString &flagName, bool flag)
     }
     else if (flagName   == "recursiveTraversal"){
         ui->actionRecursive_Traversal->setChecked(flag);
+    }
+    else if (flagName   == "divBySeparator"){
+        ui->actionDivide_by_Separator->setChecked(flag);
+    }
+    else if (flagName   == "divByStartEndTag"){
+        ui->actionDivide_by_Start_End_tag->setChecked(flag);
     }
     else {
         qDebug() << "Wrong Setting value";
@@ -1051,6 +1070,18 @@ void MainWindow::processFlag(QTextStream& ts, const QString& key, const QString&
         return;
     }
 
+    if(!previewMode && value.trimmed() == ""){
+        return;
+    }
+
+    QString sep = "";
+
+    if(ui->actionDivide_by_Separator->isChecked()){
+        if(ui->separatorEdit->text().trimmed() != ""){
+            sep = ui->separatorEdit->text() + " ";
+        }
+    }
+
     if(ui->flagTblWidget->item(flag, 1)->text() == "1"){
 
         // div line의 경우
@@ -1059,23 +1090,18 @@ void MainWindow::processFlag(QTextStream& ts, const QString& key, const QString&
             QStringList list = key.split("\n");
 
             for(auto line : list){
-                ts << ui->separatorEdit->text() + " " + line + "\n";
+                ts << sep + line + "\n";
             }
-            return;
-        }
-
-        if(!previewMode && value == ""){
             return;
         }
 
         // key와 value 사이에 띄어쓰기를 넣을 것인지 여부
         if(keyValueSpace){
-            ts << ui->separatorEdit->text() + " " + key + " : \n" + value;
+            ts << sep + key + " : \n" + value;
         }
         else{
-            ts << ui->separatorEdit->text() + " " + key + " : " + value + "\n";
+            ts << sep + key + " : " + value + "\n";
         }
-
     }
 }
 
@@ -1121,6 +1147,8 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
         }
     }
 
+    if(ui->actionDivide_by_Start_End_tag->isChecked()) ts << ui->sTagEdit->text() + "\n";
+
     processFlag(ts, supd,               "",                     FlagType::SUPDIV,     isPreviewMode, false);
 
     processFlag(ts, "@ Author",         ui->authorEdit->text(), FlagType::AUTHOR,     isPreviewMode, false);
@@ -1147,6 +1175,7 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
 
     processFlag(ts, subd,               "",                     FlagType::SUBDIV,     isPreviewMode, false);
 
+    if(ui->actionDivide_by_Start_End_tag->isChecked()) ts << ui->eTagEdit->text();
 
 }
 
@@ -1158,10 +1187,16 @@ s_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const 
 
         int hits = 0;
         for(int i = 0; i < tbl->rowCount(); i++){
+
             auto fName = tbl->item(i, 0)->text();
+
+            if(tbl->item(i, 1)->text().trimmed() == ""){
+                continue;
+            }
+
             if(fName == fileInfo.fileName){
                 *ret +=
-                        ui->separatorEdit->text() + " @     " +
+                        ui->separatorEdit->text() + "@     " +
                         QString::number(++hits) + ". " +
                         tbl->item(i, 1)->text()
                         + "\n";
@@ -1171,10 +1206,16 @@ s_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const 
     else{
 
         for(int i = 0; i < tbl->rowCount(); i++){
+
             auto fName = tbl->item(i, 0)->text();
+
+            if(tbl->item(i, 1)->text().trimmed() == ""){
+                continue;
+            }
+
             if(fName == fileInfo.fileName){
                 *ret +=
-                        ui->separatorEdit->text() + " @     " +
+                        ui->separatorEdit->text() + "@     " +
                         tbl->item(i, 1)->text()
                         + "\n";
             }
@@ -1224,14 +1265,22 @@ void MainWindow::removeComment(QStringList &strList){
 
                     target.open(QFile::ReadWrite|QFile::Text);
 
+
+                    auto  isEndPoint =
+                            [&](QString line) -> bool {
+                                if(ui->actionDivide_by_Start_End_tag->isChecked()){
+                                    return line.left(ui->eTagEdit->text().length()) == ui->eTagEdit->text();
+                                }
+                                else {
+                                    return line.left(ui->separatorEdit->text().length()) != ui->separatorEdit->text();
+                                }
+                            };
+
                     while(!target.atEnd()){
 
                         QString line = target.readLine();
 
-                        bool isComment =
-                                (line.left(ui->separatorEdit->text().length()) == ui->separatorEdit->text());
-
-                        if(!isComment){
+                        if(isEndPoint(line)){
                             break;
                         }
                     }

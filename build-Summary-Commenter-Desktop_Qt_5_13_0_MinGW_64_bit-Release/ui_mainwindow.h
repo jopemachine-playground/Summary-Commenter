@@ -55,6 +55,8 @@ public:
     QAction *actionSave_md;
     QAction *actionRemove_Comments_From_All_File;
     QAction *actionHelp;
+    QAction *actionDivide_by_Separator;
+    QAction *actionDivide_by_Start_End_tag;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_2;
     QTabWidget *tabWidget;
@@ -79,14 +81,14 @@ public:
     QLabel *separatorLbl;
     QSpacerItem *spacer4;
     QLineEdit *separatorEdit;
-    QHBoxLayout *EmailL;
-    QLabel *emailLbl;
-    QSpacerItem *spacer7;
-    QLineEdit *emailEdit;
-    QHBoxLayout *TelephoneL;
-    QLabel *telepLbl;
-    QSpacerItem *spacer8;
-    QLineEdit *telepEdit;
+    QHBoxLayout *StartTagL;
+    QLabel *sTagLbl;
+    QSpacerItem *spacer1_6;
+    QLineEdit *sTagEdit;
+    QHBoxLayout *EndTagL;
+    QLabel *eTagLbl;
+    QSpacerItem *spacer1_7;
+    QLineEdit *eTagEdit;
     QHBoxLayout *SupDivLineL;
     QLabel *supDivLbl;
     QPlainTextEdit *supDivEdit;
@@ -103,6 +105,14 @@ public:
     QLabel *teamLbl;
     QSpacerItem *spacer1_5;
     QLineEdit *teamEdit;
+    QHBoxLayout *EmailL;
+    QLabel *emailLbl;
+    QSpacerItem *spacer7;
+    QLineEdit *emailEdit;
+    QHBoxLayout *TelephoneL;
+    QLabel *telepLbl;
+    QSpacerItem *spacer8;
+    QLineEdit *telepEdit;
     QHBoxLayout *MemoL;
     QLabel *memoLbl;
     QTextEdit *memoEdit;
@@ -154,6 +164,7 @@ public:
     QMenu *menuOpen_Recents;
     QMenu *menuHelp;
     QMenu *menuSetting;
+    QMenu *menuComments_style;
     QMenu *menuExecute;
     QStatusBar *statusBar;
 
@@ -211,6 +222,13 @@ public:
         actionRemove_Comments_From_All_File->setObjectName(QString::fromUtf8("actionRemove_Comments_From_All_File"));
         actionHelp = new QAction(MainWindow);
         actionHelp->setObjectName(QString::fromUtf8("actionHelp"));
+        actionDivide_by_Separator = new QAction(MainWindow);
+        actionDivide_by_Separator->setObjectName(QString::fromUtf8("actionDivide_by_Separator"));
+        actionDivide_by_Separator->setCheckable(true);
+        actionDivide_by_Separator->setChecked(true);
+        actionDivide_by_Start_End_tag = new QAction(MainWindow);
+        actionDivide_by_Start_End_tag->setObjectName(QString::fromUtf8("actionDivide_by_Start_End_tag"));
+        actionDivide_by_Start_End_tag->setCheckable(true);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_2 = new QVBoxLayout(centralWidget);
@@ -318,45 +336,45 @@ public:
 
         verticalLayout->addLayout(SeparatorL);
 
-        EmailL = new QHBoxLayout();
-        EmailL->setSpacing(6);
-        EmailL->setObjectName(QString::fromUtf8("EmailL"));
-        emailLbl = new QLabel(frame);
-        emailLbl->setObjectName(QString::fromUtf8("emailLbl"));
+        StartTagL = new QHBoxLayout();
+        StartTagL->setSpacing(6);
+        StartTagL->setObjectName(QString::fromUtf8("StartTagL"));
+        sTagLbl = new QLabel(frame);
+        sTagLbl->setObjectName(QString::fromUtf8("sTagLbl"));
 
-        EmailL->addWidget(emailLbl);
+        StartTagL->addWidget(sTagLbl);
 
-        spacer7 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        spacer1_6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        EmailL->addItem(spacer7);
+        StartTagL->addItem(spacer1_6);
 
-        emailEdit = new QLineEdit(frame);
-        emailEdit->setObjectName(QString::fromUtf8("emailEdit"));
+        sTagEdit = new QLineEdit(frame);
+        sTagEdit->setObjectName(QString::fromUtf8("sTagEdit"));
 
-        EmailL->addWidget(emailEdit);
-
-
-        verticalLayout->addLayout(EmailL);
-
-        TelephoneL = new QHBoxLayout();
-        TelephoneL->setSpacing(6);
-        TelephoneL->setObjectName(QString::fromUtf8("TelephoneL"));
-        telepLbl = new QLabel(frame);
-        telepLbl->setObjectName(QString::fromUtf8("telepLbl"));
-
-        TelephoneL->addWidget(telepLbl);
-
-        spacer8 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        TelephoneL->addItem(spacer8);
-
-        telepEdit = new QLineEdit(frame);
-        telepEdit->setObjectName(QString::fromUtf8("telepEdit"));
-
-        TelephoneL->addWidget(telepEdit);
+        StartTagL->addWidget(sTagEdit);
 
 
-        verticalLayout->addLayout(TelephoneL);
+        verticalLayout->addLayout(StartTagL);
+
+        EndTagL = new QHBoxLayout();
+        EndTagL->setSpacing(6);
+        EndTagL->setObjectName(QString::fromUtf8("EndTagL"));
+        eTagLbl = new QLabel(frame);
+        eTagLbl->setObjectName(QString::fromUtf8("eTagLbl"));
+
+        EndTagL->addWidget(eTagLbl);
+
+        spacer1_7 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        EndTagL->addItem(spacer1_7);
+
+        eTagEdit = new QLineEdit(frame);
+        eTagEdit->setObjectName(QString::fromUtf8("eTagEdit"));
+
+        EndTagL->addWidget(eTagEdit);
+
+
+        verticalLayout->addLayout(EndTagL);
 
         SupDivLineL = new QHBoxLayout();
         SupDivLineL->setSpacing(6);
@@ -444,6 +462,46 @@ public:
 
 
         verticalLayout_6->addLayout(TeamL);
+
+        EmailL = new QHBoxLayout();
+        EmailL->setSpacing(6);
+        EmailL->setObjectName(QString::fromUtf8("EmailL"));
+        emailLbl = new QLabel(frame);
+        emailLbl->setObjectName(QString::fromUtf8("emailLbl"));
+
+        EmailL->addWidget(emailLbl);
+
+        spacer7 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        EmailL->addItem(spacer7);
+
+        emailEdit = new QLineEdit(frame);
+        emailEdit->setObjectName(QString::fromUtf8("emailEdit"));
+
+        EmailL->addWidget(emailEdit);
+
+
+        verticalLayout_6->addLayout(EmailL);
+
+        TelephoneL = new QHBoxLayout();
+        TelephoneL->setSpacing(6);
+        TelephoneL->setObjectName(QString::fromUtf8("TelephoneL"));
+        telepLbl = new QLabel(frame);
+        telepLbl->setObjectName(QString::fromUtf8("telepLbl"));
+
+        TelephoneL->addWidget(telepLbl);
+
+        spacer8 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        TelephoneL->addItem(spacer8);
+
+        telepEdit = new QLineEdit(frame);
+        telepEdit->setObjectName(QString::fromUtf8("telepEdit"));
+
+        TelephoneL->addWidget(telepEdit);
+
+
+        verticalLayout_6->addLayout(TelephoneL);
 
         MemoL = new QHBoxLayout();
         MemoL->setSpacing(6);
@@ -800,6 +858,8 @@ public:
         menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         menuSetting = new QMenu(menuBar);
         menuSetting->setObjectName(QString::fromUtf8("menuSetting"));
+        menuComments_style = new QMenu(menuSetting);
+        menuComments_style->setObjectName(QString::fromUtf8("menuComments_style"));
         menuExecute = new QMenu(menuBar);
         menuExecute->setObjectName(QString::fromUtf8("menuExecute"));
         MainWindow->setMenuBar(menuBar);
@@ -833,6 +893,10 @@ public:
         menuSetting->addSeparator();
         menuSetting->addAction(actionIssue_Numbering);
         menuSetting->addAction(actionDesc_Numbering);
+        menuSetting->addSeparator();
+        menuSetting->addAction(menuComments_style->menuAction());
+        menuComments_style->addAction(actionDivide_by_Separator);
+        menuComments_style->addAction(actionDivide_by_Start_End_tag);
         menuExecute->addAction(actionExecute);
         menuExecute->addAction(actionRemove_Comments);
         menuExecute->addAction(actionRemove_Comments_From_All_File);
@@ -892,16 +956,21 @@ public:
         actionSave_md->setText(QCoreApplication::translate("MainWindow", "Export as Markdown", nullptr));
         actionRemove_Comments_From_All_File->setText(QCoreApplication::translate("MainWindow", "Remove Comments From All Files", nullptr));
         actionHelp->setText(QCoreApplication::translate("MainWindow", "Manual", nullptr));
+        actionDivide_by_Separator->setText(QCoreApplication::translate("MainWindow", "Divide by Separator", nullptr));
+        actionDivide_by_Start_End_tag->setText(QCoreApplication::translate("MainWindow", "Divide by Start, End tag", nullptr));
         extensionLbl->setText(QCoreApplication::translate("MainWindow", "Extension", nullptr));
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));
         separatorLbl->setText(QCoreApplication::translate("MainWindow", "Separator", nullptr));
-        emailLbl->setText(QCoreApplication::translate("MainWindow", "Email", nullptr));
-        telepLbl->setText(QCoreApplication::translate("MainWindow", "Telephone", nullptr));
+        sTagLbl->setText(QCoreApplication::translate("MainWindow", "Start Tag", nullptr));
+        eTagLbl->setText(QCoreApplication::translate("MainWindow", "End Tag", nullptr));
+        eTagEdit->setText(QString());
         supDivLbl->setText(QCoreApplication::translate("MainWindow", "Sup Div Line", nullptr));
         subDivLbl->setText(QCoreApplication::translate("MainWindow", "Sub Div Line", nullptr));
         githubLbl->setText(QCoreApplication::translate("MainWindow", "Github Account", nullptr));
         teamLbl->setText(QCoreApplication::translate("MainWindow", "Team", nullptr));
+        emailLbl->setText(QCoreApplication::translate("MainWindow", "Email", nullptr));
+        telepLbl->setText(QCoreApplication::translate("MainWindow", "Telephone", nullptr));
         memoLbl->setText(QCoreApplication::translate("MainWindow", "Memo", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(SettingTab), QCoreApplication::translate("MainWindow", "Global", nullptr));
         QTableWidgetItem *___qtablewidgetitem = flagTblWidget->horizontalHeaderItem(0);
@@ -1032,6 +1101,7 @@ public:
         menuOpen_Recents->setTitle(QCoreApplication::translate("MainWindow", "Open Recents", nullptr));
         menuHelp->setTitle(QCoreApplication::translate("MainWindow", "Help", nullptr));
         menuSetting->setTitle(QCoreApplication::translate("MainWindow", "Setting", nullptr));
+        menuComments_style->setTitle(QCoreApplication::translate("MainWindow", "Comments style", nullptr));
         menuExecute->setTitle(QCoreApplication::translate("MainWindow", "Execute", nullptr));
     } // retranslateUi
 

@@ -53,6 +53,8 @@ public:
     QAction *actionOpen_Project_Path;
     QAction *actionRefresh;
     QAction *actionSave_md;
+    QAction *actionRemove_Comments_From_All_File;
+    QAction *actionHelp;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_2;
     QTabWidget *tabWidget;
@@ -205,6 +207,10 @@ public:
         actionRefresh->setObjectName(QString::fromUtf8("actionRefresh"));
         actionSave_md = new QAction(MainWindow);
         actionSave_md->setObjectName(QString::fromUtf8("actionSave_md"));
+        actionRemove_Comments_From_All_File = new QAction(MainWindow);
+        actionRemove_Comments_From_All_File->setObjectName(QString::fromUtf8("actionRemove_Comments_From_All_File"));
+        actionHelp = new QAction(MainWindow);
+        actionHelp->setObjectName(QString::fromUtf8("actionHelp"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_2 = new QVBoxLayout(centralWidget);
@@ -821,6 +827,7 @@ public:
         menuOpen_Recents->addAction(actionrecent2);
         menuOpen_Recents->addAction(actionrecent3);
         menuOpen_Recents->addAction(actionrecent4);
+        menuHelp->addAction(actionHelp);
         menuHelp->addAction(actionGithub);
         menuSetting->addAction(actionRecursive_Traversal);
         menuSetting->addSeparator();
@@ -828,6 +835,7 @@ public:
         menuSetting->addAction(actionDesc_Numbering);
         menuExecute->addAction(actionExecute);
         menuExecute->addAction(actionRemove_Comments);
+        menuExecute->addAction(actionRemove_Comments_From_All_File);
 
         retranslateUi(MainWindow);
 
@@ -862,7 +870,7 @@ public:
 #if QT_CONFIG(shortcut)
         actionOpen_and_run->setShortcut(QCoreApplication::translate("MainWindow", "Shift+F5", nullptr));
 #endif // QT_CONFIG(shortcut)
-        actionRemove_Comments->setText(QCoreApplication::translate("MainWindow", "Remove Comments", nullptr));
+        actionRemove_Comments->setText(QCoreApplication::translate("MainWindow", "Remove Worked Comments", nullptr));
         actionRecursive_Traversal->setText(QCoreApplication::translate("MainWindow", "Recursive Traversal", nullptr));
         actionrecent1->setText(QCoreApplication::translate("MainWindow", "recent1", nullptr));
         actionrecent2->setText(QCoreApplication::translate("MainWindow", "recent2", nullptr));
@@ -882,6 +890,8 @@ public:
         actionRefresh->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+R", nullptr));
 #endif // QT_CONFIG(shortcut)
         actionSave_md->setText(QCoreApplication::translate("MainWindow", "Export as Markdown", nullptr));
+        actionRemove_Comments_From_All_File->setText(QCoreApplication::translate("MainWindow", "Remove Comments From All Files", nullptr));
+        actionHelp->setText(QCoreApplication::translate("MainWindow", "Manual", nullptr));
         extensionLbl->setText(QCoreApplication::translate("MainWindow", "Extension", nullptr));
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));

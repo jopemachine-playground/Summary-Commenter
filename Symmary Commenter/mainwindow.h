@@ -152,13 +152,14 @@ private:
     QFile*                                          chLately;
     std::deque<QString>*                            pathQue;
 
-    // setting Table
+    // setting table
     void                        setTable            (QTableWidget*);
     void                        clearTbl            (QTableWidget*);
     void                        sortTbl             (QTableWidget*);
     void                        insertTbl           (QTableWidget*, const QString&, const QString& value = nullptr);
     void                        setShortCut         ();
 
+    // setting table's dragging event
     void                        dragEnterEvent      (QDragEnterEvent *e) override;
     void                        dropEvent           (QDropEvent *e) override;
 
@@ -175,7 +176,7 @@ private:
     void                        makeMDForm          (QTextStream& ts, const QTableWidget* tbl, const QString& tblName);
 
     // directory traversal recursively and get all file info (except link file)
-    s_ptr<queue<FileInfo>>      getAllTargetFiles(const QString& dirName);
+    s_ptr<queue<FileInfo>>      getAllTargetFiles   (const QString& dirName);
 
     // make and prepend comment
     void                        prependComment      (FileInfo fileInfo);

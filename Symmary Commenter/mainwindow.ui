@@ -151,16 +151,16 @@
               </layout>
              </item>
              <item>
-              <layout class="QHBoxLayout" name="EmailL">
+              <layout class="QHBoxLayout" name="StartTagL">
                <item>
-                <widget class="QLabel" name="emailLbl">
+                <widget class="QLabel" name="sTagLbl">
                  <property name="text">
-                  <string>Email</string>
+                  <string>Start Tag</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <spacer name="spacer7">
+                <spacer name="spacer1_6">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
@@ -173,21 +173,21 @@
                 </spacer>
                </item>
                <item>
-                <widget class="QLineEdit" name="emailEdit"/>
+                <widget class="QLineEdit" name="sTagEdit"/>
                </item>
               </layout>
              </item>
              <item>
-              <layout class="QHBoxLayout" name="TelephoneL">
+              <layout class="QHBoxLayout" name="EndTagL">
                <item>
-                <widget class="QLabel" name="telepLbl">
+                <widget class="QLabel" name="eTagLbl">
                  <property name="text">
-                  <string>Telephone</string>
+                  <string>End Tag</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <spacer name="spacer8">
+                <spacer name="spacer1_7">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
@@ -200,7 +200,11 @@
                 </spacer>
                </item>
                <item>
-                <widget class="QLineEdit" name="telepEdit"/>
+                <widget class="QLineEdit" name="eTagEdit">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
                </item>
               </layout>
              </item>
@@ -303,6 +307,60 @@
                </item>
                <item>
                 <widget class="QLineEdit" name="teamEdit"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="EmailL">
+               <item>
+                <widget class="QLabel" name="emailLbl">
+                 <property name="text">
+                  <string>Email</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="spacer7">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="emailEdit"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="TelephoneL">
+               <item>
+                <widget class="QLabel" name="telepLbl">
+                 <property name="text">
+                  <string>Telephone</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="spacer8">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="telepEdit"/>
                </item>
               </layout>
              </item>
@@ -831,10 +889,19 @@
     <property name="title">
      <string>Setting</string>
     </property>
+    <widget class="QMenu" name="menuComments_style">
+     <property name="title">
+      <string>Comments style</string>
+     </property>
+     <addaction name="actionDivide_by_Separator"/>
+     <addaction name="actionDivide_by_Start_End_tag"/>
+    </widget>
     <addaction name="actionRecursive_Traversal"/>
     <addaction name="separator"/>
     <addaction name="actionIssue_Numbering"/>
     <addaction name="actionDesc_Numbering"/>
+    <addaction name="separator"/>
+    <addaction name="menuComments_style"/>
    </widget>
    <widget class="QMenu" name="menuExecute">
     <property name="title">
@@ -994,6 +1061,25 @@
   <action name="actionHelp">
    <property name="text">
     <string>Manual</string>
+   </property>
+  </action>
+  <action name="actionDivide_by_Separator">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Divide by Separator</string>
+   </property>
+  </action>
+  <action name="actionDivide_by_Start_End_tag">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Divide by Start, End tag</string>
    </property>
   </action>
  </widget>

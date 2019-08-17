@@ -224,6 +224,9 @@ debug/moc_mainwindow.cpp: ../Symmary\ Commenter/mainwindow.h \
 		../../Qt/5.13.0/mingw73_64/include/QtGui/qicon.h \
 		../../Qt/5.13.0/mingw73_64/include/QtCore/QDateTime \
 		../../Qt/5.13.0/mingw73_64/include/QtCore/qdatetime.h \
+		../../Qt/5.13.0/mingw73_64/include/QtCore/QMimeData \
+		../../Qt/5.13.0/mingw73_64/include/QtCore/qmimedata.h \
+		../../Qt/5.13.0/mingw73_64/include/QtGui/QDragEnterEvent \
 		debug/moc_predefs.h \
 		../../Qt/5.13.0/mingw73_64/bin/moc.exe
 	C:\Qt\5.13.0\mingw73_64\bin\moc.exe $(DEFINES) --include C:/CommentHelper/build-Summary-Commenter-Desktop_Qt_5_13_0_MinGW_64_bit-Release/debug/moc_predefs.h -IC:/Qt/5.13.0/mingw73_64/mkspecs/win32-g++ -I"C:/CommentHelper/Symmary Commenter" -IC:/Qt/5.13.0/mingw73_64/include -IC:/Qt/5.13.0/mingw73_64/include/QtWidgets -IC:/Qt/5.13.0/mingw73_64/include/QtGui -IC:/Qt/5.13.0/mingw73_64/include/QtANGLE -IC:/Qt/5.13.0/mingw73_64/include/QtCore -I. -IC:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32 -IC:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_64/x86_64-w64-mingw32/include "..\Symmary Commenter\mainwindow.h" -o debug\moc_mainwindow.cpp
@@ -366,7 +369,10 @@ debug/main.o: ../Symmary\ Commenter/main.cpp ../../Qt/5.13.0/mingw73_64/include/
 		../../Qt/5.13.0/mingw73_64/include/QtWidgets/qtabwidget.h \
 		../../Qt/5.13.0/mingw73_64/include/QtGui/qicon.h \
 		../../Qt/5.13.0/mingw73_64/include/QtCore/QDateTime \
-		../../Qt/5.13.0/mingw73_64/include/QtCore/qdatetime.h
+		../../Qt/5.13.0/mingw73_64/include/QtCore/qdatetime.h \
+		../../Qt/5.13.0/mingw73_64/include/QtCore/QMimeData \
+		../../Qt/5.13.0/mingw73_64/include/QtCore/qmimedata.h \
+		../../Qt/5.13.0/mingw73_64/include/QtGui/QDragEnterEvent
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\main.o "..\Symmary Commenter\main.cpp"
 
 debug/mainwindow.o: ../Symmary\ Commenter/mainwindow.cpp ../../Qt/5.13.0/mingw73_64/include/QtCore/QDebug \
@@ -494,6 +500,9 @@ debug/mainwindow.o: ../Symmary\ Commenter/mainwindow.cpp ../../Qt/5.13.0/mingw73
 		../../Qt/5.13.0/mingw73_64/include/QtGui/qicon.h \
 		../../Qt/5.13.0/mingw73_64/include/QtCore/QDateTime \
 		../../Qt/5.13.0/mingw73_64/include/QtCore/qdatetime.h \
+		../../Qt/5.13.0/mingw73_64/include/QtCore/QMimeData \
+		../../Qt/5.13.0/mingw73_64/include/QtCore/qmimedata.h \
+		../../Qt/5.13.0/mingw73_64/include/QtGui/QDragEnterEvent \
 		ui_mainwindow.h \
 		../../Qt/5.13.0/mingw73_64/include/QtCore/QVariant \
 		../../Qt/5.13.0/mingw73_64/include/QtWidgets/QAction \
