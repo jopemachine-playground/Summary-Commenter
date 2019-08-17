@@ -824,6 +824,7 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionHelp"/>
     <addaction name="actionGithub"/>
    </widget>
    <widget class="QMenu" name="menuSetting">
@@ -988,6 +989,11 @@
   <action name="actionRemove_Comments_From_All_File">
    <property name="text">
     <string>Remove Comments From All Files</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>Manual</string>
    </property>
   </action>
  </widget>

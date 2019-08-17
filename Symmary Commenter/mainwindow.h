@@ -12,6 +12,9 @@
 #include <QMainWindow>
 #include <QDateTime>
 
+#include <QMimeData>
+#include <QDragEnterEvent>
+
 // ==============================+===============================================================
 // Forward declare
 
@@ -155,6 +158,9 @@ private:
     void                        sortTbl             (QTableWidget*);
     void                        insertTbl           (QTableWidget*, const QString&, const QString& value = nullptr);
     void                        setShortCut         ();
+
+    void                        dragEnterEvent      (QDragEnterEvent *e) override;
+    void                        dropEvent           (QDropEvent *e) override;
 
     // handle tables
     QTableWidgetItem*           searchTable         (QTableWidget* tbl, const QString& key);

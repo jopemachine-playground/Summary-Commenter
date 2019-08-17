@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setTable(ui->issueTblWidget);
     setTable(ui->referenceTbl);
     setTable(ui->excludeTbl);
-
+    setAcceptDrops(true);
     setShortCut();
 
     if(chLately->exists()){
@@ -262,7 +262,7 @@ void MainWindow::on_actionOpen_triggered()
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
     // preview 탭이 클릭되면 preview에 들어갈 텍스트를 계산
-    if(index == TAB_PREVIEW){
+    if(index == tab_index::TAB_PREVIEW){
         QString text = "";
 
         QTextStream ts(&text);
@@ -461,6 +461,44 @@ void MainWindow::setShortCut()
     // Other Buttons
     ui->copyBtn->setShortcut(QKeySequence(Qt::Key_C));
 
+}
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *e)
+{
+    if (e->mimeData()->hasUrls()) {
+        e->acceptProposedAction();
+    }
+}
+
+void MainWindow::dropEvent(QDropEvent *e)
+{
+    // http://www.moneybook.co.kr/pages/blog_dev_note/543888
+
+    QRegularExpression fileNameRe("(?<fileName>[^\\/\n]+$)");
+
+    foreach (const QUrl &url, e->mimeData()->urls()) {
+
+        auto fileNameMatch = fileNameRe.match(url.toLocalFile(), 0,
+                                            QRegularExpression::NormalMatch);
+
+        QString name = fileNameMatch.captured("fileName");
+
+        switch(ui->tabWidget->currentIndex()){
+
+        case tab_index::TAB_DESCRIPT: insertTbl(ui->descTblWidget, name, " ");
+        break;
+
+        case tab_index::TAB_ISSUE: insertTbl(ui->issueTblWidget, name, " ");
+        break;
+
+        case tab_index::TAB_EXCLUDE: insertTbl(ui->excludeTbl, name);
+        break;
+
+        case tab_index::TAB_REF: insertTbl(ui->referenceTbl, name, " ");
+        break;
+
+        };
+    }
 }
 
 // ==============================+===============================================================
