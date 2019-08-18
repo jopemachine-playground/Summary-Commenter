@@ -24,53 +24,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle(DEFAULT_WIN_TITLE);
 
-    chLately = new QFile(QDir::currentPath() + "\\" + "chlately");
-
-    pathQue = new std::deque<QString>();
-
-    QString latest = nullptr;
-
     setTable(FlagTable_t);
     setTable(DescTable_t);
     setTable(IssueTable_t);
     setTable(RefTable_t);
     setTable(ExcludeTable_t);
+
     setAcceptDrops(true);
     setShortCut();
 
-    if(chLately->exists()){
-
-        chLately->open( QFile::ReadWrite | QFile::Text  );
-
-        QString o = chLately->readLine();
-
-        QStringList list = o.split(",");
-
-        latest = list[0];
-
-        auto actionList = ui->menuOpen_Recents->actions();
-
-        int index = 0;
-
-        for (auto& action : actionList){
-            if(list.length() <= index) {
-                action->setVisible( false );
-            }
-            else{
-                action->setText( list[index++] );
-            }
-        }
-
-        for(auto& path : list){
-            if(path == "") continue;
-            pathQue->push_back( path );
-        }
-
-        setCHSFile(latest);
-    }
-    else{
-        chLately->open( QFile::ReadWrite | QFile::Text  );
-    }
+    openRecentPathsFile();
 }
 
 
@@ -115,7 +78,11 @@ bool MainWindow::Open(){
     // 파일을 선택했을 때
     if(fileOpenDialog.exec()){
         selectedFile = fileOpenDialog.selectedFiles()[0];
-        pathQue->push_front(selectedFile);
+
+        // queue에 해당 값이 있는지 확인해 중복되면 큐에 추가하지 않는다.
+        if(std::find(pathQue->begin(), pathQue->end(), selectedFile) != pathQue->end()){
+            pathQue->push_front(selectedFile);
+        }
     }
     else{
         return false;
@@ -983,6 +950,49 @@ void MainWindow::makeMDForm(QTextStream& ts, const QTableWidget *tbl, const QStr
         }
     }
 
+}
+
+void MainWindow::openRecentPathsFile()
+{
+    QString latest = nullptr;
+
+    pathQue = new std::deque<QString>();
+
+    chLately = new QFile(QDir(QDir::currentPath()).filePath("chlately"));
+
+    if(chLately->exists()){
+
+        chLately->open( QFile::ReadWrite | QFile::Text  );
+
+        QString o = chLately->readLine();
+
+        QStringList list = o.split(",");
+
+        latest = list[0];
+
+        auto actionList = ui->menuOpen_Recents->actions();
+
+        int index = 0;
+
+        for (auto& action : actionList){
+            if(list.length() <= index) {
+                action->setVisible( false );
+            }
+            else{
+                action->setText( list[index++] );
+            }
+        }
+
+        for(auto& path : list){
+            if(path == "") continue;
+            pathQue->push_back( path );
+        }
+
+        setCHSFile(latest);
+    }
+    else{
+        chLately->open( QFile::ReadWrite | QFile::Text  );
+    }
 }
 
 

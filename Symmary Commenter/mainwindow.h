@@ -70,7 +70,7 @@ public:
 
     explicit MainWindow(QWidget *parent = nullptr);
 
-    ~MainWindow();
+    ~MainWindow() override;
 
     void ShowMessageBox(const QString&, const QString&);
 
@@ -176,6 +176,7 @@ private:
     void                        addGlobalVars       (const QString& key, const QString& value);
     void                        setSettingFlags     (const QString& flagName, bool flag);
     void                        makeMDForm          (QTextStream& ts, const QTableWidget* tbl, const QString& tblName);
+    void                        openRecentPathsFile ();
 
     // directory traversal recursively and get all file info (except link file)
     s_ptr<queue<FileInfo>>      getAllTargetFiles   (const QString& dirName);
