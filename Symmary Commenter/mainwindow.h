@@ -153,8 +153,8 @@ private:
     void                        removeSelectedItems (QTableWidget* tbl);
 
     // file save and load
-    void                        setSCPSFile          (const QString& path);
-    void                        saveSCPSFile         (const QString& path);
+    void                        setSCPSFile         (const QString& path);
+    void                        saveSCPSFile        (const QString& path);
     void                        addGlobalVars       (const QString& key, const QString& value);
     void                        setSettingFlags     (const QString& flagName, bool flag);
     void                        makeMDForm          (QTextStream& ts, const QTableWidget* tbl, const QString& tblName);
@@ -169,7 +169,7 @@ private:
     void                        makeComment         (QTextStream& ts, const FileInfo& fileName);
     s_ptr<QString>              makeFromTbl         (QTableWidget* tbl, bool numbering, const FileInfo& fileInfo);
 
-    void                        removeComment       (QStringList& strList);
+    bool                        removeComment       (QStringList& strList);
 
 
 

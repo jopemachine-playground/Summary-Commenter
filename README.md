@@ -59,12 +59,12 @@ global.Github_Account   =
 
 
 
-아래처럼 desc, issue, urls 값만 명시한 chs 파일의 경우 Open하면 flag, global 값은 변하지 않고 import한 파일의 설정만 추가하는 식으로 이용할 수도 있음.
+아래처럼 desc, issue, urls 값만 명시한 scps 파일의 경우 Open하면 flag, global 값은 변하지 않고 import한 파일의 설정만 추가하는 식으로 이용할 수도 있음.
 
 
 
 ```
-# [*.chs]
+# [*.scps]
 constant.h::desc       	+=              상수 값들을 모아놓은 헤더 파일
 mainwindow.cpp::desc	+=		이벤트 처리 메인 윈도우 구현 파일
 gamemanager.cpp::issue	+=		버그 있음
@@ -78,7 +78,7 @@ constant.h::urls        +=		https://urlexample2.com
 
 
 
-**sclately 파일** : 최근 열었던 chs 파일들의 경로를 5개 까지 기억하고 있음. SummaryCommenter 실행 시 가장 최근에 열렸던 chs 파일을 자동으로 셋팅하며, Open Recents 버튼으로 이 경로의 chs 파일들에 접근할 수 있음.
+**sclately 파일** : 최근 열었던 scps 파일들의 경로를 5개 까지 기억하고 있음. SummaryCommenter 실행 시 가장 최근에 열렸던 scps 파일을 자동으로 셋팅하며, Open Recents 버튼으로 이 경로의 scps 파일들에 접근할 수 있음.
 
 
 

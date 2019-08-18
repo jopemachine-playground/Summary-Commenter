@@ -84,7 +84,7 @@ bool MainWindow::Open(){
         selectedFile = fileOpenDialog.selectedFiles()[0];
 
         // queue에 해당 값이 있는지 확인해 중복되면 큐에 추가하지 않는다.
-        if(std::find(pathQue->begin(), pathQue->end(), selectedFile) != pathQue->end()){
+        if(std::find(pathQue->begin(), pathQue->end(), selectedFile) == pathQue->end()){
             pathQue->push_front(selectedFile);
         }
     }
@@ -121,7 +121,10 @@ void MainWindow::Run(){
         QTextStream ts(&scprojContent);
         ts << scprojFile.readAll();
         QStringList list = scprojContent.split(",");
-        removeComment(list);
+        if(!removeComment(list)){
+            ShowMessageBox("Essential Input Not Specified!", "Error");
+            return;
+        }
     }
 
     scprojContent = "";
@@ -287,10 +290,13 @@ void MainWindow::on_actionRemove_Comments_triggered()
         QTextStream ts(&scprojContent);
         ts << scprojFile.readAll();
         QStringList list = scprojContent.split(",");
-        removeComment(list);
+        if(!removeComment(list)){
+            ShowMessageBox("Essential Input Not Specified!", "Error");
+            return;
+        }
     }
     else{
-        ShowMessageBox("chproj file not exist!", "Error");
+        ShowMessageBox("scproj file not exist!", "Error");
         return;
     }
 
@@ -356,6 +362,11 @@ void MainWindow::on_rmExcludeBtn_clicked()
 
 void MainWindow::on_actionOpen_Project_Path_triggered()
 {
+    if(ProjectPath_t.trimmed() == ""){
+        ShowMessageBox("Directory not specified", "Error");
+        return;
+    }
+
     QProcess::startDetached("explorer " + ProjectPath_t);
 }
 
@@ -394,7 +405,10 @@ void MainWindow::on_actionSave_md_triggered()
 
 void MainWindow::on_actionRemove_Comments_From_All_File_triggered()
 {
-    removeComment(*(new QStringList()));
+    if(!removeComment(*(new QStringList()))){
+        ShowMessageBox("Essential Input Not Specified!", "Error");
+        return;
+    }
 
     ShowMessageBox("done!", "Complete");
 }
@@ -402,7 +416,13 @@ void MainWindow::on_actionRemove_Comments_From_All_File_triggered()
 
 void MainWindow::on_actionOpen_setting_file_triggered()
 {
-    QString path = pathQue->front().replace("/", "\\");
+    if(pathQue->empty()){
+        ShowMessageBox("No files are open", "Error");
+        return;
+    }
+
+    QString front = pathQue->front();
+    QString path = front.replace("/", "\\");
     qDebug() << path;
 
     QProcess::startDetached("explorer " + path);
@@ -1251,7 +1271,12 @@ s_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const 
 
 
 
-void MainWindow::removeComment(QStringList &strList){
+bool MainWindow::removeComment(QStringList &strList){
+
+    if((IsDivByStartEndTag_t && EndTag_t.trimmed() == "") ||
+            (IsDivBySeparator_t && Separator_t == "")){
+        return false;
+    }
 
     auto targetExtensions = Extension_t.split(",");
 
@@ -1323,6 +1348,11 @@ void MainWindow::removeComment(QStringList &strList){
         it.next();
     }
 
+    if(pathQue->size() < 2){
+        ui->menuOpen_Recents->setEnabled(false);
+    }
+
+    return true;
 }
 
 
