@@ -57,6 +57,7 @@ public:
     QAction *actionHelp;
     QAction *actionDivide_by_Separator;
     QAction *actionDivide_by_Start_End_tag;
+    QAction *actionOpen_setting_file;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_2;
     QTabWidget *tabWidget;
@@ -229,6 +230,8 @@ public:
         actionDivide_by_Start_End_tag = new QAction(MainWindow);
         actionDivide_by_Start_End_tag->setObjectName(QString::fromUtf8("actionDivide_by_Start_End_tag"));
         actionDivide_by_Start_End_tag->setCheckable(true);
+        actionOpen_setting_file = new QAction(MainWindow);
+        actionOpen_setting_file->setObjectName(QString::fromUtf8("actionOpen_setting_file"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_2 = new QVBoxLayout(centralWidget);
@@ -875,6 +878,7 @@ public:
         menuFile->addAction(actionOpen_and_run);
         menuFile->addAction(menuOpen_Recents->menuAction());
         menuFile->addAction(actionOpen_Project_Path);
+        menuFile->addAction(actionOpen_setting_file);
         menuFile->addSeparator();
         menuFile->addAction(actionRefresh);
         menuFile->addSeparator();
@@ -958,6 +962,7 @@ public:
         actionHelp->setText(QCoreApplication::translate("MainWindow", "Manual", nullptr));
         actionDivide_by_Separator->setText(QCoreApplication::translate("MainWindow", "Divide by Separator", nullptr));
         actionDivide_by_Start_End_tag->setText(QCoreApplication::translate("MainWindow", "Divide by Start, End tag", nullptr));
+        actionOpen_setting_file->setText(QCoreApplication::translate("MainWindow", "Open Setting File", nullptr));
         extensionLbl->setText(QCoreApplication::translate("MainWindow", "Extension", nullptr));
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));
@@ -1068,7 +1073,7 @@ public:
         ___qtablewidgetitem42->setText(QCoreApplication::translate("MainWindow", "Description", nullptr));
         descAddBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
         descRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Del)", nullptr));
-        descSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name", nullptr));
+        descSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name (Ctrl + T)", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(DescTab), QCoreApplication::translate("MainWindow", "Desc", nullptr));
         QTableWidgetItem *___qtablewidgetitem43 = issueTblWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem43->setText(QCoreApplication::translate("MainWindow", "File Name", nullptr));
@@ -1076,7 +1081,7 @@ public:
         ___qtablewidgetitem44->setText(QCoreApplication::translate("MainWindow", "Issue", nullptr));
         issueAddBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
         issueRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Del)", nullptr));
-        issueSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name", nullptr));
+        issueSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name (Ctrl + T)", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(IssueTab), QCoreApplication::translate("MainWindow", "Issue", nullptr));
         QTableWidgetItem *___qtablewidgetitem45 = referenceTbl->horizontalHeaderItem(0);
         ___qtablewidgetitem45->setText(QCoreApplication::translate("MainWindow", "File Name", nullptr));
@@ -1084,13 +1089,13 @@ public:
         ___qtablewidgetitem46->setText(QCoreApplication::translate("MainWindow", "URLs", nullptr));
         addReferenceBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
         rmReferenceBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Del)", nullptr));
-        referenceSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name", nullptr));
+        referenceSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name (Ctrl + T)", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(referenceTab), QCoreApplication::translate("MainWindow", "Reference", nullptr));
         QTableWidgetItem *___qtablewidgetitem47 = excludeTbl->horizontalHeaderItem(0);
         ___qtablewidgetitem47->setText(QCoreApplication::translate("MainWindow", "File Name to exclude", nullptr));
         addExcludeBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
         rmExcludeBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Del)", nullptr));
-        sortExcludeBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name", nullptr));
+        sortExcludeBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name (Ctrl + T)", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(excludeTab), QCoreApplication::translate("MainWindow", "Exclude", nullptr));
 #if QT_CONFIG(tooltip)
         previewTextEdit->setToolTip(QCoreApplication::translate("MainWindow", "<html><head/><body><p>Check the comments to add</p></body></html>", nullptr));

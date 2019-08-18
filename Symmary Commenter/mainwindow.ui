@@ -649,7 +649,7 @@
             <item>
              <widget class="QPushButton" name="descSortBtn">
               <property name="text">
-               <string>Sort By File Name</string>
+               <string>Sort By File Name (Ctrl + T)</string>
               </property>
              </widget>
             </item>
@@ -699,7 +699,7 @@
             <item>
              <widget class="QPushButton" name="issueSortBtn">
               <property name="text">
-               <string>Sort By File Name</string>
+               <string>Sort By File Name (Ctrl + T)</string>
               </property>
              </widget>
             </item>
@@ -749,7 +749,7 @@
             <item>
              <widget class="QPushButton" name="referenceSortBtn">
               <property name="text">
-               <string>Sort By File Name</string>
+               <string>Sort By File Name (Ctrl + T)</string>
               </property>
              </widget>
             </item>
@@ -794,7 +794,7 @@
             <item>
              <widget class="QPushButton" name="sortExcludeBtn">
               <property name="text">
-               <string>Sort By File Name</string>
+               <string>Sort By File Name (Ctrl + T)</string>
               </property>
              </widget>
             </item>
@@ -873,6 +873,7 @@
     <addaction name="actionOpen_and_run"/>
     <addaction name="menuOpen_Recents"/>
     <addaction name="actionOpen_Project_Path"/>
+    <addaction name="actionOpen_setting_file"/>
     <addaction name="separator"/>
     <addaction name="actionRefresh"/>
     <addaction name="separator"/>
@@ -1084,6 +1085,11 @@
    </property>
    <property name="text">
     <string>Divide by Start, End tag</string>
+   </property>
+  </action>
+  <action name="actionOpen_setting_file">
+   <property name="text">
+    <string>Open Setting File</string>
    </property>
   </action>
  </widget>

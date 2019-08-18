@@ -410,10 +410,18 @@ void MainWindow::on_actionSave_md_triggered()
 
 void MainWindow::on_actionRemove_Comments_From_All_File_triggered()
 {
-
     removeComment(*(new QStringList()));
 
     ShowMessageBox("done!", "Complete");
+}
+
+
+void MainWindow::on_actionOpen_setting_file_triggered()
+{
+    QString path = pathQue->front().replace("/", "\\");
+    qDebug() << path;
+
+    QProcess::startDetached("explorer " + path);
 }
 
 
@@ -456,6 +464,10 @@ void MainWindow::setShortCut()
     ui->rmExcludeBtn->setShortcut(QKeySequence::Delete);
 
     // Sort Buttons
+    ui->descSortBtn->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
+    ui->issueSortBtn->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
+    ui->referenceSortBtn->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
+    ui->sortExcludeBtn->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
 
     // Other Buttons
     ui->copyBtn->setShortcut(QKeySequence(Qt::Key_C));
@@ -739,11 +751,11 @@ void MainWindow::saveCHSFile(const QString& path){
 
     ts << "\n# Setting\n";
 
-    ts << "setting.descNumbering        =   "         + QString::number(ui->actionDesc_Numbering->isChecked())       + "\n";
-    ts << "setting.issueNumbering       =   "         + QString::number(ui->actionIssue_Numbering->isChecked())      + "\n";
-    ts << "setting.recursiveTraversal   =   "         + QString::number(ui->actionRecursive_Traversal->isChecked())  + "\n";
-    ts << "setting.divBySeparator       =   "         + QString::number(ui->actionDivide_by_Separator->isChecked())  + "\n";
-    ts << "setting.divByStartEndTag     =   "         + QString::number(ui->actionDivide_by_Start_End_tag->isChecked())  + "\n";
+    ts << "setting.descNumbering        =   "         + QString::number(IsDescNumbering_t)       + "\n";
+    ts << "setting.issueNumbering       =   "         + QString::number(IsIssueNumbering_t)      + "\n";
+    ts << "setting.recursiveTraversal   =   "         + QString::number(IsRecursiveTraversal_t)  + "\n";
+    ts << "setting.divBySeparator       =   "         + QString::number(IsDivBySeparator_t)      + "\n";
+    ts << "setting.divByStartEndTag     =   "         + QString::number(IsDivByStartEndTag_t)    + "\n";
 
     ts << "\n# Flags\n";
 
@@ -995,7 +1007,7 @@ s_ptr<queue<FileInfo>> MainWindow::getAllTargetFiles(const QString &dirName){
 
     auto workQue = std::make_shared<std::queue<FileInfo>>();
 
-    auto flag = ui->actionRecursive_Traversal->isChecked() ?
+    auto flag = IsRecursiveTraversal_t ?
                 QDirIterator::IteratorFlag::Subdirectories :
                 QDirIterator::IteratorFlag::NoIteratorFlags;
 
@@ -1023,11 +1035,6 @@ s_ptr<queue<FileInfo>> MainWindow::getAllTargetFiles(const QString &dirName){
 
         it.next();
     }
-
-    //    while(!que->empty()){
-    //        qDebug() << que->front();
-    //        que->pop();
-    //    }
 
     return workQue;
 }
@@ -1125,7 +1132,7 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
         edit    = fileInfo.lastModified.toString("yyyy-MM-dd, HH:mm:ss");
         date    = fileInfo.created     .toString("yyyy-MM-dd, HH:mm:ss");
         desc    = *(makeFromTbl(DescTable_t,  ui->actionDesc_Numbering ->isChecked(), fileInfo));
-        issue   = *(makeFromTbl(IssueTable_t, ui->actionIssue_Numbering->isChecked(), fileInfo));
+        issue   = *(makeFromTbl(IssueTable_t, IsIssueNumbering_t, fileInfo));
         urls    = *(makeFromTbl(RefTable_t, true, fileInfo));
 
         auto memoText   = Memo_t;
@@ -1137,7 +1144,7 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
         }
     }
 
-    if(ui->actionDivide_by_Start_End_tag->isChecked()) ts << StartTag_t + "\n";
+    if(IsDivByStartEndTag_t) ts << StartTag_t + "\n";
 
     processFlag(ts, supd,             "",          FlagType::SUPDIV,     isPreviewMode, false);
 
@@ -1165,7 +1172,7 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
 
     processFlag(ts, subd,             "",          FlagType::SUBDIV,     isPreviewMode, false);
 
-    if(ui->actionDivide_by_Start_End_tag->isChecked()) ts << EndTag_t;
+    if(IsDivByStartEndTag_t) ts << EndTag_t;
 
 }
 
@@ -1229,7 +1236,7 @@ void MainWindow::removeComment(QStringList &strList){
         }
     }
 
-    auto flag = ui->actionRecursive_Traversal->isChecked() ?
+    auto flag = IsRecursiveTraversal_t ?
                 QDirIterator::IteratorFlag::Subdirectories :
                 QDirIterator::IteratorFlag::NoIteratorFlags;
 
@@ -1258,7 +1265,7 @@ void MainWindow::removeComment(QStringList &strList){
 
                     auto isEndPoint =
                             [&](QString line) -> bool {
-                                if(ui->actionDivide_by_Start_End_tag->isChecked()){
+                                if(IsDivByStartEndTag_t){
                                     return line.left(EndTag_t.length()) == EndTag_t;
                                 }
                                 else {

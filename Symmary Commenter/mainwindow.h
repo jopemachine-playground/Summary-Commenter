@@ -144,6 +144,8 @@ private slots:
 
     void on_actionRemove_Comments_From_All_File_triggered();
 
+    void on_actionOpen_setting_file_triggered();
+
 private:
 
     // member vars

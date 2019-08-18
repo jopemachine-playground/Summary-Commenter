@@ -1,29 +1,35 @@
 #ifndef CONSTANT_H
 #define CONSTANT_H
 
-#define DEFAULT_WIN_TITLE  "Summary Commenter"
+// ==============================+===============================================================
 
+#define FlagTable_t             ui->flagTblWidget
+#define DescTable_t             ui->descTblWidget
+#define IssueTable_t            ui->issueTblWidget
+#define RefTable_t              ui->referenceTbl
+#define ExcludeTable_t          ui->excludeTbl
 
-#define FlagTable_t     ui->flagTblWidget
-#define DescTable_t     ui->descTblWidget
-#define IssueTable_t    ui->issueTblWidget
-#define RefTable_t      ui->referenceTbl
-#define ExcludeTable_t  ui->excludeTbl
+#define Extension_t             ui->extensionEdit->text()
+#define ProjectPath_t           ui->pathEdit->text()
+#define Author_t                ui->authorEdit->text()
+#define Separator_t             ui->separatorEdit->text()
+#define StartTag_t              ui->sTagEdit->text()
+#define EndTag_t                ui->eTagEdit->text()
+#define SupDiv_t                ui->supDivEdit->toPlainText()
+#define SubDiv_t                ui->subDivEdit->toPlainText()
+#define Email_t                 ui->emailEdit->text()
+#define Telep_t                 ui->telepEdit->text()
+#define GithubAcc_t             ui->githubEdit->text()
+#define Team_t                  ui->teamEdit->text()
+#define Memo_t                  ui->memoEdit->toPlainText()
 
-#define Extension_t     ui->extensionEdit->text()
-#define ProjectPath_t   ui->pathEdit->text()
-#define Author_t        ui->authorEdit->text()
-#define Separator_t     ui->separatorEdit->text()
-#define StartTag_t      ui->sTagEdit->text()
-#define EndTag_t        ui->eTagEdit->text()
-#define SupDiv_t        ui->supDivEdit->toPlainText()
-#define SubDiv_t        ui->subDivEdit->toPlainText()
-#define Email_t         ui->emailEdit->text()
-#define Telep_t         ui->telepEdit->text()
-#define GithubAcc_t     ui->githubEdit->text()
-#define Team_t          ui->teamEdit->text()
-#define Memo_t          ui->memoEdit->toPlainText()
+#define IsDescNumbering_t       ui->actionDesc_Numbering->isChecked()
+#define IsIssueNumbering_t      ui->actionIssue_Numbering->isChecked()
+#define IsRecursiveTraversal_t  ui->actionRecursive_Traversal->isChecked()
+#define IsDivBySeparator_t      ui->actionDivide_by_Separator->isChecked()
+#define IsDivByStartEndTag_t    ui->actionDivide_by_Start_End_tag->isChecked()
 
+// ==============================+===============================================================
 
 enum tab_index{
     TAB_GLOBAL      = 0,
@@ -34,6 +40,10 @@ enum tab_index{
     TAB_EXCLUDE     = 5,
     TAB_PREVIEW     = 6,
 };
+
+// ==============================+===============================================================
+
+#define DEFAULT_WIN_TITLE  "Summary Commenter"
 
 #define SAVE_RECENT_PATH    5
 
