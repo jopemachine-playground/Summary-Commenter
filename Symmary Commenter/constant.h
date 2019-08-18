@@ -41,15 +41,41 @@ enum tab_index{
     TAB_PREVIEW     = 6,
 };
 
+enum FlagType{
+    AUTHOR = 0,
+    LASTEDITED,
+    DESC,
+    ISSUE,
+    SUPDIV,
+    SUBDIV,
+    EMAIL,
+    TELEP,
+    GITHUBACC,
+    REFURLS,
+    CREATEDDATE,
+    TEAM,
+    MEMO
+};
+
 // ==============================+===============================================================
 
-#define DEFAULT_WIN_TITLE  "Summary Commenter"
+#define DEFAULT_WIN_TITLE   "Summary Commenter"
 
 #define SAVE_RECENT_PATH    5
 
 #define CSH_START_COMMENT   "#--------------------------------------------------------\n#\n# This file is created by comment helper 2019-08-10\n#\n#--------------------------------------------------------"
 
+#define PROJECT_SETTING_FILE_EXT "scps" // Summary Commenter Project Setting file
+
+#define PROJECT_LATELY_OPEN_EXT  "sclately"
+
+#define PROJECT_WORKED_FILE_EXT  "scproj"
+
+// ==============================+===============================================================
+
 #define IS_DIV(flag) flag == FlagType::SUBDIV || flag == FlagType::SUPDIV
+
+// ==============================+===============================================================
 
 #endif // CONSTANT_H
 

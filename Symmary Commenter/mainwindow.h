@@ -7,13 +7,10 @@
 #include <stack>
 #include <queue>
 #include <memory>
-#include <memory.h>
 
 #include <QMainWindow>
 #include <QDateTime>
-
-#include <QMimeData>
-#include <QDragEnterEvent>
+#include "constant.h"
 
 // ==============================+===============================================================
 // Forward declare
@@ -30,22 +27,7 @@ QT_FORWARD_DECLARE_CLASS( QFileDialog );
 QT_FORWARD_DECLARE_CLASS( QTextStream );
 
 // ==============================+===============================================================
-
-enum FlagType{
-    AUTHOR = 0,
-    LASTEDITED,
-    DESC,
-    ISSUE,
-    SUPDIV,
-    SUBDIV,
-    EMAIL,
-    TELEP,
-    GITHUBACC,
-    REFURLS,
-    CREATEDDATE,
-    TEAM,
-    MEMO
-};
+// Type define
 
 typedef struct{
     QString filePath;
@@ -151,7 +133,7 @@ private:
     // member vars
     Ui::MainWindow*                                 ui;
     QString                                         selectedFile;
-    QFile*                                          chLately;
+    QFile*                                          latelyPathsFile;
     std::deque<QString>*                            pathQue;
 
     // setting table
@@ -171,8 +153,8 @@ private:
     void                        removeSelectedItems (QTableWidget* tbl);
 
     // file save and load
-    void                        setCHSFile          (const QString& path);
-    void                        saveCHSFile         (const QString& path);
+    void                        setSCPSFile          (const QString& path);
+    void                        saveSCPSFile         (const QString& path);
     void                        addGlobalVars       (const QString& key, const QString& value);
     void                        setSettingFlags     (const QString& flagName, bool flag);
     void                        makeMDForm          (QTextStream& ts, const QTableWidget* tbl, const QString& tblName);

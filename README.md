@@ -29,7 +29,7 @@
 
 ## How to work
 
-**chs 파일** : SummaryCommenter가 사용하는 설정 파일. 정규식을 이용해 읽어들임. 기본적으로 아래 값 들을 갖고 있고,  
+**scps 파일** : SummaryCommenter가 사용하는 설정 파일. 정규식을 이용해 읽어들임. 기본적으로 아래 값 들을 갖고 있고,  
 `{ fileName }::[ desc | issue | urls ] += { content }` 형식으로 값을 작성해,  해당 파일 주석에 값을 추가할 수 있음.
 
 ```
@@ -74,11 +74,11 @@ constant.h::urls        +=		https://urlexample2.com
 
 
 
-**chproj 파일** : Run 후 지정된 경로에 생성됨.  주석을 추가한 파일의 이름들을 갖고 있는 파일. chproj 파일을 통해 Remove Comments 버튼을 눌러 comment helper가 추가했던 주석을 제거할 수 있다.
+**scproj 파일** : Run 후 지정된 경로에 생성됨.  주석을 추가한 파일의 이름들을 갖고 있는 파일. scproj 파일을 통해 Remove Comments 버튼을 눌러 SummaryCommenter가 추가했던 주석을 제거할 수 있다.
 
 
 
-**chlately 파일** : 최근 열었던 chs 파일들의 경로를 5개 까지 기억하고 있음. comment helper 실행 시 가장 최근에 열렸던 chs 파일을 자동으로 셋팅하며, Open Recents 버튼으로 이 경로의 chs 파일들에 접근할 수 있음.
+**sclately 파일** : 최근 열었던 chs 파일들의 경로를 5개 까지 기억하고 있음. SummaryCommenter 실행 시 가장 최근에 열렸던 chs 파일을 자동으로 셋팅하며, Open Recents 버튼으로 이 경로의 chs 파일들에 접근할 수 있음.
 
 
 
@@ -89,9 +89,9 @@ constant.h::urls        +=		https://urlexample2.com
 프로그램 작동 상 주의할 점은 아래와 같다.
 
 * 지정한 디렉토리 내에 중복되는 이름을 가진 파일이 없다고 가정하고 작동한다. 중복되는 이름이 있는 파일이 있는 경우, Desc, Issue 등이 파일에 제대로 추가되지 않을 수 있음.
-* 지정 디렉토리 폴더에 chproj 파일이 존재해야만 주석을 삭제하는 기능을 사용할 수 있다. 
-* 주석을 삭제하는 기능은 chproj 파일에 명시된 파일들의 맨 처음 나온 주석을 제거한다. SummaryCommenter가 추가한 주석 위에 다른 주석이 달려 있다면, SummaryCommenter가 추가한 주석이 제거되지 않을 수 있음.
-* chproj 파일을 임의로 삭제하거나 변경하면, 주석 업데이트 시 중복 주석이 추가될 수 있음
+* 지정 디렉토리 폴더에 scproj 파일이 존재해야만 주석을 삭제하는 기능을 사용할 수 있다. 
+* 주석을 삭제하는 기능은 scproj 파일에 명시된 파일들의 맨 처음 나온 주석을 제거한다. SummaryCommenter가 추가한 주석 위에 다른 주석이 달려 있다면, SummaryCommenter가 추가한 주석이 제거되지 않을 수 있음.
+* scproj 파일을 임의로 삭제하거나 변경하면, 주석 업데이트 시 중복 주석이 추가될 수 있음
 * 디렉토리 내 모든 소스 파일 이름에 띄어쓰기 등의 공백이 없다고 가정한다. 이름에 공백이 있으면 Desc, Issue 등이 파일에 제대로 추가되지 않을 수 있음.
 
 

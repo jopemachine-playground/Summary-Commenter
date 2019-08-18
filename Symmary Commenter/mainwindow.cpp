@@ -9,10 +9,11 @@
 #include <QRegularExpressionMatch>
 #include <QDirIterator>
 #include <QProcess>
+#include <QMimeData>
+#include <QDragEnterEvent>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "constant.h"
 
 // ==============================+===============================================================
 // Public Method
@@ -41,11 +42,11 @@ MainWindow::~MainWindow()
 {
     delete ui;
 
-    if(chLately != nullptr){
-        if(chLately->isOpen()){
+    if(latelyPathsFile != nullptr){
+        if(latelyPathsFile->isOpen()){
 
-            chLately->resize(0);
-            QTextStream ts(&(*chLately));
+            latelyPathsFile->resize(0);
+            QTextStream ts(&(*latelyPathsFile));
             ts.setCodec("UTF-8");
 
             int hits = 0;
@@ -59,9 +60,9 @@ MainWindow::~MainWindow()
                 pathQue->pop_front();
             }
 
-            chLately->close();
+            latelyPathsFile->close();
         }
-        delete chLately;
+        delete latelyPathsFile;
         delete pathQue;
     }
 }
@@ -71,7 +72,10 @@ bool MainWindow::Open(){
     // FileDialog를 생성하고 연다.
     QFileDialog fileOpenDialog;
     fileOpenDialog.setFileMode(QFileDialog::AnyFile);
-    fileOpenDialog.setNameFilter(tr("Open a Setting file (*.chs)"));
+
+    QString nameFilter = QString ("Open a Setting file (*.") + QString(PROJECT_SETTING_FILE_EXT) + QString(")");
+
+    fileOpenDialog.setNameFilter(nameFilter);
     fileOpenDialog.setViewMode(QFileDialog::Detail);
     fileOpenDialog.open(this, "Open a Setting file");
 
@@ -88,12 +92,12 @@ bool MainWindow::Open(){
         return false;
     }
 
-    setCHSFile(selectedFile);
+    setSCPSFile(selectedFile);
     return true;
 }
 
 void MainWindow::OpenRecent(const int index){
-    setCHSFile(ui->menuOpen_Recents->actions()[index]->text());
+    setSCPSFile(ui->menuOpen_Recents->actions()[index]->text());
 }
 
 void MainWindow::Run(){
@@ -106,35 +110,35 @@ void MainWindow::Run(){
 
     // chproj는 지정 프로젝트 경로에서 주석을 추가해놓은 설정 파일이다.
     // chproj가 삭제되면 run 재 실행 시 해당 파일들에 주석이 한 번 더 들어가게 된다.
-    QString chprojContent = "";
+    QString scprojContent = "";
 
     // 리눅스의 경우 \\ 대신 / 를 써야한다
-    QFile chprojFile(ProjectPath_t + "\\" + "chproj");
+    QFile scprojFile(ProjectPath_t + "\\" + PROJECT_WORKED_FILE_EXT);
 
     // 설정파일이 존재하면 파일을 읽어들여 주석을 지울 파일들의 리스트를 만든다
-    if(chprojFile.exists()){
-        chprojFile.open(QFile::ReadOnly|QFile::Text);
-        QTextStream ts(&chprojContent);
-        ts << chprojFile.readAll();
-        QStringList list = chprojContent.split(",");
+    if(scprojFile.exists()){
+        scprojFile.open(QFile::ReadOnly|QFile::Text);
+        QTextStream ts(&scprojContent);
+        ts << scprojFile.readAll();
+        QStringList list = scprojContent.split(",");
         removeComment(list);
     }
 
-    chprojContent = "";
+    scprojContent = "";
 
     while(!que->empty()){
         prependComment(que->front());
-        chprojContent += que->size() == 1 ? que->front().fileName : que->front().fileName + ",";
+        scprojContent += que->size() == 1 ? que->front().fileName : que->front().fileName + ",";
         que->pop();
     }
 
-    if(chprojFile.isOpen()) chprojFile.close();
+    if(scprojFile.isOpen()) scprojFile.close();
 
-    chprojFile.open(QIODevice::WriteOnly|QFile::Text);
+    scprojFile.open(QIODevice::WriteOnly|QFile::Text);
 
-    chprojFile.write(chprojContent.toStdString().c_str());
+    scprojFile.write(scprojContent.toStdString().c_str());
 
-    chprojFile.close();
+    scprojFile.close();
 
     ShowMessageBox("work completed!", "Jobs done");
 }
@@ -209,14 +213,19 @@ void MainWindow::on_actionSave_triggered()
     // 파일이 열려 있지 않을 땐 파일 저장 Dialog를 띄워 먼저 저장할 파일의 경로를 받아온다
     if(selectedFile == "") {
 
+        QString nameFilter =
+                QString ("Summary Commenter Project Setting (*.") +
+                QString(PROJECT_SETTING_FILE_EXT) +
+                QString(");;All Files (*)");
+
         selectedFile = QFileDialog::getSaveFileName(this,
                                                     tr("Save setting file"), "",
-                                                    tr("Comment helper setting (*.chs);;All Files (*)"));
+                                                    nameFilter);
 
         setWindowTitle(selectedFile);
     }
 
-    saveCHSFile(selectedFile);
+    saveSCPSFile(selectedFile);
 
 }
 
@@ -242,13 +251,19 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 
 void MainWindow::on_actionSave_as_triggered()
 {
+
+    QString nameFilter =
+            QString ("Summary Commenter Project Setting (*.") +
+            QString(PROJECT_SETTING_FILE_EXT) +
+            QString(");;All Files (*)");
+
     selectedFile = QFileDialog::getSaveFileName(this,
-                                                tr("save setting file"), "",
-                                                tr("comment helper setting (*.chs);;All Files (*)"));
+                                                tr("Save setting file"), "",
+                                                nameFilter);
 
     setWindowTitle(selectedFile);
 
-    saveCHSFile(selectedFile);
+    saveSCPSFile(selectedFile);
 }
 
 
@@ -261,17 +276,17 @@ void MainWindow::on_actionOpen_and_run_triggered()
 
 void MainWindow::on_actionRemove_Comments_triggered()
 {
-    QString chprojContent = "";
+    QString scprojContent = "";
 
     // 리눅스의 경우 \\ 대신 / 를 써야한다
-    QFile chprojFile(ProjectPath_t + "\\" + "chproj");
+    QFile scprojFile(ProjectPath_t + "\\" + PROJECT_WORKED_FILE_EXT);
 
     // 설정파일이 존재하면 파일을 읽어들여 주석을 지울 파일들의 리스트를 만든다
-    if(chprojFile.exists()){
-        chprojFile.open(QFile::ReadOnly|QFile::Text);
-        QTextStream ts(&chprojContent);
-        ts << chprojFile.readAll();
-        QStringList list = chprojContent.split(",");
+    if(scprojFile.exists()){
+        scprojFile.open(QFile::ReadOnly|QFile::Text);
+        QTextStream ts(&scprojContent);
+        ts << scprojFile.readAll();
+        QStringList list = scprojContent.split(",");
         removeComment(list);
     }
     else{
@@ -279,7 +294,7 @@ void MainWindow::on_actionRemove_Comments_triggered()
         return;
     }
 
-    chprojFile.remove();
+    scprojFile.remove();
     ShowMessageBox("done!", "Complete");
 }
 
@@ -346,27 +361,29 @@ void MainWindow::on_actionOpen_Project_Path_triggered()
 
 void MainWindow::on_actionRefresh_triggered()
 {
-    setCHSFile(selectedFile);
+    setSCPSFile(selectedFile);
 }
 
 void MainWindow::on_actionSave_md_triggered()
 {
-    QFile md(ProjectPath_t + "\\" + "ch_readme.md");
+    QFile md(ProjectPath_t + "\\" + "sc_readme.md");
 
     // 파일이 존재하지 않을 땐 경로에 파일을 생성한다.
     md.open(QFile::WriteOnly|QFile::Text);
 
     QTextStream ts(&md);
 
-    ts << "## Description\n";
+    ts << "## Documentations\n";
+
+    ts << "### Description\n";
 
     makeMDForm(ts, DescTable_t,     "Description");
 
-    ts << "\n## Issue\n";
+    ts << "\n### Issue\n";
 
     makeMDForm(ts, IssueTable_t,    "Issue");
 
-    ts << "\n## Reference\n";
+    ts << "\n### Reference\n";
 
     makeMDForm(ts, RefTable_t,      "Reference");
 
@@ -549,18 +566,18 @@ void MainWindow::removeSelectedItems(QTableWidget* tbl){
 // Private Methods
 // File save and load
 
-void MainWindow::setCHSFile(const QString& chsPath){
+void MainWindow::setSCPSFile(const QString& settingFilePath){
 
     clearTbl(IssueTable_t);
     clearTbl(DescTable_t);
     clearTbl(RefTable_t);
     clearTbl(ExcludeTable_t);
 
-    setWindowTitle(chsPath);
+    setWindowTitle(settingFilePath);
 
     bool errFlag = false;
 
-    selectedFile = chsPath;
+    selectedFile = settingFilePath;
 
     QFile selectFile(selectedFile);
 
@@ -572,7 +589,7 @@ void MainWindow::setCHSFile(const QString& chsPath){
 
         QTextStream ts(&selectFile);
 
-        // Caution : 파일이 깨진다면, CHS 셋팅 파일의 인코딩이
+        // Caution : 파일이 깨진다면, SCPS 셋팅 파일의 인코딩이
         // UTF-8로 셋팅되어 있는지 확인할 것
         ts.setAutoDetectUnicode(true);
 
@@ -705,7 +722,7 @@ void MainWindow::setCHSFile(const QString& chsPath){
 
 }
 
-void MainWindow::saveCHSFile(const QString& path){
+void MainWindow::saveSCPSFile(const QString& path){
 
     QFile selectFile(path);
 
@@ -936,7 +953,7 @@ void MainWindow::makeMDForm(QTextStream& ts, const QTableWidget *tbl, const QStr
             }
         }
 
-        if(nextSameKey && !prevSameKey){
+        if     (nextSameKey && !prevSameKey){
             ts << "| " + tbl->item(i, 0)->text() + " | " + tbl->item(i, 1)->text() +    " ";
         }
         else if(nextSameKey && prevSameKey){
@@ -958,13 +975,13 @@ void MainWindow::openRecentPathsFile()
 
     pathQue = new std::deque<QString>();
 
-    chLately = new QFile(QDir(QDir::currentPath()).filePath("chlately"));
+    latelyPathsFile = new QFile(QDir(QDir::currentPath()).filePath(PROJECT_LATELY_OPEN_EXT));
 
-    if(chLately->exists()){
+    if(latelyPathsFile->exists()){
 
-        chLately->open( QFile::ReadWrite | QFile::Text  );
+        latelyPathsFile->open( QFile::ReadWrite | QFile::Text  );
 
-        QString o = chLately->readLine();
+        QString o = latelyPathsFile->readLine();
 
         QStringList list = o.split(",");
 
@@ -988,10 +1005,10 @@ void MainWindow::openRecentPathsFile()
             pathQue->push_back( path );
         }
 
-        setCHSFile(latest);
+        setSCPSFile(latest);
     }
     else{
-        chLately->open( QFile::ReadWrite | QFile::Text  );
+        latelyPathsFile->open( QFile::ReadWrite | QFile::Text  );
     }
 }
 
@@ -1072,7 +1089,7 @@ void MainWindow::prependComment(FileInfo fileInfo){
     makeComment(ts, fileInfo);
 
     // 개행 후 buffer 내용 출력
-    ts << "\n" <<buffer;
+    ts << "\n" << buffer;
 
 }
 
