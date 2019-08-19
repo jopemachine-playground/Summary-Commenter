@@ -137,7 +137,6 @@ private:
     std::deque<QString>*                            pathQue;
 
     // setting table
-    void                        setTable            (QTableWidget*);
     void                        clearTbl            (QTableWidget*);
     void                        sortTbl             (QTableWidget*);
     void                        insertTbl           (QTableWidget*, const QString&, const QString& value = nullptr);
@@ -145,7 +144,7 @@ private:
 
     // setting table's dragging event
     void                        dragEnterEvent      (QDragEnterEvent *e) override;
-    void                        dropEvent           (QDropEvent *e) override;
+    void                        dropEvent           (QDropEvent *e)      override;
 
     // handle tables
     QTableWidgetItem*           searchTable         (QTableWidget* tbl, const QString& key);
@@ -153,6 +152,7 @@ private:
     void                        removeSelectedItems (QTableWidget* tbl);
 
     // file save and load
+    void                        initProgram         ();
     void                        setSCPSFile         (const QString& path);
     void                        saveSCPSFile        (const QString& path);
     void                        addGlobalVars       (const QString& key, const QString& value);

@@ -25,6 +25,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle(DEFAULT_WIN_TITLE);
 
+    auto setTable = [](QTableWidget* tbl)-> void {
+        tbl->horizontalHeader()->setStretchLastSection(true);
+        tbl->setSelectionBehavior(    QAbstractItemView::SelectRows   );
+    };
+
     setTable(FlagTable_t);
     setTable(DescTable_t);
     setTable(IssueTable_t);
@@ -92,11 +97,13 @@ bool MainWindow::Open(){
         return false;
     }
 
+    initProgram();
     setSCPSFile(selectedFile);
     return true;
 }
 
 void MainWindow::OpenRecent(const int index){
+    initProgram();
     setSCPSFile(ui->menuOpen_Recents->actions()[index]->text());
 }
 
@@ -372,6 +379,7 @@ void MainWindow::on_actionOpen_Project_Path_triggered()
 
 void MainWindow::on_actionRefresh_triggered()
 {
+    initProgram();
     setSCPSFile(selectedFile);
 }
 
@@ -433,11 +441,6 @@ void MainWindow::on_actionOpen_setting_file_triggered()
 // Private Methods
 // Setting Tables
 
-void MainWindow::setTable(QTableWidget* tbl){
-    tbl->horizontalHeader()->setStretchLastSection(true);
-    tbl->setSelectionBehavior(    QAbstractItemView::SelectRows   );
-}
-
 void MainWindow::clearTbl(QTableWidget* tbl){
     tbl->setRowCount(0);
 }
@@ -454,27 +457,30 @@ void MainWindow::insertTbl(QTableWidget *tbl, const QString& key, const QString&
 
 void MainWindow::setShortCut()
 {
+    auto bindKey = [](QKeySequence key, QAbstractButton* widget)-> void {
+        widget->setShortcut(key);
+    };
 
-    // Add Buttons
-    ui->descAddBtn->setShortcut(QKeySequence(Qt::Key_Plus));
-    ui->issueAddBtn->setShortcut(QKeySequence(Qt::Key_Plus));
-    ui->addReferenceBtn->setShortcut(QKeySequence(Qt::Key_Plus));
-    ui->addExcludeBtn->setShortcut(QKeySequence(Qt::Key_Plus));
+    // Add
+    bindKey(QKeySequence(Qt::Key_Plus)        , ui->descAddBtn);
+    bindKey(QKeySequence(Qt::Key_Plus)        , ui->issueAddBtn);
+    bindKey(QKeySequence(Qt::Key_Plus)        , ui->addReferenceBtn);
+    bindKey(QKeySequence(Qt::Key_Plus)        , ui->addExcludeBtn);
 
-    // Delete Buttons
-    ui->descRemoveBtn->setShortcut(QKeySequence::Delete);
-    ui->issueRemoveBtn->setShortcut(QKeySequence::Delete);
-    ui->rmReferenceBtn->setShortcut(QKeySequence::Delete);
-    ui->rmExcludeBtn->setShortcut(QKeySequence::Delete);
+    // Remove
+    bindKey(QKeySequence::Delete              , ui->descRemoveBtn);
+    bindKey(QKeySequence::Delete              , ui->issueRemoveBtn);
+    bindKey(QKeySequence::Delete              , ui->rmReferenceBtn);
+    bindKey(QKeySequence::Delete              , ui->rmExcludeBtn);
 
-    // Sort Buttons
-    ui->descSortBtn->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
-    ui->issueSortBtn->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
-    ui->referenceSortBtn->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
-    ui->sortExcludeBtn->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
+    // Sort
+    bindKey(QKeySequence(Qt::CTRL + Qt::Key_T), ui->descSortBtn);
+    bindKey(QKeySequence(Qt::CTRL + Qt::Key_T), ui->issueSortBtn);
+    bindKey(QKeySequence(Qt::CTRL + Qt::Key_T), ui->referenceSortBtn);
+    bindKey(QKeySequence(Qt::CTRL + Qt::Key_T), ui->sortExcludeBtn);
 
-    // Other Buttons
-    ui->copyBtn->setShortcut(QKeySequence(Qt::Key_C));
+    // Copy
+    bindKey(QKeySequence(Qt::Key_C), ui->copyBtn);
 
 }
 
@@ -586,12 +592,16 @@ void MainWindow::removeSelectedItems(QTableWidget* tbl){
 // Private Methods
 // File save and load
 
-void MainWindow::setSCPSFile(const QString& settingFilePath){
-
+void MainWindow::initProgram()
+{
     clearTbl(IssueTable_t);
     clearTbl(DescTable_t);
     clearTbl(RefTable_t);
     clearTbl(ExcludeTable_t);
+}
+
+
+void MainWindow::setSCPSFile(const QString& settingFilePath){
 
     setWindowTitle(settingFilePath);
 
@@ -1025,6 +1035,7 @@ void MainWindow::openRecentPathsFile()
             pathQue->push_back( path );
         }
 
+        initProgram();
         setSCPSFile(latest);
     }
     else{
