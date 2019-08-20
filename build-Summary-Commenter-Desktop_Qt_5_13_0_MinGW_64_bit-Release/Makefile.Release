@@ -19,13 +19,13 @@ CXXFLAGS      = -fno-keep-inline-dllexport -O2 -std=gnu++11 -Wall -W -Wextra -fe
 INCPATH       = -I"..\Symmary Commenter" -I. -I..\..\Qt\5.13.0\mingw73_64\include -I..\..\Qt\5.13.0\mingw73_64\include\QtWidgets -I..\..\Qt\5.13.0\mingw73_64\include\QtGui -I..\..\Qt\5.13.0\mingw73_64\include\QtANGLE -I..\..\Qt\5.13.0\mingw73_64\include\QtCore -Irelease -I. -I\include -I..\..\Qt\5.13.0\mingw73_64\mkspecs\win32-g++ 
 LINKER      =        g++
 LFLAGS        =        -Wl,-s -Wl,-subsystem,windows -mthreads
-LIBS        =        C:\Qt\5.13.0\mingw73_64\lib\libQt5Widgets.a C:\Qt\5.13.0\mingw73_64\lib\libQt5Gui.a C:\Qt\5.13.0\mingw73_64\lib\libQt5Core.a release\Summary_resource_res.o  -lmingw32 C:\Qt\5.13.0\mingw73_64\lib\libqtmain.a -LC:\openssl\lib -LC:\Utils\postgresql\pgsql\lib -lshell32 
+LIBS        =        C:\Qt\5.13.0\mingw73_64\lib\libQt5Widgets.a C:\Qt\5.13.0\mingw73_64\lib\libQt5Gui.a C:\Qt\5.13.0\mingw73_64\lib\libQt5Core.a "release\Summary Commenter_resource_res.o"  -lmingw32 C:\Qt\5.13.0\mingw73_64\lib\libqtmain.a -LC:\openssl\lib -LC:\Utils\postgresql\pgsql\lib -lshell32 
 QMAKE         = C:\Qt\5.13.0\mingw73_64\bin\qmake.exe
 IDC           = idc
 IDL           = midl
 ZIP           = zip -r -9
 DEF_FILE      = 
-RES_FILE      = release\Summary_resource_res.o
+RES_FILE      = "release\Summary Commenter_resource_res.o"
 COPY          = copy /y
 SED           = $(QMAKE) -install sed
 COPY_FILE     = copy /y
@@ -56,21 +56,21 @@ OBJECTS       = release/main.o \
 DIST          =  "..\Symmary Commenter\constant.h" \
 		"..\Symmary Commenter\mainwindow.h" "..\Symmary Commenter\main.cpp" \
 		"..\Symmary Commenter\mainwindow.cpp"
-QMAKE_TARGET  = Summary Commenter
+QMAKE_TARGET  = "Summary Commenter"
 DESTDIR        = release\ #avoid trailing-slash linebreak
-TARGET         = Summary.exe
-DESTDIR_TARGET = release\Summary.exe
+TARGET         = "Summary Commenter.exe"
+DESTDIR_TARGET = "release\Summary Commenter.exe"
 
 ####### Build rules
 
 first: all
-all: Makefile.Release  release/Summary.exe
+all: Makefile.Release  release/Summary\ Commenter.exe
 
-release/Summary.exe: C:/Qt/5.13.0/mingw73_64/lib/libQt5Widgets.a C:/Qt/5.13.0/mingw73_64/lib/libQt5Gui.a C:/Qt/5.13.0/mingw73_64/lib/libQt5Core.a C:/Qt/5.13.0/mingw73_64/lib/libqtmain.a ui_mainwindow.h $(OBJECTS) release/Summary_resource_res.o
+release/Summary\ Commenter.exe: C:/Qt/5.13.0/mingw73_64/lib/libQt5Widgets.a C:/Qt/5.13.0/mingw73_64/lib/libQt5Gui.a C:/Qt/5.13.0/mingw73_64/lib/libQt5Core.a C:/Qt/5.13.0/mingw73_64/lib/libqtmain.a ui_mainwindow.h $(OBJECTS) release/Summary\ Commenter_resource_res.o
 	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) $(OBJECTS)  $(LIBS)
 
-release/Summary_resource_res.o: Summary_resource.rc
-	windres -i Summary_resource.rc -o release\Summary_resource_res.o --include-dir=. $(DEFINES)
+release/Summary\ Commenter_resource_res.o: Summary\ Commenter_resource.rc
+	windres -i "Summary Commenter_resource.rc" -o "release\Summary Commenter_resource_res.o" --include-dir=. $(DEFINES)
 
 qmake: FORCE
 	@$(QMAKE) -o Makefile.Release "..\Symmary Commenter\Summary-Commenter.pro" -spec win32-g++ "CONFIG+=qtquickcompiler"
@@ -82,7 +82,7 @@ dist:
 
 clean: compiler_clean 
 	-$(DEL_FILE) release\main.o release\mainwindow.o release\moc_mainwindow.o
-	-$(DEL_FILE) release\Summary_resource_res.o
+	-$(DEL_FILE) "release\Summary Commenter_resource_res.o"
 
 distclean: clean 
 	-$(DEL_FILE) .qmake.stash
