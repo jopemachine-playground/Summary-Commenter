@@ -1204,31 +1204,33 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
 
     if(IsDivByStartEndTag_t) ts << StartTag_t + "\n";
 
-    processFlag(ts, supd,             "",          FlagType::SUPDIV,     isPreviewMode, false);
+    processFlag(ts, supd,             "",                FlagType::SUPDIV,     isPreviewMode, false);
 
-    processFlag(ts, "Author",         Author_t,    FlagType::AUTHOR,     isPreviewMode, false);
+    processFlag(ts, "File Name",      fileInfo.fileName, FlagType::FileName,   isPreviewMode, false );
 
-    processFlag(ts, "Team",           Team_t,      FlagType::TEAM,       isPreviewMode, false);
+    processFlag(ts, "Author",         Author_t,          FlagType::AUTHOR,     isPreviewMode, false);
 
-    processFlag(ts, "Created",        date,        FlagType::CREATEDDATE,isPreviewMode, false);
+    processFlag(ts, "Team",           Team_t,            FlagType::TEAM,       isPreviewMode, false);
 
-    processFlag(ts, "Last Edited",    edit,        FlagType::LASTEDITED, isPreviewMode, false);
+    processFlag(ts, "Created",        date,              FlagType::CREATEDDATE,isPreviewMode, false);
 
-    processFlag(ts, "Desc",           desc,        FlagType::DESC,       isPreviewMode, true );
+    processFlag(ts, "Last Edited",    edit,              FlagType::LASTEDITED, isPreviewMode, false);
 
-    processFlag(ts, "Issue",          issue,       FlagType::ISSUE,      isPreviewMode, true );
+    processFlag(ts, "Desc",           desc,              FlagType::DESC,       isPreviewMode, true );
 
-    processFlag(ts, "Email",          Email_t,     FlagType::EMAIL,      isPreviewMode, false);
+    processFlag(ts, "Issue",          issue,             FlagType::ISSUE,      isPreviewMode, true );
 
-    processFlag(ts, "Contact",        Telep_t,     FlagType::TELEP,      isPreviewMode, false);
+    processFlag(ts, "Email",          Email_t,           FlagType::EMAIL,      isPreviewMode, false);
 
-    processFlag(ts, "Github Account", GithubAcc_t, FlagType::GITHUBACC,  isPreviewMode, false);
+    processFlag(ts, "Contact",        Telep_t,           FlagType::TELEP,      isPreviewMode, false);
 
-    processFlag(ts, "Ref URLs",       urls,        FlagType::REFURLS,    isPreviewMode, true );
+    processFlag(ts, "Github Account", GithubAcc_t,       FlagType::GITHUBACC,  isPreviewMode, false);
 
-    processFlag(ts, "Memo",           memo,        FlagType::MEMO,       isPreviewMode, true );
+    processFlag(ts, "Ref URLs",       urls,              FlagType::REFURLS,    isPreviewMode, true );
 
-    processFlag(ts, subd,             "",          FlagType::SUBDIV,     isPreviewMode, false);
+    processFlag(ts, "Memo",           memo,              FlagType::MEMO,       isPreviewMode, true );
+
+    processFlag(ts, subd,             "",                FlagType::SUBDIV,     isPreviewMode, false);
 
     if(IsDivByStartEndTag_t) ts << EndTag_t;
 
