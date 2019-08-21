@@ -7,6 +7,9 @@
 #include <stack>
 #include <queue>
 #include <memory>
+#include <unordered_map>
+#include <utility>
+#include <functional>
 
 #include <QMainWindow>
 #include <QDateTime>
@@ -29,18 +32,67 @@ QT_FORWARD_DECLARE_CLASS( QTextStream );
 // ==============================+===============================================================
 // Type define
 
+using ExistLineFeed = bool;
+using TblPos        = int ;
+
+template<class T>
+using s_ptr         = std::shared_ptr<T>;
+
+template<class T>
+using queue         = std::queue<T>;
+
 typedef struct{
-    QString filePath;
-    QString fileName;
-    QDateTime lastModified;
-    QDateTime created;
+
+    QString     filePath;
+    QString     fileName;
+    QDateTime   lastModified;
+    QDateTime   created;
+
 } FileInfo;
 
-template<class T>
-using s_ptr = std::shared_ptr<T>;
+typedef struct{
+    QString     key;
+    bool        ExistLineFeed;
+} FlagType;
 
-template<class T>
-using queue = std::queue<T>;
+typedef struct{
+
+    std::unordered_map<TblPos, FlagType>           map;
+
+    void    init(){
+                int hit = 0;
+                map.insert({hit++,  {"Sup_Div_Line",   false}});
+                map.insert({hit++,  {"File_Name",      false}});
+                map.insert({hit++,  {"Author",         false}});
+                map.insert({hit++,  {"Team",           false}});
+                map.insert({hit++,  {"Created_Date",   false}});
+                map.insert({hit++,  {"Last_Edited",    false}});
+                map.insert({hit++,  {"Desc",           true }});
+                map.insert({hit++,  {"Issue",          true }});
+                map.insert({hit++,  {"Email",          false}});
+                map.insert({hit++,  {"Telephone",      false}});
+                map.insert({hit++,  {"Github_Account", false}});
+                map.insert({hit++,  {"Ref_URLs",       false}});
+                map.insert({hit++,  {"Memo",           true }});
+                map.insert({hit++,  {"Sub_Div_Line",   false}});
+    }
+
+    void    swap(int key1, int key2){
+                auto temp = map.at(key1);
+                map.at(key1) = map.at(key2);
+                map.at(key2) = temp;
+    }
+
+} FlagType_tbl;
+
+typedef struct{
+
+    TblPos      pos;
+    FlagType    type;
+    QString&    value;
+
+} Flag;
+
 
 // ==============================+===============================================================
 
@@ -128,6 +180,10 @@ private slots:
 
     void on_actionOpen_setting_file_triggered();
 
+    void on_FlagUpBtn_clicked();
+
+    void on_FlagDownBtn_clicked();
+
 private:
 
     // member vars
@@ -135,16 +191,18 @@ private:
     QString                                         selectedFile;
     QFile*                                          latelyPathsFile;
     std::deque<QString>*                            pathQue;
+    FlagType_tbl*                                   flagTypeTbl;
 
     // setting table
     void                        clearTbl            (QTableWidget*);
     void                        sortTbl             (QTableWidget*);
     void                        insertTbl           (QTableWidget*, const QString&, const QString& value = nullptr);
     void                        setShortCut         ();
+    void                        itemChange          (QTableWidget*, int prev, int dest);
 
     // setting table's dragging event
     void                        dragEnterEvent      (QDragEnterEvent *e) override;
-    void                        dropEvent           (QDropEvent *e)      override;
+    void                        dropEvent           (QDropEvent      *e) override;
 
     // handle tables
     QTableWidgetItem*           searchTable         (QTableWidget* tbl, const QString& key);
@@ -158,14 +216,14 @@ private:
     void                        addGlobalVars       (const QString& key, const QString& value);
     void                        setSettingFlags     (const QString& flagName, bool flag);
     void                        makeMDForm          (QTextStream& ts, const QTableWidget* tbl, const QString& tblName);
-    void                        openRecentPathsFile ();
+    bool                        openRecentPathsFile ();
 
     // directory traversal recursively and get all file info (except link file)
     s_ptr<queue<FileInfo>>      getAllTargetFiles   (const QString& dirName);
 
     // make and prepend comment
     void                        prependComment      (FileInfo fileInfo);
-    void                        processFlag         (QTextStream& ts, const QString& key, const QString& value, FlagType flag, bool previewMode, bool keyValueSpace);
+    void                        processFlag         (QTextStream& ts, Flag& flag, bool previewMode);
     void                        makeComment         (QTextStream& ts, const FileInfo& fileName);
     s_ptr<QString>              makeFromTbl         (QTableWidget* tbl, bool numbering, const FileInfo& fileInfo);
 

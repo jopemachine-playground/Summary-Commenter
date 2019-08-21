@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle(DEFAULT_WIN_TITLE);
 
     auto setTable = [](QTableWidget* tbl)-> void {
+        tbl->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Fixed);
         tbl->horizontalHeader()->setStretchLastSection(true);
         tbl->setSelectionBehavior(    QAbstractItemView::SelectRows   );
     };
@@ -39,13 +40,22 @@ MainWindow::MainWindow(QWidget *parent) :
     setAcceptDrops(true);
     setShortCut();
 
-    openRecentPathsFile();
-}
+    if(!openRecentPathsFile()){
+        // scps 파일을 열지 않았다면 기본 값으로 초기화
+        flagTypeTbl = new FlagType_tbl;
+        flagTypeTbl->init();
+        int size = static_cast<int>(flagTypeTbl->map.size());
+        for(int i = 0; i < size; i++){
+            insertItem(FlagTable_t, false, flagTypeTbl->map.at(i).key, QString::number(1));
+        }
+    }
 
+}
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete flagTypeTbl;
 
     if(latelyPathsFile != nullptr){
         if(latelyPathsFile->isOpen()){
@@ -215,7 +225,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionGithub_triggered()
 {
-    system("start chrome /new-window https://github.com/jopemachine/CommentHelper");
+    system("start chrome /new-window https://github.com/jopemachine/Summary-Commenter");
 }
 
 void MainWindow::on_actionSave_triggered()
@@ -270,6 +280,10 @@ void MainWindow::on_actionSave_as_triggered()
     selectedFile = QFileDialog::getSaveFileName(this,
                                                 tr("Save setting file"), "",
                                                 nameFilter);
+
+    if(selectedFile == ""){
+        return;
+    }
 
     setWindowTitle(selectedFile);
 
@@ -431,9 +445,41 @@ void MainWindow::on_actionOpen_setting_file_triggered()
 
     QString front = pathQue->front();
     QString path = front.replace("/", "\\");
-    qDebug() << path;
 
     QProcess::startDetached("explorer " + path);
+}
+
+void MainWindow::on_FlagUpBtn_clicked()
+{
+    QItemSelection selection = FlagTable_t->selectionModel()->selection();
+
+    QModelIndexList i = selection[0].indexes();
+    int target = i[0].row();
+
+    if(target == 0 || selection.count() != 1){
+        return;
+    }
+
+    itemChange(FlagTable_t, target, target - 1);
+    flagTypeTbl->swap(target, target - 1);
+    FlagTable_t->selectRow(target - 1);
+
+}
+
+void MainWindow::on_FlagDownBtn_clicked()
+{
+    QItemSelection selection = FlagTable_t->selectionModel()->selection();
+
+    QModelIndexList i = selection[0].indexes();
+    int target = i[0].row();
+
+    if(target == static_cast<int>(flagTypeTbl->map.size()) - 1 || selection.count() != 1){
+        return;
+    }
+
+    itemChange(FlagTable_t, target, target + 1);
+    flagTypeTbl->swap(target, target + 1);
+    FlagTable_t->selectRow(target + 1);
 }
 
 
@@ -461,11 +507,12 @@ void MainWindow::setShortCut()
         widget->setShortcut(key);
     };
 
-    // Add
+    // Add, Up
     bindKey(QKeySequence(Qt::Key_Plus)        , ui->descAddBtn);
     bindKey(QKeySequence(Qt::Key_Plus)        , ui->issueAddBtn);
     bindKey(QKeySequence(Qt::Key_Plus)        , ui->addReferenceBtn);
     bindKey(QKeySequence(Qt::Key_Plus)        , ui->addExcludeBtn);
+    bindKey(QKeySequence(Qt::Key_Plus)        , ui->FlagUpBtn);
 
     // Remove
     bindKey(QKeySequence::Delete              , ui->descRemoveBtn);
@@ -480,8 +527,26 @@ void MainWindow::setShortCut()
     bindKey(QKeySequence(Qt::CTRL + Qt::Key_T), ui->sortExcludeBtn);
 
     // Copy
-    bindKey(QKeySequence(Qt::Key_C), ui->copyBtn);
+    bindKey(QKeySequence(Qt::Key_C)           , ui->copyBtn);
 
+    // Down
+    bindKey(QKeySequence(Qt::Key_Minus)       , ui->FlagDownBtn);
+
+}
+
+void MainWindow::itemChange(QTableWidget* tbl, int prev, int dest)
+{
+    auto swap = [](QTableWidget* tbl, int curr, int targ)-> void{
+        auto target_1stCol = tbl->item(targ, 0)->text();
+        auto target_2ndCol = tbl->item(targ, 1)->text();
+
+        tbl->item(targ, 0)->setText(tbl->item(curr, 0)->text());
+        tbl->item(targ, 1)->setText(tbl->item(curr, 1)->text());
+        tbl->item(curr, 0)->setText(target_1stCol);
+        tbl->item(curr, 1)->setText(target_2ndCol);
+    };
+
+    swap(tbl, prev, dest);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
@@ -500,23 +565,23 @@ void MainWindow::dropEvent(QDropEvent *e)
     foreach (const QUrl &url, e->mimeData()->urls()) {
 
         auto fileNameMatch = fileNameRe.match(url.toLocalFile(), 0,
-                                            QRegularExpression::NormalMatch);
+                                              QRegularExpression::NormalMatch);
 
         QString name = fileNameMatch.captured("fileName");
 
         switch(ui->tabWidget->currentIndex()){
 
         case tab_index::TAB_DESCRIPT:   insertTbl(DescTable_t,  name, " ");
-        break;
+            break;
 
         case tab_index::TAB_ISSUE:      insertTbl(IssueTable_t, name, " ");
-        break;
+            break;
 
         case tab_index::TAB_REF:        insertTbl(RefTable_t,   name, " ");
-        break;
+            break;
 
         case tab_index::TAB_EXCLUDE:    insertTbl(ExcludeTable_t, name);
-        break;
+            break;
 
         };
     }
@@ -594,6 +659,9 @@ void MainWindow::removeSelectedItems(QTableWidget* tbl){
 
 void MainWindow::initProgram()
 {
+    flagTypeTbl = new FlagType_tbl;
+
+    clearTbl(FlagTable_t);
     clearTbl(IssueTable_t);
     clearTbl(DescTable_t);
     clearTbl(RefTable_t);
@@ -604,6 +672,8 @@ void MainWindow::initProgram()
 void MainWindow::setSCPSFile(const QString& settingFilePath){
 
     setWindowTitle(settingFilePath);
+
+    int flagHits = 0;
 
     bool errFlag = false;
 
@@ -659,15 +729,23 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
                                       QRegularExpression::NormalMatch);
 
         if(flagMatch.hasMatch()){
-            auto item = searchTable(FlagTable_t, flagMatch.captured("attKey"));
-            item->setText(flagMatch.captured("attValue"));
+            // 읽은 순서대로 flagTypeTbl에 기록하고, 테이블에 추가
+            bool LineFeed = false;
+            if(flagMatch.captured("attKey") == "Desc" || flagMatch.captured("attKey") == "Issue" ||
+                    flagMatch.captured("attKey") == "Memo"){
+                LineFeed = true;
+            }
+
+            flagTypeTbl->map.insert({ flagHits++, { flagMatch.captured("attKey"), LineFeed }});
+
+            insertItem(FlagTable_t, false, flagMatch.captured("attKey"), flagMatch.captured("attValue"));
             confQueue->pop();
             continue;
         }
 
         // Global Setting
 
-        QRegularExpression globalRe("global[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
+        QRegularExpression globalRe("global[.](?<attKey>\\w+)\\s+[=]\\s+\"(?<attValue>.*)\"");
 
         auto globalMatch = globalRe.match(confQueue->front(), 0,
                                           QRegularExpression::NormalMatch);
@@ -798,19 +876,19 @@ void MainWindow::saveSCPSFile(const QString& path){
     QString subDs = SubDiv_t.replace("\n",",");
     QString supDs = SupDiv_t.replace("\n",",");
 
-    ts << "global.Extension        =  " <<   Extension_t      << "\n";
-    ts << "global.Project_Path     =  " <<   ProjectPath_t    << "\n";
-    ts << "global.Author           =  " <<   Author_t         << "\n";
-    ts << "global.Separator        =  " <<   Separator_t      << "\n";
-    ts << "global.StartTag         =  " <<   StartTag_t       << "\n";
-    ts << "global.EndTag           =  " <<   EndTag_t         << "\n";
-    ts << "global.Sub_Div_Line     =  " <<   subDs            << "\n";
-    ts << "global.Sup_Div_Line     =  " <<   supDs            << "\n";
-    ts << "global.Email            =  " <<   Email_t          << "\n";
-    ts << "global.Telephone        =  " <<   Telep_t          << "\n";
-    ts << "global.Github_Account   =  " <<   GithubAcc_t      << "\n";
-    ts << "global.Team             =  " <<   Team_t           << "\n";
-    ts << "global.Memo             =  " <<   memo             << "\n";
+    ts << "global.Extension        =  \"" <<   Extension_t      << "\"\n";
+    ts << "global.Project_Path     =  \"" <<   ProjectPath_t    << "\"\n";
+    ts << "global.Author           =  \"" <<   Author_t         << "\"\n";
+    ts << "global.Separator        =  \"" <<   Separator_t      << "\"\n";
+    ts << "global.StartTag         =  \"" <<   StartTag_t       << "\"\n";
+    ts << "global.EndTag           =  \"" <<   EndTag_t         << "\"\n";
+    ts << "global.Sub_Div_Line     =  \"" <<   subDs            << "\"\n";
+    ts << "global.Sup_Div_Line     =  \"" <<   supDs            << "\"\n";
+    ts << "global.Email            =  \"" <<   Email_t          << "\"\n";
+    ts << "global.Telephone        =  \"" <<   Telep_t          << "\"\n";
+    ts << "global.Github_Account   =  \"" <<   GithubAcc_t      << "\"\n";
+    ts << "global.Team             =  \"" <<   Team_t           << "\"\n";
+    ts << "global.Memo             =  \"" <<   memo             << "\"\n";
 
     ts << "\n# Desc\n";
 
@@ -999,7 +1077,7 @@ void MainWindow::makeMDForm(QTextStream& ts, const QTableWidget *tbl, const QStr
 
 }
 
-void MainWindow::openRecentPathsFile()
+bool MainWindow::openRecentPathsFile()
 {
     QString latest = nullptr;
 
@@ -1016,6 +1094,8 @@ void MainWindow::openRecentPathsFile()
         QStringList list = o.split(",");
 
         latest = list[0];
+
+        if(latest.trimmed() == "") return false;
 
         auto actionList = ui->menuOpen_Recents->actions();
 
@@ -1037,9 +1117,11 @@ void MainWindow::openRecentPathsFile()
 
         initProgram();
         setSCPSFile(latest);
+        return true;
     }
     else{
         latelyPathsFile->open( QFile::ReadWrite | QFile::Text  );
+        return false;
     }
 }
 
@@ -1124,45 +1206,46 @@ void MainWindow::prependComment(FileInfo fileInfo){
 
 }
 
-void MainWindow::processFlag(QTextStream& ts, const QString& key, const QString& value,
-                             FlagType flag, bool previewMode, bool keyValueSpace){
+void MainWindow::processFlag(QTextStream& ts, Flag& flag, bool previewMode){
 
-    if(key.trimmed() == "" || key == nullptr){
+    if(flag.type.key.trimmed() == "" || flag.type.key == nullptr){
         return;
     }
 
-    if(!previewMode && value.trimmed() == ""){
+    if(!previewMode && flag.value.trimmed() == ""){
         return;
     }
 
-    QString sep = Separator_t;
-
-    if(FlagTable_t->item(flag, 1)->text() == "1"){
+    if(FlagTable_t->item(flag.pos, 1)->text() == "1"){
 
         // div line의 경우
-        if(IS_DIV(flag)){
+        QString val = flag.type.key;
 
-            QStringList list = key.split("\n");
+        if(val == "Sup_Div_Line" || val == "Sub_Div_Line"){
+
+            QStringList list = flag.value.split("\n");
 
             for(auto line : list){
-                ts << sep + line + "\n";
+                ts << line + "\n";
             }
             return;
         }
 
         // key와 value 사이에 띄어쓰기를 넣을 것인지 여부
-        if(keyValueSpace){
-            ts << sep + key + " : \n" + value;
+        if(flag.type.ExistLineFeed){
+            ts << Separator_t + flag.type.key + " : \n" + flag.value;
         }
         else{
-            ts << sep + key + " : " + value + "\n";
+            ts << Separator_t + flag.type.key + " : "   + flag.value + "\n";
         }
     }
 }
 
 void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
 
-    bool isPreviewMode = false;
+    // Run에서 사용하는 경우, fileName이 들어온다
+    // isPreviewMode는 함수를 preview tab에서 사용하는 경우 true
+    bool isPreviewMode = fileInfo.fileName == nullptr ? true : false;
 
     QString
             edit    = nullptr,
@@ -1170,67 +1253,55 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
             issue   = nullptr,
             date    = nullptr,
             urls    = nullptr,
-            memo    = nullptr,
-            subd    = SubDiv_t,
-            supd    = SupDiv_t;
+            memo    = nullptr;
 
-    // 함수를 preview tab에서 사용하는 경우
-    if(fileInfo.fileName == nullptr){
-        edit    =   "<Edited>";
-        desc    =   "";
-        issue   =   "";
-        date    =   "<Date>";
-        urls    =   "";
-        memo    =   "";
-        isPreviewMode = true;
-    }
-    // Run에서 사용하는 경우, fileName이 들어온다
-    else{
+    edit    = fileInfo.lastModified.toString("yyyy-MM-dd, HH:mm:ss");
+    date    = fileInfo.created     .toString("yyyy-MM-dd, HH:mm:ss");
+    desc    = *(makeFromTbl(DescTable_t , IsDescNumbering_t , fileInfo));
+    issue   = *(makeFromTbl(IssueTable_t, IsIssueNumbering_t, fileInfo));
+    urls    = *(makeFromTbl(RefTable_t  , true              , fileInfo));
 
-        edit    = fileInfo.lastModified.toString("yyyy-MM-dd, HH:mm:ss");
-        date    = fileInfo.created     .toString("yyyy-MM-dd, HH:mm:ss");
-        desc    = *(makeFromTbl(DescTable_t,  ui->actionDesc_Numbering ->isChecked(), fileInfo));
-        issue   = *(makeFromTbl(IssueTable_t, IsIssueNumbering_t, fileInfo));
-        urls    = *(makeFromTbl(RefTable_t, true, fileInfo));
+    auto memoText   = Memo_t;
+    auto memos      = memoText.split("\n");
 
-        auto memoText   = Memo_t;
-        auto memos      = memoText.split("\n");
-
-        for(auto& text : memos){
-            if(text.trimmed() == "") continue;
-            memo.append(Separator_t + "  " + text + "\n");
-        }
+    for(auto& text : memos){
+        if(text.trimmed() == "") continue;
+        memo.append(Separator_t + "  " + text + "\n");
     }
 
     if(IsDivByStartEndTag_t) ts << StartTag_t + "\n";
 
-    processFlag(ts, supd,             "",                FlagType::SUPDIV,     isPreviewMode, false);
+    int loop = static_cast<int>(flagTypeTbl->map.size());
 
-    processFlag(ts, "File Name",      fileInfo.fileName, FlagType::FileName,   isPreviewMode, false );
+    for(int i = 0; i < loop; i++){
+        \
+        QString key = flagTypeTbl->map.at(i).key;
+        QString value = "";
 
-    processFlag(ts, "Author",         Author_t,          FlagType::AUTHOR,     isPreviewMode, false);
+        if     (key == "Author")         value = Author_t;
+        else if(key == "Last_Edited")    value = edit;
+        else if(key == "Desc")           value = desc;
+        else if(key == "Issue")          value = issue;
+        else if(key == "Sup_Div_Line")   value = SupDiv_t;
+        else if(key == "Sub_Div_Line")   value = SubDiv_t;
+        else if(key == "Email")          value = Email_t;
+        else if(key == "Telephone")      value = Telep_t;
+        else if(key == "Github_Account") value = GithubAcc_t;
+        else if(key == "Ref_URLs")       value = urls;
+        else if(key == "Created_Date")   value = date;
+        else if(key == "Team")           value = Team_t;
+        else if(key == "Memo")           value = memo;
+        else if(key == "File_Name")      value = fileInfo.fileName;
 
-    processFlag(ts, "Team",           Team_t,            FlagType::TEAM,       isPreviewMode, false);
+        Flag flag =
+        {
+            i,                      // Tbl  pos
+            flagTypeTbl->map.at(i), // Flag Type
+            value                   // Flag Value
+        };
 
-    processFlag(ts, "Created",        date,              FlagType::CREATEDDATE,isPreviewMode, false);
-
-    processFlag(ts, "Last Edited",    edit,              FlagType::LASTEDITED, isPreviewMode, false);
-
-    processFlag(ts, "Desc",           desc,              FlagType::DESC,       isPreviewMode, true );
-
-    processFlag(ts, "Issue",          issue,             FlagType::ISSUE,      isPreviewMode, true );
-
-    processFlag(ts, "Email",          Email_t,           FlagType::EMAIL,      isPreviewMode, false);
-
-    processFlag(ts, "Contact",        Telep_t,           FlagType::TELEP,      isPreviewMode, false);
-
-    processFlag(ts, "Github Account", GithubAcc_t,       FlagType::GITHUBACC,  isPreviewMode, false);
-
-    processFlag(ts, "Ref URLs",       urls,              FlagType::REFURLS,    isPreviewMode, true );
-
-    processFlag(ts, "Memo",           memo,              FlagType::MEMO,       isPreviewMode, true );
-
-    processFlag(ts, subd,             "",                FlagType::SUBDIV,     isPreviewMode, false);
+        processFlag(ts, flag, isPreviewMode);
+    }
 
     if(IsDivByStartEndTag_t) ts << EndTag_t;
 
@@ -1330,13 +1401,13 @@ bool MainWindow::removeComment(QStringList &strList){
 
                     auto isEndPoint =
                             [&](QString line) -> bool {
-                                if(IsDivByStartEndTag_t){
-                                    return line.left(EndTag_t.length()) == EndTag_t;
-                                }
-                                else {
-                                    return line.left(Separator_t.length()) != Separator_t;
-                                }
-                            };
+                        if(IsDivByStartEndTag_t){
+                            return line.left(EndTag_t.length()) == EndTag_t;
+                        }
+                        else {
+                            return line.left(Separator_t.length()) != Separator_t;
+                        }
+                    };
 
                     while(!target.atEnd()){
 
@@ -1370,4 +1441,3 @@ bool MainWindow::removeComment(QStringList &strList){
 
 
 // ==============================+===============================================================
-

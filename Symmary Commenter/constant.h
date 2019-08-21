@@ -2,6 +2,7 @@
 #define CONSTANT_H
 
 // ==============================+===============================================================
+// shortcuts
 
 #define FlagTable_t             ui->flagTblWidget
 #define DescTable_t             ui->descTblWidget
@@ -30,35 +31,20 @@
 #define IsDivByStartEndTag_t    ui->actionDivide_by_Start_End_tag->isChecked()
 
 // ==============================+===============================================================
+// enum
 
 enum tab_index{
-    TAB_GLOBAL      = 0,
-    TAB_FLAG        = 1,
-    TAB_DESCRIPT    = 2,
-    TAB_ISSUE       = 3,
-    TAB_REF         = 4,
-    TAB_EXCLUDE     = 5,
-    TAB_PREVIEW     = 6,
-};
-
-enum FlagType{
-    AUTHOR = 0,
-    LASTEDITED,
-    DESC,
-    ISSUE,
-    SUPDIV,
-    SUBDIV,
-    EMAIL,
-    TELEP,
-    GITHUBACC,
-    REFURLS,
-    CREATEDDATE,
-    TEAM,
-    MEMO,
-    FileName
+    TAB_GLOBAL      =  0,
+    TAB_FLAG        =  1,
+    TAB_DESCRIPT    =  2,
+    TAB_ISSUE       =  3,
+    TAB_REF         =  4,
+    TAB_EXCLUDE     =  5,
+    TAB_PREVIEW     =  6,
 };
 
 // ==============================+===============================================================
+// constants
 
 #define DEFAULT_WIN_TITLE   "Summary Commenter"
 
@@ -71,10 +57,6 @@ enum FlagType{
 #define PROJECT_LATELY_OPEN_EXT  "sclately"
 
 #define PROJECT_WORKED_FILE_EXT  "scproj"
-
-// ==============================+===============================================================
-
-#define IS_DIV(flag) flag == FlagType::SUBDIV || flag == FlagType::SUPDIV
 
 // ==============================+===============================================================
 
