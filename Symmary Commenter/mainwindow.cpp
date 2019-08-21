@@ -274,8 +274,8 @@ void MainWindow::on_actionSave_as_triggered()
 
     QString nameFilter =
             QString ("Summary Commenter Project Setting (*.") +
-            QString(PROJECT_SETTING_FILE_EXT) +
-            QString(");;All Files (*)");
+            QString (PROJECT_SETTING_FILE_EXT) +
+            QString (");;All Files (*)");
 
     selectedFile = QFileDialog::getSaveFileName(this,
                                                 tr("Save setting file"), "",
@@ -558,29 +558,20 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 
 void MainWindow::dropEvent(QDropEvent *e)
 {
-    // http://www.moneybook.co.kr/pages/blog_dev_note/543888
-
-    QRegularExpression fileNameRe("(?<fileName>[^\\/\n]+$)");
-
     foreach (const QUrl &url, e->mimeData()->urls()) {
-
-        auto fileNameMatch = fileNameRe.match(url.toLocalFile(), 0,
-                                              QRegularExpression::NormalMatch);
-
-        QString name = fileNameMatch.captured("fileName");
 
         switch(ui->tabWidget->currentIndex()){
 
-        case tab_index::TAB_DESCRIPT:   insertTbl(DescTable_t,  name, " ");
+        case tab_index::TAB_DESCRIPT:   insertTbl(DescTable_t,  url.fileName(), " ");
             break;
 
-        case tab_index::TAB_ISSUE:      insertTbl(IssueTable_t, name, " ");
+        case tab_index::TAB_ISSUE:      insertTbl(IssueTable_t, url.fileName(), " ");
             break;
 
-        case tab_index::TAB_REF:        insertTbl(RefTable_t,   name, " ");
+        case tab_index::TAB_REF:        insertTbl(RefTable_t,   url.fileName(), " ");
             break;
 
-        case tab_index::TAB_EXCLUDE:    insertTbl(ExcludeTable_t, name);
+        case tab_index::TAB_EXCLUDE:    insertTbl(ExcludeTable_t, url.fileName());
             break;
 
         };
@@ -1208,7 +1199,10 @@ void MainWindow::prependComment(FileInfo fileInfo){
 
 void MainWindow::processFlag(QTextStream& ts, Flag& flag, bool previewMode){
 
-    if(flag.type.key.trimmed() == "" || flag.type.key == nullptr){
+    QString key = flag.type.key;
+    key.replace("_", " ");
+
+    if(key.trimmed() == "" || key == nullptr){
         return;
     }
 
@@ -1219,9 +1213,7 @@ void MainWindow::processFlag(QTextStream& ts, Flag& flag, bool previewMode){
     if(FlagTable_t->item(flag.pos, 1)->text() == "1"){
 
         // div line의 경우
-        QString val = flag.type.key;
-
-        if(val == "Sup_Div_Line" || val == "Sub_Div_Line"){
+        if(key == "Sup Div Line" || key == "Sub Div Line"){
 
             QStringList list = flag.value.split("\n");
 
@@ -1233,10 +1225,10 @@ void MainWindow::processFlag(QTextStream& ts, Flag& flag, bool previewMode){
 
         // key와 value 사이에 띄어쓰기를 넣을 것인지 여부
         if(flag.type.ExistLineFeed){
-            ts << Separator_t + flag.type.key + " : \n" + flag.value;
+            ts << Separator_t + key + " : \n" + flag.value;
         }
         else{
-            ts << Separator_t + flag.type.key + " : "   + flag.value + "\n";
+            ts << Separator_t + key + " : "   + flag.value + "\n";
         }
     }
 }
