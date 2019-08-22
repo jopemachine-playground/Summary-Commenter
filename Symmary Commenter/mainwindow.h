@@ -42,12 +42,10 @@ template<class T>
 using queue         = std::queue<T>;
 
 typedef struct{
-
     QString     filePath;
     QString     fileName;
     QDateTime   lastModified;
     QDateTime   created;
-
 } FileInfo;
 
 typedef struct{
@@ -57,7 +55,7 @@ typedef struct{
 
 typedef struct{
 
-    std::unordered_map<TblPos, FlagType>           map;
+    std::unordered_map<TblPos, FlagType>                    map;
 
     void    init(){
                 int hit = 0;
@@ -86,11 +84,9 @@ typedef struct{
 } FlagType_tbl;
 
 typedef struct{
-
     TblPos      pos;
     FlagType    type;
     QString&    value;
-
 } Flag;
 
 
@@ -207,6 +203,7 @@ private:
 
     // handle tables
     QTableWidgetItem*           searchTable         (QTableWidget* tbl, const QString& key);
+    void                        insertItem          (QTableWidget* tbl, bool keyEditable, const QString& item);
     void                        insertItem          (QTableWidget* tbl, bool keyEditable, const QString& key, const QString& value);
     void                        removeSelectedItems (QTableWidget* tbl);
 

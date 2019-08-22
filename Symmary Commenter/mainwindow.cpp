@@ -454,6 +454,8 @@ void MainWindow::on_FlagUpBtn_clicked()
 {
     QItemSelection selection = FlagTable_t->selectionModel()->selection();
 
+    if(selection.size() == 0) return;
+
     QModelIndexList i = selection[0].indexes();
     int target = i[0].row();
 
@@ -470,6 +472,8 @@ void MainWindow::on_FlagUpBtn_clicked()
 void MainWindow::on_FlagDownBtn_clicked()
 {
     QItemSelection selection = FlagTable_t->selectionModel()->selection();
+
+    if(selection.size() == 0) return;
 
     QModelIndexList i = selection[0].indexes();
     int target = i[0].row();
@@ -584,29 +588,36 @@ void MainWindow::handleDrop(const QList<QUrl> & list)
 
                 if(!it.hasNext()) break;
                 it.next();
-
             }
             handleDrop(newList);
         }
+
         else if(fi.isFile()){
 
-            // 나중에 정규식을 이용해 확장자를 추출하고, 원하는 확장자 파일만 추가하도록 변경하자.
+            QRegularExpression re(".[.](?<Ext>\\w+)");
 
-            switch(ui->tabWidget->currentIndex()){
+            auto match = re.match(fi.fileName(), 0, QRegularExpression::NormalMatch);
 
-            case tab_index::TAB_DESCRIPT:   insertTbl(DescTable_t,    url.fileName(), " ");
-                break;
+            qDebug() << match.captured("Ext");
 
-            case tab_index::TAB_ISSUE:      insertTbl(IssueTable_t,   url.fileName(), " ");
-                break;
+            if(match.captured("Ext") != "" && Extension_t.contains(match.captured("Ext"))){
 
-            case tab_index::TAB_REF:        insertTbl(RefTable_t,     url.fileName(), " ");
-                break;
+                switch(ui->tabWidget->currentIndex()){
 
-            case tab_index::TAB_EXCLUDE:    insertTbl(ExcludeTable_t, url.fileName());
-                break;
+                case tab_index::TAB_DESCRIPT:   insertTbl(DescTable_t,    url.fileName(), "");
+                    break;
 
-            };
+                case tab_index::TAB_ISSUE:      insertTbl(IssueTable_t,   url.fileName(), "");
+                    break;
+
+                case tab_index::TAB_REF:        insertTbl(RefTable_t,     url.fileName(), "");
+                    break;
+
+                case tab_index::TAB_EXCLUDE:    insertTbl(ExcludeTable_t, url.fileName());
+                    break;
+
+                };
+            }
         }
     }
 }
@@ -626,6 +637,21 @@ QTableWidgetItem* MainWindow::searchTable(QTableWidget* table, const QString& ke
     return nullptr;
 }
 
+void MainWindow::insertItem(QTableWidget* tbl, bool keyEditable, const QString& item){
+
+    int row =   tbl->rowCount();
+    tbl->insertRow(row);
+
+    // key
+    auto keyColumn      = new QTableWidgetItem(item);
+
+    if(!keyEditable){
+        keyColumn->setFlags(keyColumn->flags() & ~Qt::ItemIsEditable);
+    }
+
+    tbl->setItem(row, 0, keyColumn);
+}
+
 void MainWindow::insertItem(QTableWidget* tbl, bool keyEditable,
                             const QString& key, const QString& value){
 
@@ -634,18 +660,13 @@ void MainWindow::insertItem(QTableWidget* tbl, bool keyEditable,
 
     // key
     auto keyColumn      = new QTableWidgetItem(key);
-
+    auto valueColumn    = new QTableWidgetItem(value);
     if(!keyEditable){
         keyColumn->setFlags(keyColumn->flags() & ~Qt::ItemIsEditable);
     }
 
     tbl->setItem(row, 0, keyColumn);
-
-    // value
-    if(value != nullptr){
-        auto valueColumn    = new QTableWidgetItem(value);
-        tbl->setItem(row, 1, valueColumn);
-    }
+    tbl->setItem(row, 1, valueColumn);
 
 }
 
@@ -782,7 +803,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Desc Setting
 
-        QRegularExpression descRe("(?<attKey>\\w+[.]?\\w+)::desc\\s+[+][=]\\s+(?<attValue>.+)");
+        QRegularExpression descRe("(?<attKey>.+[.]?\\w+)::desc\\s+[+][=]\\s+(?<attValue>.+)");
 
         auto descMatch = descRe.match(confQueue->front(), 0,
                                       QRegularExpression::NormalMatch);
@@ -797,7 +818,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Issue Setting
 
-        QRegularExpression issueRe("(?<attKey>\\w+[.]?\\w+)::issue\\s+[+][=]\\s+(?<attValue>.+)");
+        QRegularExpression issueRe("(?<attKey>.+[.]?\\w+)::issue\\s+[+][=]\\s+(?<attValue>.+)");
 
         auto issueMatch = issueRe.match(confQueue->front(), 0,
                                         QRegularExpression::NormalMatch);
@@ -812,7 +833,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Reference URLs Setting
 
-        QRegularExpression refURLRe("(?<attKey>\\w+[.]?\\w+)::refURLs\\s+[+][=]\\s+(?<attValue>.+)");
+        QRegularExpression refURLRe("(?<attKey>.+[.]?\\w+)::refURLs\\s+[+][=]\\s+(?<attValue>.+)");
 
         auto refURLsMatch = refURLRe.match(confQueue->front(), 0,
                                            QRegularExpression::NormalMatch);
@@ -827,7 +848,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Excluded files
 
-        QRegularExpression excludingRe("(?<attKey>\\w+[.]?\\w+)::exclude");
+        QRegularExpression excludingRe("(?<attKey>.+[.]?\\w+)::exclude");
 
         auto excludeMatch = excludingRe.match(confQueue->front(), 0,
                                               QRegularExpression::NormalMatch);
@@ -917,6 +938,8 @@ void MainWindow::saveSCPSFile(const QString& path){
     ts << "\n# Desc\n";
 
     for(int i = 0; i < DescTable_t->rowCount(); i++){
+
+        // qDebug() << DescTable_t->item(i, 1)->text();
 
         QStringList list = DescTable_t->item(i, 1)->text().split("\n");
 
@@ -1113,9 +1136,9 @@ bool MainWindow::openRecentPathsFile()
 
         latelyPathsFile->open( QFile::ReadWrite | QFile::Text  );
 
-        QString o = latelyPathsFile->readLine();
+        QString fileContent = latelyPathsFile->readLine();
 
-        QStringList list = o.split(",");
+        QStringList list = fileContent.split(",");
 
         latest = list[0];
 

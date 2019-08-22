@@ -9,33 +9,19 @@ setting.descNumbering        =   1
 setting.issueNumbering       =   1
 setting.recursiveTraversal   =   1
 setting.divBySeparator       =   1
-setting.divByStartEndTag     =   1
+setting.divByStartEndTag     =   0
 
 # Flags
-flag.Sup_Div_Line   =   1
-flag.File_Name   =   1
-flag.Author   =   1
-flag.Team   =   1
-flag.Created_Date   =   1
-flag.Last_Edited   =   1
-flag.Desc   =   1
-flag.Issue   =   1
-flag.Email   =   1
-flag.Telephone   =   1
-flag.Github_Account   =   1
-flag.Ref_URLs   =   1
-flag.Memo   =   1
-flag.Sub_Div_Line   =   1
 
 # Globals
 global.Extension        =  ""
 global.Project_Path     =  ""
 global.Author           =  ""
-global.Separator        =  "@ "
-global.StartTag         =  "<!--"
-global.EndTag           =  "-->"
-global.Sub_Div_Line     =  "-------------------------------"
-global.Sup_Div_Line     =  "-------------------------------"
+global.Separator        =  "// @ "
+global.StartTag         =  ""
+global.EndTag           =  ""
+global.Sub_Div_Line     =  "// ///////////////////////"
+global.Sup_Div_Line     =  "// ///////////////////////"
 global.Email            =  ""
 global.Telephone        =  ""
 global.Github_Account   =  ""
