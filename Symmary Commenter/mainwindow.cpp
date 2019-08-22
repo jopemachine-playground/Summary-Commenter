@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     if(!openRecentPathsFile()){
         // scps 파일을 열지 않았다면 기본 값으로 초기화
+        // 열었다면 openRecentPathsFile에서 flagTypeTbl 생성 및 초기화.
         flagTypeTbl = new FlagType_tbl;
         flagTypeTbl->init();
         int size = static_cast<int>(flagTypeTbl->map.size());
@@ -49,7 +50,6 @@ MainWindow::MainWindow(QWidget *parent) :
             insertItem(FlagTable_t, false, flagTypeTbl->map.at(i).key, QString::number(1));
         }
     }
-
 }
 
 MainWindow::~MainWindow()
@@ -98,7 +98,7 @@ bool MainWindow::Open(){
     if(fileOpenDialog.exec()){
         selectedFile = fileOpenDialog.selectedFiles()[0];
 
-        // queue에 해당 값이 있는지 확인해 중복되면 큐에 추가하지 않는다.
+        // pathQue에 해당 경로가 있는지 확인해 중복되면 큐에 추가하지 않는다.
         if(std::find(pathQue->begin(), pathQue->end(), selectedFile) == pathQue->end()){
             pathQue->push_front(selectedFile);
         }
@@ -125,8 +125,8 @@ void MainWindow::Run(){
 
     auto que = getAllTargetFiles(ProjectPath_t);
 
-    // chproj는 지정 프로젝트 경로에서 주석을 추가해놓은 설정 파일이다.
-    // chproj가 삭제되면 run 재 실행 시 해당 파일들에 주석이 한 번 더 들어가게 된다.
+    // scproj는 지정 프로젝트 경로에서 주석을 추가해놓은 설정 파일이다.
+    // scproj가 삭제되면 run 재 실행 시 해당 파일들에 주석이 한 번 더 들어가게 된다.
     QString scprojContent = "";
 
     // 리눅스의 경우 \\ 대신 / 를 써야한다
@@ -281,6 +281,7 @@ void MainWindow::on_actionSave_as_triggered()
                                                 tr("Save setting file"), "",
                                                 nameFilter);
 
+    // 저장을 하지 않고 종료했을 땐, return
     if(selectedFile == ""){
         return;
     }
@@ -549,6 +550,10 @@ void MainWindow::itemChange(QTableWidget* tbl, int prev, int dest)
     swap(tbl, prev, dest);
 }
 
+// ==============================+===============================================================
+// Private Methods
+// Setting Table's dragging event
+
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 {
     if (e->mimeData()->hasUrls()) {
@@ -558,23 +563,51 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 
 void MainWindow::dropEvent(QDropEvent *e)
 {
-    foreach (const QUrl &url, e->mimeData()->urls()) {
+    handleDrop(e->mimeData()->urls());
+}
 
-        switch(ui->tabWidget->currentIndex()){
+void MainWindow::handleDrop(const QList<QUrl> & list)
+{
+    foreach (const QUrl &url, list) {
 
-        case tab_index::TAB_DESCRIPT:   insertTbl(DescTable_t,  url.fileName(), " ");
-            break;
+        QString localPath = url.toLocalFile();
+        QFileInfo fi(localPath);
 
-        case tab_index::TAB_ISSUE:      insertTbl(IssueTable_t, url.fileName(), " ");
-            break;
+        if(fi.isDir()){
+            QList<QUrl> newList;
+            QDirIterator it(QDir(localPath), QDirIterator::IteratorFlag::Subdirectories);
+            while(true){
 
-        case tab_index::TAB_REF:        insertTbl(RefTable_t,   url.fileName(), " ");
-            break;
+                if(!it.fileInfo().isDir() && it.filePath() != ""){
+                    newList.append(QUrl::fromLocalFile(it.filePath()));
+                }
 
-        case tab_index::TAB_EXCLUDE:    insertTbl(ExcludeTable_t, url.fileName());
-            break;
+                if(!it.hasNext()) break;
+                it.next();
 
-        };
+            }
+            handleDrop(newList);
+        }
+        else if(fi.isFile()){
+
+            // 나중에 정규식을 이용해 확장자를 추출하고, 원하는 확장자 파일만 추가하도록 변경하자.
+
+            switch(ui->tabWidget->currentIndex()){
+
+            case tab_index::TAB_DESCRIPT:   insertTbl(DescTable_t,    url.fileName(), " ");
+                break;
+
+            case tab_index::TAB_ISSUE:      insertTbl(IssueTable_t,   url.fileName(), " ");
+                break;
+
+            case tab_index::TAB_REF:        insertTbl(RefTable_t,     url.fileName(), " ");
+                break;
+
+            case tab_index::TAB_EXCLUDE:    insertTbl(ExcludeTable_t, url.fileName());
+                break;
+
+            };
+        }
     }
 }
 
@@ -1261,7 +1294,7 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
         memo.append(Separator_t + "  " + text + "\n");
     }
 
-    if(IsDivByStartEndTag_t) ts << StartTag_t + "\n";
+    if(IsDivByStartEndTag_t && StartTag_t.trimmed() != "") ts << StartTag_t + "\n";
 
     int loop = static_cast<int>(flagTypeTbl->map.size());
 

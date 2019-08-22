@@ -203,6 +203,7 @@ private:
     // setting table's dragging event
     void                        dragEnterEvent      (QDragEnterEvent *e) override;
     void                        dropEvent           (QDropEvent      *e) override;
+    void                        handleDrop          (const QList<QUrl>&);
 
     // handle tables
     QTableWidgetItem*           searchTable         (QTableWidget* tbl, const QString& key);
