@@ -23,7 +23,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setWindowTitle(DEFAULT_WIN_TITLE);
 
     auto setTable = [](QTableWidget* tbl)-> void {
         tbl->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Fixed);
@@ -40,15 +39,10 @@ MainWindow::MainWindow(QWidget *parent) :
     setAcceptDrops(true);
     setShortCut();
 
+    // scps 파일을 열지 않았다면 기본 값으로 초기화
+    // 열었다면 openRecentPathsFile에서 flagTypeTbl 생성 및 초기화.
     if(!openRecentPathsFile()){
-        // scps 파일을 열지 않았다면 기본 값으로 초기화
-        // 열었다면 openRecentPathsFile에서 flagTypeTbl 생성 및 초기화.
-        flagTypeTbl = new FlagType_tbl;
-        flagTypeTbl->init();
-        int size = static_cast<int>(flagTypeTbl->map.size());
-        for(int i = 0; i < size; i++){
-            insertItem(FlagTable_t, false, flagTypeTbl->map.at(i).key, QString::number(1));
-        }
+        NewFile();
     }
 }
 
@@ -161,6 +155,20 @@ void MainWindow::Run(){
     scprojFile.close();
 
     ShowMessageBox("work completed!", "Jobs done");
+}
+
+void MainWindow::NewFile()
+{
+    initProgram();
+    setWindowTitle(DEFAULT_WIN_TITLE);
+    selectedFile = nullptr;
+    flagTypeTbl  = new FlagType_tbl;
+    flagTypeTbl->init();
+
+    int size = static_cast<int>(flagTypeTbl->map.size());
+    for(int i = 0; i < size; i++){
+        insertItem(FlagTable_t, false, flagTypeTbl->map.at(i).key, QString::number(1));
+    }
 }
 
 void MainWindow::ShowMessageBox(const QString& message, const QString& title){
@@ -487,6 +495,20 @@ void MainWindow::on_FlagDownBtn_clicked()
     FlagTable_t->selectRow(target + 1);
 }
 
+void MainWindow::on_actionNew_triggered()
+{
+    NewFile();
+}
+
+void MainWindow::on_FlagAddBtn_clicked()
+{
+    insertTbl(FlagTable_t, "flag" , "");
+}
+
+void MainWindow::on_FlagDeleteBtn_clicked()
+{
+    removeSelectedItems(FlagTable_t);
+}
 
 // ==============================+===============================================================
 // Private Methods
@@ -512,18 +534,19 @@ void MainWindow::setShortCut()
         widget->setShortcut(key);
     };
 
-    // Add, Up
+    // Add
     bindKey(QKeySequence(Qt::Key_Plus)        , ui->descAddBtn);
     bindKey(QKeySequence(Qt::Key_Plus)        , ui->issueAddBtn);
     bindKey(QKeySequence(Qt::Key_Plus)        , ui->addReferenceBtn);
     bindKey(QKeySequence(Qt::Key_Plus)        , ui->addExcludeBtn);
-    bindKey(QKeySequence(Qt::Key_Plus)        , ui->FlagUpBtn);
+    bindKey(QKeySequence(Qt::Key_Plus)        , ui->FlagAddBtn);
 
     // Remove
     bindKey(QKeySequence::Delete              , ui->descRemoveBtn);
     bindKey(QKeySequence::Delete              , ui->issueRemoveBtn);
     bindKey(QKeySequence::Delete              , ui->rmReferenceBtn);
     bindKey(QKeySequence::Delete              , ui->rmExcludeBtn);
+    bindKey(QKeySequence::Delete              , ui->FlagDeleteBtn);
 
     // Sort
     bindKey(QKeySequence(Qt::CTRL + Qt::Key_T), ui->descSortBtn);
@@ -534,8 +557,9 @@ void MainWindow::setShortCut()
     // Copy
     bindKey(QKeySequence(Qt::Key_C)           , ui->copyBtn);
 
-    // Down
-    bindKey(QKeySequence(Qt::Key_Minus)       , ui->FlagDownBtn);
+    // Up, Down
+    bindKey(QKeySequence(Qt::Key_Up)          , ui->FlagUpBtn);
+    bindKey(QKeySequence(Qt::Key_Down)        , ui->FlagDownBtn);
 
 }
 
@@ -658,9 +682,10 @@ void MainWindow::insertItem(QTableWidget* tbl, bool keyEditable,
     int row =   tbl->rowCount();
     tbl->insertRow(row);
 
-    // key
+    // key, value
     auto keyColumn      = new QTableWidgetItem(key);
     auto valueColumn    = new QTableWidgetItem(value);
+
     if(!keyEditable){
         keyColumn->setFlags(keyColumn->flags() & ~Qt::ItemIsEditable);
     }
@@ -1489,3 +1514,4 @@ bool MainWindow::removeComment(QStringList &strList){
 
 
 // ==============================+===============================================================
+

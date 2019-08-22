@@ -421,16 +421,30 @@
           <item>
            <layout class="QHBoxLayout" name="FlagBtnL">
             <item>
+             <widget class="QPushButton" name="FlagAddBtn">
+              <property name="text">
+               <string>Add (+)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="FlagDeleteBtn">
+              <property name="text">
+               <string>Remove (Delete)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QPushButton" name="FlagUpBtn">
               <property name="text">
-               <string>Up (+)</string>
+               <string>Up</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="FlagDownBtn">
               <property name="text">
-               <string>Down (-)</string>
+               <string>Down</string>
               </property>
              </widget>
             </item>
@@ -700,6 +714,8 @@
      <addaction name="actionrecent3"/>
      <addaction name="actionrecent4"/>
     </widget>
+    <addaction name="actionNew"/>
+    <addaction name="separator"/>
     <addaction name="actionOpen"/>
     <addaction name="actionOpen_and_run"/>
     <addaction name="menuOpen_Recents"/>
@@ -922,6 +938,14 @@
   <action name="actionOpen_setting_file">
    <property name="text">
     <string>Open Setting File</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>New</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
  </widget>

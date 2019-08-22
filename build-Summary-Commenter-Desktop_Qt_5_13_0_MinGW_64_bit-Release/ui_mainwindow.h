@@ -58,6 +58,7 @@ public:
     QAction *actionDivide_by_Separator;
     QAction *actionDivide_by_Start_End_tag;
     QAction *actionOpen_setting_file;
+    QAction *actionNew;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_2;
     QTabWidget *tabWidget;
@@ -122,6 +123,8 @@ public:
     QVBoxLayout *verticalLayout_8;
     QTableWidget *flagTblWidget;
     QHBoxLayout *FlagBtnL;
+    QPushButton *FlagAddBtn;
+    QPushButton *FlagDeleteBtn;
     QPushButton *FlagUpBtn;
     QPushButton *FlagDownBtn;
     QWidget *DescTab;
@@ -235,6 +238,8 @@ public:
         actionDivide_by_Start_End_tag->setCheckable(true);
         actionOpen_setting_file = new QAction(MainWindow);
         actionOpen_setting_file->setObjectName(QString::fromUtf8("actionOpen_setting_file"));
+        actionNew = new QAction(MainWindow);
+        actionNew->setObjectName(QString::fromUtf8("actionNew"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_2 = new QVBoxLayout(centralWidget);
@@ -555,6 +560,16 @@ public:
         FlagBtnL = new QHBoxLayout();
         FlagBtnL->setSpacing(6);
         FlagBtnL->setObjectName(QString::fromUtf8("FlagBtnL"));
+        FlagAddBtn = new QPushButton(FlagTab);
+        FlagAddBtn->setObjectName(QString::fromUtf8("FlagAddBtn"));
+
+        FlagBtnL->addWidget(FlagAddBtn);
+
+        FlagDeleteBtn = new QPushButton(FlagTab);
+        FlagDeleteBtn->setObjectName(QString::fromUtf8("FlagDeleteBtn"));
+
+        FlagBtnL->addWidget(FlagDeleteBtn);
+
         FlagUpBtn = new QPushButton(FlagTab);
         FlagUpBtn->setObjectName(QString::fromUtf8("FlagUpBtn"));
 
@@ -813,6 +828,8 @@ public:
         menuBar->addAction(menuExecute->menuAction());
         menuBar->addAction(menuSetting->menuAction());
         menuBar->addAction(menuHelp->menuAction());
+        menuFile->addAction(actionNew);
+        menuFile->addSeparator();
         menuFile->addAction(actionOpen);
         menuFile->addAction(actionOpen_and_run);
         menuFile->addAction(menuOpen_Recents->menuAction());
@@ -903,6 +920,10 @@ public:
         actionDivide_by_Separator->setText(QCoreApplication::translate("MainWindow", "Divide by Separator", nullptr));
         actionDivide_by_Start_End_tag->setText(QCoreApplication::translate("MainWindow", "Divide by Start, End tag", nullptr));
         actionOpen_setting_file->setText(QCoreApplication::translate("MainWindow", "Open Setting File", nullptr));
+        actionNew->setText(QCoreApplication::translate("MainWindow", "New", nullptr));
+#if QT_CONFIG(shortcut)
+        actionNew->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+N", nullptr));
+#endif // QT_CONFIG(shortcut)
         extensionLbl->setText(QCoreApplication::translate("MainWindow", "Extension", nullptr));
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));
@@ -925,8 +946,10 @@ public:
         ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "Flag", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = flagTblWidget->horizontalHeaderItem(1);
         ___qtablewidgetitem1->setText(QCoreApplication::translate("MainWindow", "Value", nullptr));
-        FlagUpBtn->setText(QCoreApplication::translate("MainWindow", "Up (+)", nullptr));
-        FlagDownBtn->setText(QCoreApplication::translate("MainWindow", "Down (-)", nullptr));
+        FlagAddBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
+        FlagDeleteBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Delete)", nullptr));
+        FlagUpBtn->setText(QCoreApplication::translate("MainWindow", "Up", nullptr));
+        FlagDownBtn->setText(QCoreApplication::translate("MainWindow", "Down", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(FlagTab), QCoreApplication::translate("MainWindow", "Flag", nullptr));
         QTableWidgetItem *___qtablewidgetitem2 = descTblWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem2->setText(QCoreApplication::translate("MainWindow", "File Name", nullptr));

@@ -110,6 +110,8 @@ public:
 
     void Run();
 
+    void NewFile();
+
 private slots:
 
     void on_descAddBtn_clicked();
@@ -179,6 +181,12 @@ private slots:
     void on_FlagUpBtn_clicked();
 
     void on_FlagDownBtn_clicked();
+
+    void on_actionNew_triggered();
+
+    void on_FlagAddBtn_clicked();
+
+    void on_FlagDeleteBtn_clicked();
 
 private:
 
