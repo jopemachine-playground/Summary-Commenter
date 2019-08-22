@@ -98,7 +98,7 @@ class MainWindow : public QMainWindow
 
 public:
 
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(char *argv[], QWidget *parent = nullptr);
 
     ~MainWindow() override;
 
@@ -196,6 +196,8 @@ private:
     QFile*                                          latelyPathsFile;
     std::deque<QString>*                            pathQue;
     FlagType_tbl*                                   flagTypeTbl;
+    char*                                           programPath;
+    char*                                           execPath;
 
     // setting table
     void                        clearTbl            (QTableWidget*);
@@ -222,7 +224,7 @@ private:
     void                        addGlobalVars       (const QString& key, const QString& value);
     void                        setSettingFlags     (const QString& flagName, bool flag);
     void                        makeMDForm          (QTextStream& ts, const QTableWidget* tbl, const QString& tblName);
-    bool                        openRecentPathsFile ();
+    bool                        openRecentSCPS ();
 
     // directory traversal recursively and get all file info (except link file)
     s_ptr<queue<FileInfo>>      getAllTargetFiles   (const QString& dirName);

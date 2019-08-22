@@ -18,7 +18,7 @@
 // ==============================+===============================================================
 // Public Method
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(char *argv[], QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
@@ -39,9 +39,19 @@ MainWindow::MainWindow(QWidget *parent) :
     setAcceptDrops(true);
     setShortCut();
 
-    // scps 파일을 열지 않았다면 기본 값으로 초기화
-    // 열었다면 openRecentPathsFile에서 flagTypeTbl 생성 및 초기화.
-    if(!openRecentPathsFile()){
+    programPath = argv[0];
+    execPath    = argv[1];
+
+    // scps 파일로 프로그램을 open한 경우
+    if((execPath != nullptr) && execPath[0] != '\0') {
+        initProgram();
+        setSCPSFile(execPath);
+        return;
+    }
+
+    // openRecentPathsFile : sclately에 최근 연 scps의 경로가 있다면 그 파일을 연다.
+    if(!openRecentSCPS()){
+        // 없다면 NewFile.
         NewFile();
     }
 }
@@ -729,6 +739,10 @@ void MainWindow::removeSelectedItems(QTableWidget* tbl){
 
 void MainWindow::initProgram()
 {
+    pathQue = new std::deque<QString>();
+
+    latelyPathsFile = new QFile(QFileInfo(programPath).dir().filePath(PROJECT_LATELY_OPEN_EXT));
+
     flagTypeTbl = new FlagType_tbl;
 
     clearTbl(FlagTable_t);
@@ -1149,13 +1163,11 @@ void MainWindow::makeMDForm(QTextStream& ts, const QTableWidget *tbl, const QStr
 
 }
 
-bool MainWindow::openRecentPathsFile()
+bool MainWindow::openRecentSCPS()
 {
+    initProgram();
+
     QString latest = nullptr;
-
-    pathQue = new std::deque<QString>();
-
-    latelyPathsFile = new QFile(QDir(QDir::currentPath()).filePath(PROJECT_LATELY_OPEN_EXT));
 
     if(latelyPathsFile->exists()){
 
@@ -1187,7 +1199,6 @@ bool MainWindow::openRecentPathsFile()
             pathQue->push_back( path );
         }
 
-        initProgram();
         setSCPSFile(latest);
         return true;
     }
