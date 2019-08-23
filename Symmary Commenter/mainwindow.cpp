@@ -42,10 +42,13 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
     programPath = argv[0];
     execPath    = argv[1];
 
+    pathQue = new std::deque<QString>();
+    sclately = new QFile(QFileInfo(programPath).dir().filePath(PROJECT_LATELY_OPEN_EXT));
+
     // scps 파일로 프로그램을 open한 경우
     if((execPath != nullptr) && execPath[0] != '\0') {
         initProgram();
-        setSCPSFile(execPath);
+        setSCPSFile(QString(execPath));
         return;
     }
 
@@ -61,11 +64,12 @@ MainWindow::~MainWindow()
     delete ui;
     delete flagTypeTbl;
 
-    if(latelyPathsFile != nullptr){
-        if(latelyPathsFile->isOpen()){
+    if(sclately != nullptr){
 
-            latelyPathsFile->resize(0);
-            QTextStream ts(&(*latelyPathsFile));
+        if(sclately->isOpen()){
+
+            sclately->resize(0);
+            QTextStream ts(&(*sclately));
             ts.setCodec("UTF-8");
 
             int hits = 0;
@@ -79,9 +83,9 @@ MainWindow::~MainWindow()
                 pathQue->pop_front();
             }
 
-            latelyPathsFile->close();
+            sclately->close();
         }
-        delete latelyPathsFile;
+        delete sclately;
         delete pathQue;
     }
 }
@@ -100,11 +104,11 @@ bool MainWindow::Open(){
 
     // 파일을 선택했을 때
     if(fileOpenDialog.exec()){
-        selectedFile = fileOpenDialog.selectedFiles()[0];
+        openedFile = fileOpenDialog.selectedFiles()[0];
 
         // pathQue에 해당 경로가 있는지 확인해 중복되면 큐에 추가하지 않는다.
-        if(std::find(pathQue->begin(), pathQue->end(), selectedFile) == pathQue->end()){
-            pathQue->push_front(selectedFile);
+        if(std::find(pathQue->begin(), pathQue->end(), openedFile) == pathQue->end()){
+            pathQue->push_front(openedFile);
         }
     }
     else{
@@ -112,7 +116,7 @@ bool MainWindow::Open(){
     }
 
     initProgram();
-    setSCPSFile(selectedFile);
+    setSCPSFile(openedFile);
     return true;
 }
 
@@ -171,7 +175,7 @@ void MainWindow::NewFile()
 {
     initProgram();
     setWindowTitle(DEFAULT_WIN_TITLE);
-    selectedFile = nullptr;
+    openedFile = nullptr;
     flagTypeTbl  = new FlagType_tbl;
     flagTypeTbl->init();
 
@@ -249,21 +253,21 @@ void MainWindow::on_actionGithub_triggered()
 void MainWindow::on_actionSave_triggered()
 {
     // 파일이 열려 있지 않을 땐 파일 저장 Dialog를 띄워 먼저 저장할 파일의 경로를 받아온다
-    if(selectedFile == "") {
+    if(openedFile == "") {
 
         QString nameFilter =
                 QString ("Summary Commenter Project Setting (*.") +
                 QString(PROJECT_SETTING_FILE_EXT) +
                 QString(");;All Files (*)");
 
-        selectedFile = QFileDialog::getSaveFileName(this,
+        openedFile = QFileDialog::getSaveFileName(this,
                                                     tr("Save setting file"), "",
                                                     nameFilter);
 
-        setWindowTitle(selectedFile);
+        setWindowTitle(openedFile);
     }
 
-    saveSCPSFile(selectedFile);
+    saveSCPSFile(openedFile);
 
 }
 
@@ -295,18 +299,18 @@ void MainWindow::on_actionSave_as_triggered()
             QString (PROJECT_SETTING_FILE_EXT) +
             QString (");;All Files (*)");
 
-    selectedFile = QFileDialog::getSaveFileName(this,
+    openedFile = QFileDialog::getSaveFileName(this,
                                                 tr("Save setting file"), "",
                                                 nameFilter);
 
     // 저장을 하지 않고 종료했을 땐, return
-    if(selectedFile == ""){
+    if(openedFile == ""){
         return;
     }
 
-    setWindowTitle(selectedFile);
+    setWindowTitle(openedFile);
 
-    saveSCPSFile(selectedFile);
+    saveSCPSFile(openedFile);
 }
 
 
@@ -413,7 +417,7 @@ void MainWindow::on_actionOpen_Project_Path_triggered()
 void MainWindow::on_actionRefresh_triggered()
 {
     initProgram();
-    setSCPSFile(selectedFile);
+    setSCPSFile(openedFile);
 }
 
 void MainWindow::on_actionSave_md_triggered()
@@ -457,15 +461,12 @@ void MainWindow::on_actionRemove_Comments_From_All_File_triggered()
 
 void MainWindow::on_actionOpen_setting_file_triggered()
 {
-    if(pathQue->empty()){
+    if(openedFile == nullptr){
         ShowMessageBox("No files are open", "Error");
         return;
     }
 
-    QString front = pathQue->front();
-    QString path = front.replace("/", "\\");
-
-    QProcess::startDetached("explorer " + path);
+    QProcess::startDetached("notepad.exe " + openedFile);
 }
 
 void MainWindow::on_FlagUpBtn_clicked()
@@ -628,11 +629,10 @@ void MainWindow::handleDrop(const QList<QUrl> & list)
 
         else if(fi.isFile()){
 
+            // 지정한 확장자에 해당하는 파일만 가져온다.
             QRegularExpression re(".[.](?<Ext>\\w+)");
 
             auto match = re.match(fi.fileName(), 0, QRegularExpression::NormalMatch);
-
-            qDebug() << match.captured("Ext");
 
             if(match.captured("Ext") != "" && Extension_t.contains(match.captured("Ext"))){
 
@@ -664,7 +664,6 @@ void MainWindow::handleDrop(const QList<QUrl> & list)
 QTableWidgetItem* MainWindow::searchTable(QTableWidget* table, const QString& key){
     for(int i = 0;  i < table->rowCount(); i++){
         if(table->item(i, 0)->text() == key){
-            // qDebug() << table->item(i, 0)->text();
             return table->item(i, 1);
         }
     }
@@ -739,10 +738,6 @@ void MainWindow::removeSelectedItems(QTableWidget* tbl){
 
 void MainWindow::initProgram()
 {
-    pathQue = new std::deque<QString>();
-
-    latelyPathsFile = new QFile(QFileInfo(programPath).dir().filePath(PROJECT_LATELY_OPEN_EXT));
-
     flagTypeTbl = new FlagType_tbl;
 
     clearTbl(FlagTable_t);
@@ -761,9 +756,9 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
     bool errFlag = false;
 
-    selectedFile = settingFilePath;
+    openedFile = settingFilePath;
 
-    QFile selectFile(selectedFile);
+    QFile selectFile(openedFile);
 
     std::queue<QString>* confQueue = new std::queue<QString>;
 
@@ -842,7 +837,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Desc Setting
 
-        QRegularExpression descRe("(?<attKey>.+[.]?\\w+)::desc\\s+[+][=]\\s+(?<attValue>.+)");
+        QRegularExpression descRe("(?<attKey>.+[.]?\\w+)::desc\\s+[+][=]\\s+\"(?<attValue>.*)\"");
 
         auto descMatch = descRe.match(confQueue->front(), 0,
                                       QRegularExpression::NormalMatch);
@@ -857,7 +852,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Issue Setting
 
-        QRegularExpression issueRe("(?<attKey>.+[.]?\\w+)::issue\\s+[+][=]\\s+(?<attValue>.+)");
+        QRegularExpression issueRe("(?<attKey>.+[.]?\\w+)::issue\\s+[+][=]\\s+\"(?<attValue>.*)\"");
 
         auto issueMatch = issueRe.match(confQueue->front(), 0,
                                         QRegularExpression::NormalMatch);
@@ -872,7 +867,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Reference URLs Setting
 
-        QRegularExpression refURLRe("(?<attKey>.+[.]?\\w+)::refURLs\\s+[+][=]\\s+(?<attValue>.+)");
+        QRegularExpression refURLRe("(?<attKey>.+[.]?\\w+)::refURLs\\s+[+][=]\\s+\"(?<attValue>.*)\"");
 
         auto refURLsMatch = refURLRe.match(confQueue->front(), 0,
                                            QRegularExpression::NormalMatch);
@@ -983,8 +978,8 @@ void MainWindow::saveSCPSFile(const QString& path){
         QStringList list = DescTable_t->item(i, 1)->text().split("\n");
 
         for (auto& desc : list){
-            ts << DescTable_t->item(i, 0)->text() + "::desc       +=       "
-                  + desc << "\n";
+            ts << DescTable_t->item(i, 0)->text() + "::desc       +=       \""
+                  + desc << "\"\n";
         }
     }
 
@@ -995,8 +990,8 @@ void MainWindow::saveSCPSFile(const QString& path){
         QStringList list = IssueTable_t->item(i, 1)->text().split("\n");
 
         for (auto& issue : list){
-            ts << IssueTable_t->item(i, 0)->text() + "::issue       +=       "
-                  + issue << "\n";
+            ts << IssueTable_t->item(i, 0)->text() + "::issue       +=       \""
+                  + issue << "\"\n";
         }
     }
 
@@ -1007,8 +1002,8 @@ void MainWindow::saveSCPSFile(const QString& path){
         QStringList list = RefTable_t->item(i, 1)->text().split("\n");
 
         for (auto& url : list){
-            ts << RefTable_t->item(i, 0)->text() + "::refURLs       +=       "
-                  + url << "\n";
+            ts << RefTable_t->item(i, 0)->text() + "::refURLs       +=       \""
+                  + url << "\"\n";
         }
 
     }
@@ -1019,7 +1014,7 @@ void MainWindow::saveSCPSFile(const QString& path){
         ts << ExcludeTable_t->item(i, 0)->text() + "::exclude\n";
     }
 
-    selectedFile = path;
+    openedFile = path;
 
     selectFile.close();
 
@@ -1169,11 +1164,11 @@ bool MainWindow::openRecentSCPS()
 
     QString latest = nullptr;
 
-    if(latelyPathsFile->exists()){
+    if(sclately->exists()){
 
-        latelyPathsFile->open( QFile::ReadWrite | QFile::Text  );
+        sclately->open( QFile::ReadWrite | QFile::Text  );
 
-        QString fileContent = latelyPathsFile->readLine();
+        QString fileContent = sclately->readLine();
 
         QStringList list = fileContent.split(",");
 
@@ -1203,7 +1198,7 @@ bool MainWindow::openRecentSCPS()
         return true;
     }
     else{
-        latelyPathsFile->open( QFile::ReadWrite | QFile::Text  );
+        sclately->open( QFile::ReadWrite | QFile::Text  );
         return false;
     }
 }

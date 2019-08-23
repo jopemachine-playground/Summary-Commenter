@@ -192,8 +192,8 @@ private:
 
     // member vars
     Ui::MainWindow*                                 ui;
-    QString                                         selectedFile;
-    QFile*                                          latelyPathsFile;
+    QString                                         openedFile;
+    QFile*                                          sclately;
     std::deque<QString>*                            pathQue;
     FlagType_tbl*                                   flagTypeTbl;
     char*                                           programPath;
