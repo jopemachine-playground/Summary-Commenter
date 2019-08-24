@@ -89,6 +89,12 @@ typedef struct{
     QString&    value;
 } Flag;
 
+typedef struct{
+    QString      div;
+    QStringList  workedFiles;
+    CommentStyle style;
+} Scproj;
+
 
 // ==============================+===============================================================
 
@@ -223,7 +229,10 @@ private:
     void                        addGlobalVars       (const QString& key, const QString& value);
     void                        setSettingFlags     (const QString& flagName, bool flag);
     void                        makeMDForm          (QTextStream& ts, const QTableWidget* tbl, const QString& tblName);
-    bool                        openRecentSCPS ();
+    bool                        openRecentSCPS      ();
+
+    s_ptr<Scproj>               readSCProjFile      (const QString& path);
+    void                        writeSCProjFile     (const QString &path, queue<FileInfo>&);
 
     // directory traversal recursively and get all file info (except link file)
     s_ptr<queue<FileInfo>>      getAllTargetFiles   (const QString& dirName);

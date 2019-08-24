@@ -46,7 +46,7 @@ enum TabIndex{
 enum CommentStyle{
     Undefined       = -1,
     DivBySeparator      ,
-    DivByStartEndTag
+    DivByStartEndTag    ,
 };
 
 // ==============================+===============================================================

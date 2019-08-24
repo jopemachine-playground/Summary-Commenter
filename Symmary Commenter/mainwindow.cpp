@@ -96,7 +96,8 @@ bool MainWindow::Open(){
     QFileDialog fileOpenDialog;
     fileOpenDialog.setFileMode(QFileDialog::AnyFile);
 
-    QString nameFilter = QString ("Open a Setting file (*.") + QString(PROJECT_SETTING_FILE_EXT) + QString(")");
+    QString nameFilter =
+            QString ("Open a Setting file (*.") + QString(PROJECT_SETTING_FILE_EXT) + QString(")");
 
     fileOpenDialog.setNameFilter(nameFilter);
     fileOpenDialog.setViewMode(QFileDialog::Detail);
@@ -132,111 +133,23 @@ void MainWindow::Run(){
         return;
     }
 
-    auto que = getAllTargetFiles(ProjectPath_t);
-
-    // scproj는 지정 프로젝트 경로에서 주석을 추가해놓은 설정 파일이다.
-    // scproj가 삭제되면 run 재 실행 시 해당 파일들에 주석이 한 번 더 들어가게 된다.
-    QString scprojContent = "";
-    QString workedFiles   = "";
-
-    QString div;
-    CommentStyle style = CommentStyle::Undefined;
-
-    // 리눅스의 경우 \\ 대신 / 를 써야한다
-    QFile scprojFile(ProjectPath_t + "\\" + PROJECT_WORKED_FILE_EXT);
-
     // 설정파일이 존재하면 파일을 읽어들여 주석을 지울 파일들의 리스트를 만든다
-    if(scprojFile.exists()){
+    auto proj = readSCProjFile(ProjectPath_t + "\\" + PROJECT_WORKED_FILE_EXT);
 
-        scprojFile.open(QFile::ReadOnly|QFile::Text);
-
-        QTextStream ts(&scprojContent);
-
-        while(!scprojFile.atEnd()){
-
-            QString line = scprojFile.readLine();
-
-            QRegularExpression sepRe("DivBySeparator:\\s*\"(?<sep>.*)\"");
-
-            auto sepMatch = sepRe.match(line, 0,
-                                          QRegularExpression::NormalMatch);
-
-            if(sepMatch.hasMatch()){
-
-                div = sepMatch.captured("sep");
-                style = CommentStyle::DivBySeparator;
-            }
-
-            QRegularExpression endTagRe("DivByStartEndTag_t:\\s*\"(?<tag>.*)\"");
-
-            auto tagMatch = endTagRe.match(line, 0,
-                                          QRegularExpression::NormalMatch);
-
-            if(tagMatch.hasMatch()){
-
-                div = tagMatch.captured("tag");
-                style = CommentStyle::DivByStartEndTag;
-            }
-
-            QRegularExpression workedFileRe(":\\s*\"(?<files>.*)\"");
-
-            auto fileMatch = workedFileRe.match(line, 0,
-                                          QRegularExpression::NormalMatch);
-
-            if(fileMatch.hasMatch()){
-                workedFiles = fileMatch.captured("files");
-                qDebug() << "hasMatch";
-                qDebug() << workedFiles;
-            }
-
-        }
-
-        QStringList list = workedFiles.split(",");
-
-        if(style == CommentStyle::Undefined || div == ""){
-            ShowMessageBox("Worked Method Not Correctly Specified!", "Error");
-            return;
-        }
-
-        removeComment(list, div, style);
-
+    if(proj != nullptr){
+        removeComment(proj->workedFiles, proj->div, proj->style);
     }
 
-    // 새로 작업을 해야하므로 workedFiles를 초기화
-    workedFiles = "";
+    queue<FileInfo> que  = *(getAllTargetFiles(ProjectPath_t));
+    queue<FileInfo> que2 = que;
 
-    while(!que->empty()){
-        // prepend 할 때 마다 workedFiles에 추가
-        prependComment(que->front());
-        workedFiles += que->size() == 1 ? que->front().fileName : que->front().fileName + ",";
-        que->pop();
+    while(!que.empty()){
+        prependComment(que.front());
+        que.pop();
     }
 
-    if(scprojFile.isOpen()) scprojFile.close();
-
-    scprojFile.open(QIODevice::WriteOnly|QFile::Text);
-
-    // 작업 방식
-    scprojFile.write("# Worked_Method\n");
-
-    QString method;
-
-    if(IsDivBySeparator_t){
-        method = QString("DivBySeparator: \"")     + QString(Separator_t) + QString("\"\n");
-    }
-    else if(IsDivByStartEndTag_t){
-        method = QString("DivByStartEndTag_t: \"") + QString(EndTag_t)    + QString("\"\n");
-    }
-
-    scprojFile.write(method.toStdString().c_str());
-
-    // 작업한 파일들
-    scprojFile.write("\n# Worked_Files\n");
-    QString worked = QString(": \"") + workedFiles + QString("\"\n");
-
-    scprojFile.write(worked.toStdString().c_str());
-
-    scprojFile.close();
+    writeSCProjFile(ProjectPath_t + "\\" + PROJECT_WORKED_FILE_EXT,
+                    que2);
 
     ShowMessageBox("work completed!", "Jobs done");
 }
@@ -245,8 +158,8 @@ void MainWindow::NewFile()
 {
     clearAllTbls();
     setWindowTitle(DEFAULT_WIN_TITLE);
-    openedFile = nullptr;
-    flagTypeTbl  = new FlagType_tbl;
+    openedFile  = nullptr;
+    flagTypeTbl = new FlagType_tbl;
     flagTypeTbl->init();
 
     int size = static_cast<int>(flagTypeTbl->map.size());
@@ -1282,6 +1195,100 @@ bool MainWindow::openRecentSCPS()
         sclately->open( QFile::ReadWrite | QFile::Text  );
         return false;
     }
+}
+
+s_ptr<Scproj> MainWindow::readSCProjFile(const QString &path){
+
+    QFile scprojFile(path);
+
+    if(!scprojFile.exists()){
+        return nullptr;
+    }
+
+    scprojFile.open(QFile::ReadOnly|QFile::Text);
+
+    s_ptr<Scproj> result = std::make_shared<Scproj>();
+
+    result->style = CommentStyle::Undefined;
+
+    while(!scprojFile.atEnd()){
+
+        QString line = scprojFile.readLine();
+
+        QRegularExpression sepRe("DivBySeparator:\\s*\"(?<sep>.*)\"");
+
+        auto sepMatch = sepRe.match(line, 0,
+                                      QRegularExpression::NormalMatch);
+
+        if(sepMatch.hasMatch()){
+
+            result->div = sepMatch.captured("sep");
+            result->style = CommentStyle::DivBySeparator;
+        }
+
+        QRegularExpression endTagRe("DivByStartEndTag_t:\\s*\"(?<tag>.*)\"");
+
+        auto tagMatch = endTagRe.match(line, 0,
+                                      QRegularExpression::NormalMatch);
+
+        if(tagMatch.hasMatch()){
+
+            result->div = tagMatch.captured("tag");
+            result->style = CommentStyle::DivByStartEndTag;
+        }
+
+        QRegularExpression workedFileRe(":\\s*\"(?<files>.*)\"");
+
+        auto fileMatch = workedFileRe.match(line, 0,
+                                      QRegularExpression::NormalMatch);
+
+        if(fileMatch.hasMatch()){
+            result->workedFiles = fileMatch.captured("files").split(",");
+        }
+    }
+
+    scprojFile.close();
+
+    return result;
+}
+
+void MainWindow::writeSCProjFile(const QString &path, queue<FileInfo>& workedFilesQue)
+{
+    QFile scprojFile(path);
+
+    scprojFile.open(QIODevice::WriteOnly|QFile::Text);
+
+    QString workedFiles = "";
+
+    while(!workedFilesQue.empty()){
+        // prepend 할 때 마다 workedFiles에 추가
+        workedFiles += workedFilesQue.size() == 1 ?
+                    workedFilesQue.front().fileName : workedFilesQue.front().fileName + ",";
+        workedFilesQue.pop();
+    }
+
+    // 작업 방식
+    scprojFile.write("# Worked_Method\n");
+
+    QString method;
+
+    if(IsDivBySeparator_t){
+        method = QString("DivBySeparator: \"")     + QString(Separator_t) + QString("\"\n");
+    }
+    else if(IsDivByStartEndTag_t){
+        method = QString("DivByStartEndTag_t: \"") + QString(EndTag_t)    + QString("\"\n");
+    }
+
+    scprojFile.write(method.toStdString().c_str());
+
+    // 작업한 파일들
+    scprojFile.write("\n# Worked_Files\n");
+
+    QString worked = QString(": \"") + workedFiles + QString("\"\n");
+
+    scprojFile.write(worked.toStdString().c_str());
+
+    scprojFile.close();
 }
 
 
