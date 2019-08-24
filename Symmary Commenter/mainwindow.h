@@ -205,6 +205,8 @@ private:
     char*                                           programPath;
     char*                                           execPath;
 
+    void                        applyPalette         (QPalette& palete);
+
     // setting table
     void                        sortTbl             (QTableWidget*);
     void                        insertTbl           (QTableWidget*, const QString&, const QString& value = nullptr);

@@ -11,6 +11,7 @@
 #include <QProcess>
 #include <QMimeData>
 #include <QDragEnterEvent>
+#include <QStyleFactory>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -23,6 +24,11 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    qApp->setStyle(QStyleFactory::create("Fusion"));
+
+    QPalette palette;
+    applyPalette(palette);
 
     auto setTable = [](QTableWidget* tbl)-> void {
         tbl->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Fixed);
@@ -514,6 +520,26 @@ void MainWindow::on_FlagAddBtn_clicked()
 void MainWindow::on_FlagDeleteBtn_clicked()
 {
     removeSelectedItems(FlagTable_t);
+}
+
+void MainWindow::applyPalette(QPalette &palette)
+{
+    palette.setColor(QPalette::Window, QColor(33,33,33));
+    palette.setColor(QPalette::WindowText, Qt::white);
+    palette.setColor(QPalette::Base, QColor(61,61,61));
+    palette.setColor(QPalette::AlternateBase, QColor(61,61,61));
+    palette.setColor(QPalette::ToolTipBase, Qt::white);
+    palette.setColor(QPalette::ToolTipText, Qt::white);
+    palette.setColor(QPalette::Text, Qt::white);
+    palette.setColor(QPalette::Button, QColor(33,33,33));
+    palette.setColor(QPalette::ButtonText, Qt::white);
+    palette.setColor(QPalette::BrightText, Qt::red);
+    palette.setColor(QPalette::Highlight, QColor(148, 250, 255));
+    palette.setColor(QPalette::HighlightedText, Qt::black);
+    palette.setColor(QPalette::Disabled, QPalette::Text, Qt::darkGray);
+    palette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
+
+    qApp->setPalette(palette);
 }
 
 // ==============================+===============================================================

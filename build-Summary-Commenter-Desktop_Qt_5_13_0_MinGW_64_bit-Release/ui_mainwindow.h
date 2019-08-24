@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFrame>
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -64,7 +65,7 @@ public:
     QTabWidget *tabWidget;
     QWidget *SettingTab;
     QHBoxLayout *horizontalLayout_13;
-    QFrame *frame;
+    QGroupBox *groupBox;
     QHBoxLayout *horizontalLayout_3;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *ExtensionL;
@@ -264,13 +265,9 @@ public:
         horizontalLayout_13->setSpacing(6);
         horizontalLayout_13->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_13->setObjectName(QString::fromUtf8("horizontalLayout_13"));
-        frame = new QFrame(SettingTab);
-        frame->setObjectName(QString::fromUtf8("frame"));
-        frame->setFrameShape(QFrame::Box);
-        frame->setFrameShadow(QFrame::Sunken);
-        frame->setLineWidth(1);
-        frame->setMidLineWidth(1);
-        horizontalLayout_3 = new QHBoxLayout(frame);
+        groupBox = new QGroupBox(SettingTab);
+        groupBox->setObjectName(QString::fromUtf8("groupBox"));
+        horizontalLayout_3 = new QHBoxLayout(groupBox);
         horizontalLayout_3->setSpacing(6);
         horizontalLayout_3->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
@@ -280,7 +277,7 @@ public:
         ExtensionL = new QHBoxLayout();
         ExtensionL->setSpacing(6);
         ExtensionL->setObjectName(QString::fromUtf8("ExtensionL"));
-        extensionLbl = new QLabel(frame);
+        extensionLbl = new QLabel(groupBox);
         extensionLbl->setObjectName(QString::fromUtf8("extensionLbl"));
 
         ExtensionL->addWidget(extensionLbl);
@@ -289,7 +286,7 @@ public:
 
         ExtensionL->addItem(spacer1);
 
-        extensionEdit = new QLineEdit(frame);
+        extensionEdit = new QLineEdit(groupBox);
         extensionEdit->setObjectName(QString::fromUtf8("extensionEdit"));
 
         ExtensionL->addWidget(extensionEdit);
@@ -300,7 +297,7 @@ public:
         PathL = new QHBoxLayout();
         PathL->setSpacing(6);
         PathL->setObjectName(QString::fromUtf8("PathL"));
-        pathLbl = new QLabel(frame);
+        pathLbl = new QLabel(groupBox);
         pathLbl->setObjectName(QString::fromUtf8("pathLbl"));
 
         PathL->addWidget(pathLbl);
@@ -309,7 +306,7 @@ public:
 
         PathL->addItem(spacer2);
 
-        pathEdit = new QLineEdit(frame);
+        pathEdit = new QLineEdit(groupBox);
         pathEdit->setObjectName(QString::fromUtf8("pathEdit"));
 
         PathL->addWidget(pathEdit);
@@ -320,7 +317,7 @@ public:
         AuthorL = new QHBoxLayout();
         AuthorL->setSpacing(6);
         AuthorL->setObjectName(QString::fromUtf8("AuthorL"));
-        authorLbl = new QLabel(frame);
+        authorLbl = new QLabel(groupBox);
         authorLbl->setObjectName(QString::fromUtf8("authorLbl"));
 
         AuthorL->addWidget(authorLbl);
@@ -329,7 +326,7 @@ public:
 
         AuthorL->addItem(spacer3);
 
-        authorEdit = new QLineEdit(frame);
+        authorEdit = new QLineEdit(groupBox);
         authorEdit->setObjectName(QString::fromUtf8("authorEdit"));
 
         AuthorL->addWidget(authorEdit);
@@ -340,7 +337,7 @@ public:
         SeparatorL = new QHBoxLayout();
         SeparatorL->setSpacing(6);
         SeparatorL->setObjectName(QString::fromUtf8("SeparatorL"));
-        separatorLbl = new QLabel(frame);
+        separatorLbl = new QLabel(groupBox);
         separatorLbl->setObjectName(QString::fromUtf8("separatorLbl"));
 
         SeparatorL->addWidget(separatorLbl);
@@ -349,7 +346,7 @@ public:
 
         SeparatorL->addItem(spacer4);
 
-        separatorEdit = new QLineEdit(frame);
+        separatorEdit = new QLineEdit(groupBox);
         separatorEdit->setObjectName(QString::fromUtf8("separatorEdit"));
 
         SeparatorL->addWidget(separatorEdit);
@@ -360,7 +357,7 @@ public:
         StartTagL = new QHBoxLayout();
         StartTagL->setSpacing(6);
         StartTagL->setObjectName(QString::fromUtf8("StartTagL"));
-        sTagLbl = new QLabel(frame);
+        sTagLbl = new QLabel(groupBox);
         sTagLbl->setObjectName(QString::fromUtf8("sTagLbl"));
 
         StartTagL->addWidget(sTagLbl);
@@ -369,7 +366,7 @@ public:
 
         StartTagL->addItem(spacer1_6);
 
-        sTagEdit = new QLineEdit(frame);
+        sTagEdit = new QLineEdit(groupBox);
         sTagEdit->setObjectName(QString::fromUtf8("sTagEdit"));
 
         StartTagL->addWidget(sTagEdit);
@@ -380,7 +377,7 @@ public:
         EndTagL = new QHBoxLayout();
         EndTagL->setSpacing(6);
         EndTagL->setObjectName(QString::fromUtf8("EndTagL"));
-        eTagLbl = new QLabel(frame);
+        eTagLbl = new QLabel(groupBox);
         eTagLbl->setObjectName(QString::fromUtf8("eTagLbl"));
 
         EndTagL->addWidget(eTagLbl);
@@ -389,7 +386,7 @@ public:
 
         EndTagL->addItem(spacer1_7);
 
-        eTagEdit = new QLineEdit(frame);
+        eTagEdit = new QLineEdit(groupBox);
         eTagEdit->setObjectName(QString::fromUtf8("eTagEdit"));
 
         EndTagL->addWidget(eTagEdit);
@@ -400,12 +397,12 @@ public:
         SupDivLineL = new QHBoxLayout();
         SupDivLineL->setSpacing(6);
         SupDivLineL->setObjectName(QString::fromUtf8("SupDivLineL"));
-        supDivLbl = new QLabel(frame);
+        supDivLbl = new QLabel(groupBox);
         supDivLbl->setObjectName(QString::fromUtf8("supDivLbl"));
 
         SupDivLineL->addWidget(supDivLbl);
 
-        supDivEdit = new QPlainTextEdit(frame);
+        supDivEdit = new QPlainTextEdit(groupBox);
         supDivEdit->setObjectName(QString::fromUtf8("supDivEdit"));
 
         SupDivLineL->addWidget(supDivEdit);
@@ -416,12 +413,12 @@ public:
         SubDivLineL = new QHBoxLayout();
         SubDivLineL->setSpacing(6);
         SubDivLineL->setObjectName(QString::fromUtf8("SubDivLineL"));
-        subDivLbl = new QLabel(frame);
+        subDivLbl = new QLabel(groupBox);
         subDivLbl->setObjectName(QString::fromUtf8("subDivLbl"));
 
         SubDivLineL->addWidget(subDivLbl);
 
-        subDivEdit = new QPlainTextEdit(frame);
+        subDivEdit = new QPlainTextEdit(groupBox);
         subDivEdit->setObjectName(QString::fromUtf8("subDivEdit"));
 
         SubDivLineL->addWidget(subDivEdit);
@@ -432,7 +429,7 @@ public:
 
         horizontalLayout_3->addLayout(verticalLayout);
 
-        line = new QFrame(frame);
+        line = new QFrame(groupBox);
         line->setObjectName(QString::fromUtf8("line"));
         line->setFrameShadow(QFrame::Raised);
         line->setLineWidth(1);
@@ -447,7 +444,7 @@ public:
         GithubL = new QHBoxLayout();
         GithubL->setSpacing(6);
         GithubL->setObjectName(QString::fromUtf8("GithubL"));
-        githubLbl = new QLabel(frame);
+        githubLbl = new QLabel(groupBox);
         githubLbl->setObjectName(QString::fromUtf8("githubLbl"));
 
         GithubL->addWidget(githubLbl);
@@ -456,7 +453,7 @@ public:
 
         GithubL->addItem(spacer1_4);
 
-        githubEdit = new QLineEdit(frame);
+        githubEdit = new QLineEdit(groupBox);
         githubEdit->setObjectName(QString::fromUtf8("githubEdit"));
 
         GithubL->addWidget(githubEdit);
@@ -467,7 +464,7 @@ public:
         TeamL = new QHBoxLayout();
         TeamL->setSpacing(6);
         TeamL->setObjectName(QString::fromUtf8("TeamL"));
-        teamLbl = new QLabel(frame);
+        teamLbl = new QLabel(groupBox);
         teamLbl->setObjectName(QString::fromUtf8("teamLbl"));
 
         TeamL->addWidget(teamLbl);
@@ -476,7 +473,7 @@ public:
 
         TeamL->addItem(spacer1_5);
 
-        teamEdit = new QLineEdit(frame);
+        teamEdit = new QLineEdit(groupBox);
         teamEdit->setObjectName(QString::fromUtf8("teamEdit"));
 
         TeamL->addWidget(teamEdit);
@@ -487,7 +484,7 @@ public:
         ProjectNameL = new QHBoxLayout();
         ProjectNameL->setSpacing(6);
         ProjectNameL->setObjectName(QString::fromUtf8("ProjectNameL"));
-        projectNameLbl = new QLabel(frame);
+        projectNameLbl = new QLabel(groupBox);
         projectNameLbl->setObjectName(QString::fromUtf8("projectNameLbl"));
 
         ProjectNameL->addWidget(projectNameLbl);
@@ -496,7 +493,7 @@ public:
 
         ProjectNameL->addItem(spacer1_8);
 
-        projectNameEdit = new QLineEdit(frame);
+        projectNameEdit = new QLineEdit(groupBox);
         projectNameEdit->setObjectName(QString::fromUtf8("projectNameEdit"));
 
         ProjectNameL->addWidget(projectNameEdit);
@@ -507,7 +504,7 @@ public:
         EmailL = new QHBoxLayout();
         EmailL->setSpacing(6);
         EmailL->setObjectName(QString::fromUtf8("EmailL"));
-        emailLbl = new QLabel(frame);
+        emailLbl = new QLabel(groupBox);
         emailLbl->setObjectName(QString::fromUtf8("emailLbl"));
 
         EmailL->addWidget(emailLbl);
@@ -516,7 +513,7 @@ public:
 
         EmailL->addItem(spacer7);
 
-        emailEdit = new QLineEdit(frame);
+        emailEdit = new QLineEdit(groupBox);
         emailEdit->setObjectName(QString::fromUtf8("emailEdit"));
 
         EmailL->addWidget(emailEdit);
@@ -527,7 +524,7 @@ public:
         TelephoneL = new QHBoxLayout();
         TelephoneL->setSpacing(6);
         TelephoneL->setObjectName(QString::fromUtf8("TelephoneL"));
-        telepLbl = new QLabel(frame);
+        telepLbl = new QLabel(groupBox);
         telepLbl->setObjectName(QString::fromUtf8("telepLbl"));
 
         TelephoneL->addWidget(telepLbl);
@@ -536,7 +533,7 @@ public:
 
         TelephoneL->addItem(spacer8);
 
-        telepEdit = new QLineEdit(frame);
+        telepEdit = new QLineEdit(groupBox);
         telepEdit->setObjectName(QString::fromUtf8("telepEdit"));
 
         TelephoneL->addWidget(telepEdit);
@@ -547,12 +544,12 @@ public:
         MemoL = new QHBoxLayout();
         MemoL->setSpacing(6);
         MemoL->setObjectName(QString::fromUtf8("MemoL"));
-        memoLbl = new QLabel(frame);
+        memoLbl = new QLabel(groupBox);
         memoLbl->setObjectName(QString::fromUtf8("memoLbl"));
 
         MemoL->addWidget(memoLbl);
 
-        memoEdit = new QTextEdit(frame);
+        memoEdit = new QTextEdit(groupBox);
         memoEdit->setObjectName(QString::fromUtf8("memoEdit"));
 
         MemoL->addWidget(memoEdit);
@@ -564,7 +561,7 @@ public:
         horizontalLayout_3->addLayout(verticalLayout_6);
 
 
-        horizontalLayout_13->addWidget(frame);
+        horizontalLayout_13->addWidget(groupBox);
 
         tabWidget->addTab(SettingTab, QString());
         FlagTab = new QWidget();
@@ -954,6 +951,7 @@ public:
 #if QT_CONFIG(shortcut)
         actionNew->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+N", nullptr));
 #endif // QT_CONFIG(shortcut)
+        groupBox->setTitle(QCoreApplication::translate("MainWindow", "Settings", nullptr));
         extensionLbl->setText(QCoreApplication::translate("MainWindow", "Extension", nullptr));
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));
