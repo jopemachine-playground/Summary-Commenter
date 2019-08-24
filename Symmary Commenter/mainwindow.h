@@ -200,11 +200,11 @@ private:
     char*                                           execPath;
 
     // setting table
-    void                        clearTbl            (QTableWidget*);
     void                        sortTbl             (QTableWidget*);
     void                        insertTbl           (QTableWidget*, const QString&, const QString& value = nullptr);
     void                        setShortCut         ();
     void                        itemChange          (QTableWidget*, int prev, int dest);
+    void                        clearAllTbls        ();
 
     // setting table's dragging event
     void                        dragEnterEvent      (QDragEnterEvent *e) override;
@@ -218,7 +218,6 @@ private:
     void                        removeSelectedItems (QTableWidget* tbl);
 
     // file save and load
-    void                        initProgram         ();
     void                        setSCPSFile         (const QString& path);
     void                        saveSCPSFile        (const QString& path);
     void                        addGlobalVars       (const QString& key, const QString& value);
@@ -235,7 +234,7 @@ private:
     void                        makeComment         (QTextStream& ts, const FileInfo& fileName);
     s_ptr<QString>              makeFromTbl         (QTableWidget* tbl, bool numbering, const FileInfo& fileInfo);
 
-    bool                        removeComment       (QStringList& strList);
+    void                        removeComment       (QStringList &strList, const QString& div, const CommentStyle style);
 
 
 

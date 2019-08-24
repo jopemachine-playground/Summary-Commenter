@@ -39,7 +39,7 @@
           <property name="midLineWidth">
            <number>1</number>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
             <layout class="QVBoxLayout" name="verticalLayout">
              <item>
@@ -319,6 +319,33 @@
                </item>
                <item>
                 <widget class="QLineEdit" name="teamEdit"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="ProjectNameL">
+               <item>
+                <widget class="QLabel" name="projectNameLbl">
+                 <property name="text">
+                  <string>Project Name</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="spacer1_8">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="projectNameEdit"/>
                </item>
               </layout>
              </item>
@@ -841,21 +868,37 @@
    </property>
   </action>
   <action name="actionrecent1">
+   <property name="icon">
+    <iconset>
+     <normaloff>res/img/icon.ico</normaloff>res/img/icon.ico</iconset>
+   </property>
    <property name="text">
     <string>recent1</string>
    </property>
   </action>
   <action name="actionrecent2">
+   <property name="icon">
+    <iconset>
+     <normaloff>res/img/icon.ico</normaloff>res/img/icon.ico</iconset>
+   </property>
    <property name="text">
     <string>recent2</string>
    </property>
   </action>
   <action name="actionrecent3">
+   <property name="icon">
+    <iconset>
+     <normaloff>res/img/icon.ico</normaloff>res/img/icon.ico</iconset>
+   </property>
    <property name="text">
     <string>recent3</string>
    </property>
   </action>
   <action name="actionrecent4">
+   <property name="icon">
+    <iconset>
+     <normaloff>res/img/icon.ico</normaloff>res/img/icon.ico</iconset>
+   </property>
    <property name="text">
     <string>recent4</string>
    </property>

@@ -33,7 +33,7 @@
 // ==============================+===============================================================
 // enum
 
-enum tab_index{
+enum TabIndex{
     TAB_GLOBAL      =  0,
     TAB_FLAG        =  1,
     TAB_DESCRIPT    =  2,
@@ -41,6 +41,12 @@ enum tab_index{
     TAB_REF         =  4,
     TAB_EXCLUDE     =  5,
     TAB_PREVIEW     =  6,
+};
+
+enum CommentStyle{
+    Undefined       = -1,
+    DivBySeparator      ,
+    DivByStartEndTag
 };
 
 // ==============================+===============================================================

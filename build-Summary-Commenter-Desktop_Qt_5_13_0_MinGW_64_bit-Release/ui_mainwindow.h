@@ -65,7 +65,7 @@ public:
     QWidget *SettingTab;
     QHBoxLayout *horizontalLayout_13;
     QFrame *frame;
-    QHBoxLayout *horizontalLayout_2;
+    QHBoxLayout *horizontalLayout_3;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *ExtensionL;
     QLabel *extensionLbl;
@@ -107,6 +107,10 @@ public:
     QLabel *teamLbl;
     QSpacerItem *spacer1_5;
     QLineEdit *teamEdit;
+    QHBoxLayout *ProjectNameL;
+    QLabel *projectNameLbl;
+    QSpacerItem *spacer1_8;
+    QLineEdit *projectNameEdit;
     QHBoxLayout *EmailL;
     QLabel *emailLbl;
     QSpacerItem *spacer7;
@@ -205,12 +209,18 @@ public:
         actionRecursive_Traversal->setChecked(true);
         actionrecent1 = new QAction(MainWindow);
         actionrecent1->setObjectName(QString::fromUtf8("actionrecent1"));
+        QIcon icon1;
+        icon1.addFile(QString::fromUtf8("res/img/icon.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        actionrecent1->setIcon(icon1);
         actionrecent2 = new QAction(MainWindow);
         actionrecent2->setObjectName(QString::fromUtf8("actionrecent2"));
+        actionrecent2->setIcon(icon1);
         actionrecent3 = new QAction(MainWindow);
         actionrecent3->setObjectName(QString::fromUtf8("actionrecent3"));
+        actionrecent3->setIcon(icon1);
         actionrecent4 = new QAction(MainWindow);
         actionrecent4->setObjectName(QString::fromUtf8("actionrecent4"));
+        actionrecent4->setIcon(icon1);
         actionIssue_Numbering = new QAction(MainWindow);
         actionIssue_Numbering->setObjectName(QString::fromUtf8("actionIssue_Numbering"));
         actionIssue_Numbering->setCheckable(true);
@@ -260,10 +270,10 @@ public:
         frame->setFrameShadow(QFrame::Sunken);
         frame->setLineWidth(1);
         frame->setMidLineWidth(1);
-        horizontalLayout_2 = new QHBoxLayout(frame);
-        horizontalLayout_2->setSpacing(6);
-        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        horizontalLayout_3 = new QHBoxLayout(frame);
+        horizontalLayout_3->setSpacing(6);
+        horizontalLayout_3->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
         verticalLayout = new QVBoxLayout();
         verticalLayout->setSpacing(6);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
@@ -420,7 +430,7 @@ public:
         verticalLayout->addLayout(SubDivLineL);
 
 
-        horizontalLayout_2->addLayout(verticalLayout);
+        horizontalLayout_3->addLayout(verticalLayout);
 
         line = new QFrame(frame);
         line->setObjectName(QString::fromUtf8("line"));
@@ -429,7 +439,7 @@ public:
         line->setMidLineWidth(0);
         line->setFrameShape(QFrame::VLine);
 
-        horizontalLayout_2->addWidget(line);
+        horizontalLayout_3->addWidget(line);
 
         verticalLayout_6 = new QVBoxLayout();
         verticalLayout_6->setSpacing(6);
@@ -473,6 +483,26 @@ public:
 
 
         verticalLayout_6->addLayout(TeamL);
+
+        ProjectNameL = new QHBoxLayout();
+        ProjectNameL->setSpacing(6);
+        ProjectNameL->setObjectName(QString::fromUtf8("ProjectNameL"));
+        projectNameLbl = new QLabel(frame);
+        projectNameLbl->setObjectName(QString::fromUtf8("projectNameLbl"));
+
+        ProjectNameL->addWidget(projectNameLbl);
+
+        spacer1_8 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        ProjectNameL->addItem(spacer1_8);
+
+        projectNameEdit = new QLineEdit(frame);
+        projectNameEdit->setObjectName(QString::fromUtf8("projectNameEdit"));
+
+        ProjectNameL->addWidget(projectNameEdit);
+
+
+        verticalLayout_6->addLayout(ProjectNameL);
 
         EmailL = new QHBoxLayout();
         EmailL->setSpacing(6);
@@ -531,7 +561,7 @@ public:
         verticalLayout_6->addLayout(MemoL);
 
 
-        horizontalLayout_2->addLayout(verticalLayout_6);
+        horizontalLayout_3->addLayout(verticalLayout_6);
 
 
         horizontalLayout_13->addWidget(frame);
@@ -938,6 +968,7 @@ public:
         subDivEdit->setPlainText(QCoreApplication::translate("MainWindow", "// ///////////////////////", nullptr));
         githubLbl->setText(QCoreApplication::translate("MainWindow", "Github Account", nullptr));
         teamLbl->setText(QCoreApplication::translate("MainWindow", "Team", nullptr));
+        projectNameLbl->setText(QCoreApplication::translate("MainWindow", "Project Name", nullptr));
         emailLbl->setText(QCoreApplication::translate("MainWindow", "Email", nullptr));
         telepLbl->setText(QCoreApplication::translate("MainWindow", "Telephone", nullptr));
         memoLbl->setText(QCoreApplication::translate("MainWindow", "Memo", nullptr));

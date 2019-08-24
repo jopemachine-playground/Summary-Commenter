@@ -47,7 +47,7 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
 
     // scps 파일로 프로그램을 open한 경우
     if((execPath != nullptr) && execPath[0] != '\0') {
-        initProgram();
+        clearAllTbls();
         setSCPSFile(QString(execPath));
         return;
     }
@@ -115,17 +115,18 @@ bool MainWindow::Open(){
         return false;
     }
 
-    initProgram();
+    clearAllTbls();
     setSCPSFile(openedFile);
     return true;
 }
 
 void MainWindow::OpenRecent(const int index){
-    initProgram();
+    clearAllTbls();
     setSCPSFile(ui->menuOpen_Recents->actions()[index]->text());
 }
 
 void MainWindow::Run(){
+
     if(ProjectPath_t.trimmed() == ""){
         ShowMessageBox("No directory include!", "No directory");
         return;
@@ -136,27 +137,78 @@ void MainWindow::Run(){
     // scproj는 지정 프로젝트 경로에서 주석을 추가해놓은 설정 파일이다.
     // scproj가 삭제되면 run 재 실행 시 해당 파일들에 주석이 한 번 더 들어가게 된다.
     QString scprojContent = "";
+    QString workedFiles   = "";
+
+    QString div;
+    CommentStyle style = CommentStyle::Undefined;
 
     // 리눅스의 경우 \\ 대신 / 를 써야한다
     QFile scprojFile(ProjectPath_t + "\\" + PROJECT_WORKED_FILE_EXT);
 
     // 설정파일이 존재하면 파일을 읽어들여 주석을 지울 파일들의 리스트를 만든다
     if(scprojFile.exists()){
+
         scprojFile.open(QFile::ReadOnly|QFile::Text);
+
         QTextStream ts(&scprojContent);
-        ts << scprojFile.readAll();
-        QStringList list = scprojContent.split(",");
-        if(!removeComment(list)){
-            ShowMessageBox("Essential Input Not Specified!", "Error");
+
+        while(!scprojFile.atEnd()){
+
+            QString line = scprojFile.readLine();
+
+            QRegularExpression sepRe("DivBySeparator:\\s*\"(?<sep>.*)\"");
+
+            auto sepMatch = sepRe.match(line, 0,
+                                          QRegularExpression::NormalMatch);
+
+            if(sepMatch.hasMatch()){
+
+                div = sepMatch.captured("sep");
+                style = CommentStyle::DivBySeparator;
+            }
+
+            QRegularExpression endTagRe("DivByStartEndTag_t:\\s*\"(?<tag>.*)\"");
+
+            auto tagMatch = endTagRe.match(line, 0,
+                                          QRegularExpression::NormalMatch);
+
+            if(tagMatch.hasMatch()){
+
+                div = tagMatch.captured("tag");
+                style = CommentStyle::DivByStartEndTag;
+            }
+
+            QRegularExpression workedFileRe(":\\s*\"(?<files>.*)\"");
+
+            auto fileMatch = workedFileRe.match(line, 0,
+                                          QRegularExpression::NormalMatch);
+
+            if(fileMatch.hasMatch()){
+                workedFiles = fileMatch.captured("files");
+                qDebug() << "hasMatch";
+                qDebug() << workedFiles;
+            }
+
+        }
+
+        QStringList list = workedFiles.split(",");
+
+        if(style == CommentStyle::Undefined || div == ""){
+            ShowMessageBox("Worked Method Not Correctly Specified!", "Error");
             return;
         }
+
+        removeComment(list, div, style);
+
     }
 
-    scprojContent = "";
+    // 새로 작업을 해야하므로 workedFiles를 초기화
+    workedFiles = "";
 
     while(!que->empty()){
+        // prepend 할 때 마다 workedFiles에 추가
         prependComment(que->front());
-        scprojContent += que->size() == 1 ? que->front().fileName : que->front().fileName + ",";
+        workedFiles += que->size() == 1 ? que->front().fileName : que->front().fileName + ",";
         que->pop();
     }
 
@@ -164,7 +216,25 @@ void MainWindow::Run(){
 
     scprojFile.open(QIODevice::WriteOnly|QFile::Text);
 
-    scprojFile.write(scprojContent.toStdString().c_str());
+    // 작업 방식
+    scprojFile.write("# Worked_Method\n");
+
+    QString method;
+
+    if(IsDivBySeparator_t){
+        method = QString("DivBySeparator: \"")     + QString(Separator_t) + QString("\"\n");
+    }
+    else if(IsDivByStartEndTag_t){
+        method = QString("DivByStartEndTag_t: \"") + QString(EndTag_t)    + QString("\"\n");
+    }
+
+    scprojFile.write(method.toStdString().c_str());
+
+    // 작업한 파일들
+    scprojFile.write("\n# Worked_Files\n");
+    QString worked = QString(": \"") + workedFiles + QString("\"\n");
+
+    scprojFile.write(worked.toStdString().c_str());
 
     scprojFile.close();
 
@@ -173,7 +243,7 @@ void MainWindow::Run(){
 
 void MainWindow::NewFile()
 {
-    initProgram();
+    clearAllTbls();
     setWindowTitle(DEFAULT_WIN_TITLE);
     openedFile = nullptr;
     flagTypeTbl  = new FlagType_tbl;
@@ -279,7 +349,7 @@ void MainWindow::on_actionOpen_triggered()
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
     // preview 탭이 클릭되면 preview에 들어갈 텍스트를 계산
-    if(index == tab_index::TAB_PREVIEW){
+    if(index == TabIndex::TAB_PREVIEW){
         QString text = "";
 
         QTextStream ts(&text);
@@ -334,10 +404,16 @@ void MainWindow::on_actionRemove_Comments_triggered()
         QTextStream ts(&scprojContent);
         ts << scprojFile.readAll();
         QStringList list = scprojContent.split(",");
-        if(!removeComment(list)){
+
+        QString div = IsDivByStartEndTag_t ? EndTag_t : Separator_t;
+        CommentStyle style = IsDivByStartEndTag_t ? CommentStyle::DivByStartEndTag : CommentStyle::DivBySeparator;
+
+        if(style == CommentStyle::Undefined || div == ""){
             ShowMessageBox("Essential Input Not Specified!", "Error");
             return;
         }
+
+        removeComment(list, div, style);
     }
     else{
         ShowMessageBox("scproj file not exist!", "Error");
@@ -416,13 +492,13 @@ void MainWindow::on_actionOpen_Project_Path_triggered()
 
 void MainWindow::on_actionRefresh_triggered()
 {
-    initProgram();
+    clearAllTbls();
     setSCPSFile(openedFile);
 }
 
 void MainWindow::on_actionSave_md_triggered()
 {
-    QFile md(ProjectPath_t + "\\" + "sc_readme.md");
+    QFile md(ProjectPath_t + "\\" + "sc_document.md");
 
     // 파일이 존재하지 않을 땐 경로에 파일을 생성한다.
     md.open(QFile::WriteOnly|QFile::Text);
@@ -450,10 +526,16 @@ void MainWindow::on_actionSave_md_triggered()
 
 void MainWindow::on_actionRemove_Comments_From_All_File_triggered()
 {
-    if(!removeComment(*(new QStringList()))){
+    // 모든 파일에서 현재 셋팅된 값으로 주석을 지울 것인지 확인하는 창을 띄울 것.
+    QString div = IsDivByStartEndTag_t ? EndTag_t : Separator_t;
+    CommentStyle style = IsDivByStartEndTag_t ? CommentStyle::DivByStartEndTag : CommentStyle::DivBySeparator;
+
+    if(style == CommentStyle::Undefined || div == ""){
         ShowMessageBox("Essential Input Not Specified!", "Error");
         return;
     }
+
+    removeComment(*(new QStringList()), div, style);
 
     ShowMessageBox("done!", "Complete");
 }
@@ -525,10 +607,6 @@ void MainWindow::on_FlagDeleteBtn_clicked()
 // Private Methods
 // Setting Tables
 
-void MainWindow::clearTbl(QTableWidget* tbl){
-    tbl->setRowCount(0);
-}
-
 void MainWindow::sortTbl(QTableWidget *tbl){
     tbl->sortByColumn(0, Qt::AscendingOrder);
 }
@@ -589,6 +667,21 @@ void MainWindow::itemChange(QTableWidget* tbl, int prev, int dest)
     swap(tbl, prev, dest);
 }
 
+void MainWindow::clearAllTbls()
+{
+    flagTypeTbl = new FlagType_tbl;
+
+    auto clearTbl = [](QTableWidget* tbl) -> void {
+        tbl->setRowCount(0);
+    };
+
+    clearTbl(FlagTable_t);
+    clearTbl(IssueTable_t);
+    clearTbl(DescTable_t);
+    clearTbl(RefTable_t);
+    clearTbl(ExcludeTable_t);
+}
+
 // ==============================+===============================================================
 // Private Methods
 // Setting Table's dragging event
@@ -638,16 +731,16 @@ void MainWindow::handleDrop(const QList<QUrl> & list)
 
                 switch(ui->tabWidget->currentIndex()){
 
-                case tab_index::TAB_DESCRIPT:   insertTbl(DescTable_t,    url.fileName(), "");
+                case TabIndex::TAB_DESCRIPT:   insertTbl(DescTable_t,    url.fileName(), "");
                     break;
 
-                case tab_index::TAB_ISSUE:      insertTbl(IssueTable_t,   url.fileName(), "");
+                case TabIndex::TAB_ISSUE:      insertTbl(IssueTable_t,   url.fileName(), "");
                     break;
 
-                case tab_index::TAB_REF:        insertTbl(RefTable_t,     url.fileName(), "");
+                case TabIndex::TAB_REF:        insertTbl(RefTable_t,     url.fileName(), "");
                     break;
 
-                case tab_index::TAB_EXCLUDE:    insertTbl(ExcludeTable_t, url.fileName());
+                case TabIndex::TAB_EXCLUDE:    insertTbl(ExcludeTable_t, url.fileName());
                     break;
 
                 };
@@ -735,18 +828,6 @@ void MainWindow::removeSelectedItems(QTableWidget* tbl){
 // ==============================+===============================================================
 // Private Methods
 // File save and load
-
-void MainWindow::initProgram()
-{
-    flagTypeTbl = new FlagType_tbl;
-
-    clearTbl(FlagTable_t);
-    clearTbl(IssueTable_t);
-    clearTbl(DescTable_t);
-    clearTbl(RefTable_t);
-    clearTbl(ExcludeTable_t);
-}
-
 
 void MainWindow::setSCPSFile(const QString& settingFilePath){
 
@@ -1160,7 +1241,7 @@ void MainWindow::makeMDForm(QTextStream& ts, const QTableWidget *tbl, const QStr
 
 bool MainWindow::openRecentSCPS()
 {
-    initProgram();
+    clearAllTbls();
 
     QString latest = nullptr;
 
@@ -1361,8 +1442,8 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
         else if(key == "Last_Edited")    value = edit;
         else if(key == "Desc")           value = desc;
         else if(key == "Issue")          value = issue;
-        else if(key == "Sup_Div_Line")   value = SupDiv_t;
-        else if(key == "Sub_Div_Line")   value = SubDiv_t;
+        else if(key == "Sup_Div_Line")   value = IsDivBySeparator_t ? Separator_t + SupDiv_t : SupDiv_t;
+        else if(key == "Sub_Div_Line")   value = IsDivBySeparator_t ? Separator_t + SubDiv_t : SubDiv_t;
         else if(key == "Email")          value = Email_t;
         else if(key == "Telephone")      value = Telep_t;
         else if(key == "Github_Account") value = GithubAcc_t;
@@ -1434,21 +1515,12 @@ s_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const 
 
 
 
-bool MainWindow::removeComment(QStringList &strList){
-
-    if((IsDivByStartEndTag_t && EndTag_t.trimmed() == "") ||
-            (IsDivBySeparator_t && Separator_t == "")){
-        return false;
-    }
+void MainWindow::removeComment(QStringList &strList, const QString& div, const CommentStyle style){
 
     auto targetExtensions = Extension_t.split(",");
 
     for(auto& i : targetExtensions){
         i = i.trimmed();
-        if(i == ""){
-            // 마지막 "" 원소 제거
-            strList.pop_back();
-        }
     }
 
     auto flag = IsRecursiveTraversal_t ?
@@ -1477,14 +1549,13 @@ bool MainWindow::removeComment(QStringList &strList){
 
                     target.open(QFile::ReadWrite|QFile::Text);
 
-
                     auto isEndPoint =
                             [&](QString line) -> bool {
-                        if(IsDivByStartEndTag_t){
-                            return line.left(EndTag_t.length()) == EndTag_t;
+                        if(style == CommentStyle::DivByStartEndTag){
+                            return line.left(div.length()) == div;
                         }
                         else {
-                            return line.left(Separator_t.length()) != Separator_t;
+                            return line.left(div.length()) != div;
                         }
                     };
 
@@ -1515,7 +1586,6 @@ bool MainWindow::removeComment(QStringList &strList){
         ui->menuOpen_Recents->setEnabled(false);
     }
 
-    return true;
 }
 
 
