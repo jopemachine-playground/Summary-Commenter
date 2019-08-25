@@ -25,8 +25,6 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
 {
     ui->setupUi(this);
 
-    qApp->setStyle(QStyleFactory::create("Fusion"));
-
     QPalette palette;
     applyPalette(palette);
 
@@ -44,6 +42,7 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
 
     setAcceptDrops(true);
     setShortCut();
+    setToolbar();
 
     programPath = argv[0];
     execPath    = argv[1];
@@ -165,7 +164,7 @@ void MainWindow::NewFile()
     clearAllTbls();
     setWindowTitle(DEFAULT_WIN_TITLE);
     openedFile  = nullptr;
-    flagTypeTbl = new FlagType_tbl;
+    flagTypeTbl = new FlagTypeTbl;
     flagTypeTbl->init();
 
     int size = static_cast<int>(flagTypeTbl->map.size());
@@ -368,6 +367,11 @@ void MainWindow::on_actionrecent4_triggered()
     OpenRecent(3);
 }
 
+void MainWindow::on_actionrecent5_triggered()
+{
+    OpenRecent(4);
+}
+
 void MainWindow::on_descSortBtn_clicked()
 {
     sortTbl(DescTable_t);
@@ -532,22 +536,40 @@ void MainWindow::on_FlagDeleteBtn_clicked()
     removeSelectedItems(FlagTable_t);
 }
 
+void MainWindow::setToolbar()
+{
+    QActionGroup* modeGroup = new QActionGroup(ui->menuComments_style);
+    modeGroup->setExclusive(true);
+
+    divBySeparator = ui->menuComments_style->addAction("Divide by Separator");
+    divBySeparator->setCheckable(true);
+    divBySeparator->setChecked(true);
+    modeGroup->addAction(divBySeparator);
+
+    divByStartEndTag = ui->menuComments_style->addAction("Divide by Start End tag");
+    divByStartEndTag->setCheckable(true);
+    modeGroup->addAction(divByStartEndTag);
+}
+
 void MainWindow::applyPalette(QPalette &palette)
 {
-    palette.setColor(QPalette::Window, QColor(33,33,33));
-    palette.setColor(QPalette::WindowText, Qt::white);
-    palette.setColor(QPalette::Base, QColor(61,61,61));
-    palette.setColor(QPalette::AlternateBase, QColor(61,61,61));
-    palette.setColor(QPalette::ToolTipBase, Qt::white);
-    palette.setColor(QPalette::ToolTipText, Qt::white);
-    palette.setColor(QPalette::Text, Qt::white);
-    palette.setColor(QPalette::Button, QColor(33,33,33));
-    palette.setColor(QPalette::ButtonText, Qt::white);
-    palette.setColor(QPalette::BrightText, Qt::red);
-    palette.setColor(QPalette::Highlight, QColor(148, 250, 255));
+    qApp->setStyle(QStyleFactory::create("Fusion"));
+
+    palette.setColor(QPalette::Window,          QColor(33,33,33));
+    palette.setColor(QPalette::WindowText,      Qt::white);
+    palette.setColor(QPalette::Base,            QColor(61,61,61));
+    palette.setColor(QPalette::AlternateBase,   QColor(61,61,61));
+    palette.setColor(QPalette::ToolTipBase,     Qt::white);
+    palette.setColor(QPalette::ToolTipText,     Qt::white);
+    palette.setColor(QPalette::Text,            Qt::white);
+    palette.setColor(QPalette::Button,          QColor(33,33,33));
+    palette.setColor(QPalette::ButtonText,      Qt::white);
+    palette.setColor(QPalette::BrightText,      Qt::red);
+    palette.setColor(QPalette::Highlight,       QColor(148, 250, 255));
     palette.setColor(QPalette::HighlightedText, Qt::black);
-    palette.setColor(QPalette::Disabled, QPalette::Text, Qt::darkGray);
-    palette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
+
+    palette.setColor(QPalette::Disabled, QPalette::Text,        Qt::darkGray);
+    palette.setColor(QPalette::Disabled, QPalette::ButtonText,  Qt::darkGray);
 
     qApp->setPalette(palette);
 }
@@ -618,7 +640,7 @@ void MainWindow::itemChange(QTableWidget* tbl, int prev, int dest)
 
 void MainWindow::clearAllTbls()
 {
-    flagTypeTbl = new FlagType_tbl;
+    flagTypeTbl = new FlagTypeTbl;
 
     auto clearTbl = [](QTableWidget* tbl) -> void {
         tbl->setRowCount(0);
@@ -1126,10 +1148,10 @@ void MainWindow::setSettingFlags(const QString &flagName, bool flag)
         ui->actionRecursive_Traversal->setChecked(flag);
     }
     else if (flagName   == "divBySeparator"){
-        ui->actionDivide_by_Separator->setChecked(flag);
+        divBySeparator->setChecked(flag);
     }
     else if (flagName   == "divByStartEndTag"){
-        ui->actionDivide_by_Start_End_tag->setChecked(flag);
+        divByStartEndTag->setChecked(flag);
     }
     else {
         qDebug() << "Wrong Setting value";
@@ -1204,32 +1226,43 @@ bool MainWindow::openRecentSCPS()
 
         latest = list[0];
 
+        applyRecentBar(list);
+
         if(latest.trimmed() == "") return false;
 
-        auto actionList = ui->menuOpen_Recents->actions();
-
-        int index = 0;
-
-        for (auto& action : actionList){
-            if(list.length() <= index) {
-                action->setVisible( false );
-            }
-            else{
-                action->setText( list[index++] );
-            }
-        }
-
-        for(auto& path : list){
-            if(path == "") continue;
-            pathQue->push_back( path );
-        }
-
         setSCPSFile(latest);
+
         return true;
     }
     else{
         sclately->open( QFile::ReadWrite | QFile::Text  );
+
+        QStringList empty{};
+
+        applyRecentBar(empty);
+
         return false;
+    }
+}
+
+void MainWindow::applyRecentBar(QStringList &list)
+{
+    auto actionList = ui->menuOpen_Recents->actions();
+
+    int index = 0;
+
+    for (auto& action : actionList){
+        if(list.length() <= index || list[index].trimmed() == "") {
+            action->setVisible( false );
+        }
+        else{
+            action->setText( list[index++] );
+        }
+    }
+
+    for(auto& path : list){
+        if(path == "") continue;
+        pathQue->push_back( path );
     }
 }
 
@@ -1623,10 +1656,6 @@ void MainWindow::removeComment(QStringList &strList, const QString& div, const C
         }
         if(!it.hasNext()) break;
         it.next();
-    }
-
-    if(pathQue->size() < 2){
-        ui->menuOpen_Recents->setEnabled(false);
     }
 
 }

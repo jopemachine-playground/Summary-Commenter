@@ -27,8 +27,9 @@
 #define IsDescNumbering_t       ui->actionDesc_Numbering->isChecked()
 #define IsIssueNumbering_t      ui->actionIssue_Numbering->isChecked()
 #define IsRecursiveTraversal_t  ui->actionRecursive_Traversal->isChecked()
-#define IsDivBySeparator_t      ui->actionDivide_by_Separator->isChecked()
-#define IsDivByStartEndTag_t    ui->actionDivide_by_Start_End_tag->isChecked()
+
+#define IsDivBySeparator_t      divBySeparator->isChecked()
+#define IsDivByStartEndTag_t    divByStartEndTag->isChecked()
 
 // ==============================+===============================================================
 // enum

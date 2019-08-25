@@ -82,7 +82,7 @@ typedef struct{
                 map.at(key2) = temp;
     }
 
-} FlagType_tbl;
+} FlagTypeTbl;
 
 typedef struct{
     TblPos      pos;
@@ -195,6 +195,8 @@ private slots:
 
     void on_FlagDeleteBtn_clicked();
 
+    void on_actionrecent5_triggered();
+
 private:
 
     // member vars
@@ -202,10 +204,13 @@ private:
     QString                                         openedFile;
     QFile*                                          sclately;
     std::deque<QString>*                            pathQue;
-    FlagType_tbl*                                   flagTypeTbl;
+    FlagTypeTbl*                                    flagTypeTbl;
+    QAction*                                        divBySeparator;
+    QAction*                                        divByStartEndTag;
     char*                                           programPath;
     char*                                           execPath;
 
+    void                        setToolbar          ();
     void                        applyPalette        (QPalette& palete);
 
     // setting table
@@ -226,14 +231,20 @@ private:
     void                        insertItem          (QTableWidget* tbl, bool keyEditable, const QString& key, const QString& value);
     void                        removeSelectedItems (QTableWidget* tbl);
 
-    // file save and load
+    // * file save and load
+
+    // SCPS
     void                        setSCPSFile         (const QString& path);
     void                        saveSCPSFile        (const QString& path);
     void                        addGlobalVars       (const QString& key, const QString& value);
     void                        setSettingFlags     (const QString& flagName, bool flag);
     void                        makeMDForm          (QTextStream& ts, const QTableWidget* tbl, const QString& tblName);
-    bool                        openRecentSCPS      ();
 
+    // SClately
+    bool                        openRecentSCPS      ();
+    void                        applyRecentBar      (QStringList& list);
+
+    // SCProj
     s_ptr<Scproj>               readSCProjFile      (const QString& path);
     void                        writeSCProjFile     (const QString &path, queue<FileInfo>&);
 

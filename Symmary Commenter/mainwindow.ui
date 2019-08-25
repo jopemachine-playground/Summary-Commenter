@@ -872,6 +872,7 @@
      <addaction name="actionrecent2"/>
      <addaction name="actionrecent3"/>
      <addaction name="actionrecent4"/>
+     <addaction name="actionrecent5"/>
     </widget>
     <addaction name="actionNew"/>
     <addaction name="separator"/>
@@ -904,8 +905,6 @@
      <property name="title">
       <string>Comments style</string>
      </property>
-     <addaction name="actionDivide_by_Separator"/>
-     <addaction name="actionDivide_by_Start_End_tag"/>
     </widget>
     <addaction name="actionRecursive_Traversal"/>
     <addaction name="separator"/>
@@ -1091,25 +1090,6 @@
     <string>Manual</string>
    </property>
   </action>
-  <action name="actionDivide_by_Separator">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Divide by Separator</string>
-   </property>
-  </action>
-  <action name="actionDivide_by_Start_End_tag">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Divide by Start, End tag</string>
-   </property>
-  </action>
   <action name="actionOpen_setting_file">
    <property name="text">
     <string>Open Setting File</string>
@@ -1121,6 +1101,15 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionrecent5">
+   <property name="icon">
+    <iconset>
+     <normaloff>res/img/icon.ico</normaloff>res/img/icon.ico</iconset>
+   </property>
+   <property name="text">
+    <string>recent5</string>
    </property>
   </action>
  </widget>

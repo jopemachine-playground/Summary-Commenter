@@ -56,10 +56,9 @@ public:
     QAction *actionSave_md;
     QAction *actionRemove_Comments_From_All_File;
     QAction *actionHelp;
-    QAction *actionDivide_by_Separator;
-    QAction *actionDivide_by_Start_End_tag;
     QAction *actionOpen_setting_file;
     QAction *actionNew;
+    QAction *actionrecent5;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_2;
     QTabWidget *tabWidget;
@@ -240,17 +239,13 @@ public:
         actionRemove_Comments_From_All_File->setObjectName(QString::fromUtf8("actionRemove_Comments_From_All_File"));
         actionHelp = new QAction(MainWindow);
         actionHelp->setObjectName(QString::fromUtf8("actionHelp"));
-        actionDivide_by_Separator = new QAction(MainWindow);
-        actionDivide_by_Separator->setObjectName(QString::fromUtf8("actionDivide_by_Separator"));
-        actionDivide_by_Separator->setCheckable(true);
-        actionDivide_by_Separator->setChecked(true);
-        actionDivide_by_Start_End_tag = new QAction(MainWindow);
-        actionDivide_by_Start_End_tag->setObjectName(QString::fromUtf8("actionDivide_by_Start_End_tag"));
-        actionDivide_by_Start_End_tag->setCheckable(true);
         actionOpen_setting_file = new QAction(MainWindow);
         actionOpen_setting_file->setObjectName(QString::fromUtf8("actionOpen_setting_file"));
         actionNew = new QAction(MainWindow);
         actionNew->setObjectName(QString::fromUtf8("actionNew"));
+        actionrecent5 = new QAction(MainWindow);
+        actionrecent5->setObjectName(QString::fromUtf8("actionrecent5"));
+        actionrecent5->setIcon(icon1);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_2 = new QVBoxLayout(centralWidget);
@@ -896,6 +891,7 @@ public:
         menuOpen_Recents->addAction(actionrecent2);
         menuOpen_Recents->addAction(actionrecent3);
         menuOpen_Recents->addAction(actionrecent4);
+        menuOpen_Recents->addAction(actionrecent5);
         menuHelp->addAction(actionHelp);
         menuHelp->addAction(actionGithub);
         menuSetting->addAction(actionRecursive_Traversal);
@@ -904,8 +900,6 @@ public:
         menuSetting->addAction(actionDesc_Numbering);
         menuSetting->addSeparator();
         menuSetting->addAction(menuComments_style->menuAction());
-        menuComments_style->addAction(actionDivide_by_Separator);
-        menuComments_style->addAction(actionDivide_by_Start_End_tag);
         menuExecute->addAction(actionExecute);
         menuExecute->addSeparator();
         menuExecute->addAction(actionRemove_Comments);
@@ -966,13 +960,12 @@ public:
         actionSave_md->setText(QCoreApplication::translate("MainWindow", "Export as Markdown", nullptr));
         actionRemove_Comments_From_All_File->setText(QCoreApplication::translate("MainWindow", "Remove Comments From All Files", nullptr));
         actionHelp->setText(QCoreApplication::translate("MainWindow", "Manual", nullptr));
-        actionDivide_by_Separator->setText(QCoreApplication::translate("MainWindow", "Divide by Separator", nullptr));
-        actionDivide_by_Start_End_tag->setText(QCoreApplication::translate("MainWindow", "Divide by Start, End tag", nullptr));
         actionOpen_setting_file->setText(QCoreApplication::translate("MainWindow", "Open Setting File", nullptr));
         actionNew->setText(QCoreApplication::translate("MainWindow", "New", nullptr));
 #if QT_CONFIG(shortcut)
         actionNew->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+N", nullptr));
 #endif // QT_CONFIG(shortcut)
+        actionrecent5->setText(QCoreApplication::translate("MainWindow", "recent5", nullptr));
         groupBox->setTitle(QCoreApplication::translate("MainWindow", "Settings", nullptr));
         extensionLbl->setText(QCoreApplication::translate("MainWindow", "Extension", nullptr));
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
