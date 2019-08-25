@@ -184,7 +184,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(755, 530);
+        MainWindow->resize(810, 578);
         actionGithub = new QAction(MainWindow);
         actionGithub->setObjectName(QString::fromUtf8("actionGithub"));
         QIcon icon;
@@ -288,6 +288,8 @@ public:
 
         extensionEdit = new QLineEdit(groupBox);
         extensionEdit->setObjectName(QString::fromUtf8("extensionEdit"));
+        extensionEdit->setMinimumSize(QSize(200, 0));
+        extensionEdit->setMaximumSize(QSize(200, 16777215));
 
         ExtensionL->addWidget(extensionEdit);
 
@@ -308,6 +310,8 @@ public:
 
         pathEdit = new QLineEdit(groupBox);
         pathEdit->setObjectName(QString::fromUtf8("pathEdit"));
+        pathEdit->setMinimumSize(QSize(200, 0));
+        pathEdit->setMaximumSize(QSize(200, 16777215));
 
         PathL->addWidget(pathEdit);
 
@@ -328,6 +332,8 @@ public:
 
         authorEdit = new QLineEdit(groupBox);
         authorEdit->setObjectName(QString::fromUtf8("authorEdit"));
+        authorEdit->setMinimumSize(QSize(200, 0));
+        authorEdit->setMaximumSize(QSize(200, 16777215));
 
         AuthorL->addWidget(authorEdit);
 
@@ -348,6 +354,8 @@ public:
 
         separatorEdit = new QLineEdit(groupBox);
         separatorEdit->setObjectName(QString::fromUtf8("separatorEdit"));
+        separatorEdit->setMinimumSize(QSize(200, 0));
+        separatorEdit->setMaximumSize(QSize(200, 16777215));
 
         SeparatorL->addWidget(separatorEdit);
 
@@ -368,6 +376,8 @@ public:
 
         sTagEdit = new QLineEdit(groupBox);
         sTagEdit->setObjectName(QString::fromUtf8("sTagEdit"));
+        sTagEdit->setMinimumSize(QSize(200, 0));
+        sTagEdit->setMaximumSize(QSize(200, 16777215));
 
         StartTagL->addWidget(sTagEdit);
 
@@ -388,6 +398,8 @@ public:
 
         eTagEdit = new QLineEdit(groupBox);
         eTagEdit->setObjectName(QString::fromUtf8("eTagEdit"));
+        eTagEdit->setMinimumSize(QSize(200, 0));
+        eTagEdit->setMaximumSize(QSize(200, 16777215));
 
         EndTagL->addWidget(eTagEdit);
 
@@ -455,6 +467,8 @@ public:
 
         githubEdit = new QLineEdit(groupBox);
         githubEdit->setObjectName(QString::fromUtf8("githubEdit"));
+        githubEdit->setMinimumSize(QSize(200, 0));
+        githubEdit->setMaximumSize(QSize(200, 16777215));
 
         GithubL->addWidget(githubEdit);
 
@@ -475,6 +489,8 @@ public:
 
         teamEdit = new QLineEdit(groupBox);
         teamEdit->setObjectName(QString::fromUtf8("teamEdit"));
+        teamEdit->setMinimumSize(QSize(200, 0));
+        teamEdit->setMaximumSize(QSize(200, 16777215));
 
         TeamL->addWidget(teamEdit);
 
@@ -495,6 +511,8 @@ public:
 
         projectNameEdit = new QLineEdit(groupBox);
         projectNameEdit->setObjectName(QString::fromUtf8("projectNameEdit"));
+        projectNameEdit->setMinimumSize(QSize(200, 0));
+        projectNameEdit->setMaximumSize(QSize(200, 16777215));
 
         ProjectNameL->addWidget(projectNameEdit);
 
@@ -515,6 +533,8 @@ public:
 
         emailEdit = new QLineEdit(groupBox);
         emailEdit->setObjectName(QString::fromUtf8("emailEdit"));
+        emailEdit->setMinimumSize(QSize(200, 0));
+        emailEdit->setMaximumSize(QSize(200, 16777215));
 
         EmailL->addWidget(emailEdit);
 
@@ -535,6 +555,8 @@ public:
 
         telepEdit = new QLineEdit(groupBox);
         telepEdit->setObjectName(QString::fromUtf8("telepEdit"));
+        telepEdit->setMinimumSize(QSize(200, 0));
+        telepEdit->setMaximumSize(QSize(200, 16777215));
 
         TelephoneL->addWidget(telepEdit);
 
@@ -833,7 +855,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 755, 21));
+        menuBar->setGeometry(QRect(0, 0, 810, 21));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuOpen_Recents = new QMenu(menuFile);

@@ -74,7 +74,22 @@ constant.h::urls        +=		https://urlexample2.com
 
 
 
-**scproj 파일** : Run 후 지정된 경로에 생성됨.  주석을 추가한 파일의 이름들을 갖고 있는 파일. scproj 파일을 통해 Remove Comments 버튼을 눌러 SummaryCommenter가 추가했던 주석을 제거할 수 있다.
+**scproj 파일** : Run 후 지정된 경로에 생성됨.  작업했던 파일들의 이름들을 갖고 있는 파일. scproj 파일을 통해 Remove Comments 버튼을 눌러 SummaryCommenter가 추가했던 주석을 제거할 수 있다.
+
+
+
+```
+# Worked_Method
+DivByStartEndTag_t: "-->"
+
+# Worked_Files
+: "Jekyll-Script.html,Comment.php,CommentExample.html,CommentManageService.php,index.html,AddComment.php,Comment.php,PopularPosting.php,Positiveness.php,PostsSortingByCommentsNumber.php,RecentComments.php,CommentPageLogin.php,CommentPageLogout.php,DeleteComment.php,DeleteService.php,EditComment.php,ID_DuplicateCheck.php,MySQLConection.php,RegisterURL.php,ShowHomePage.php,SignInAction.php,SignOutAction.php,SignUpAction.php,URLVerification.php,UserEditAction.php,UserModalBox.php,SignIn.php,SignUp.html,URL-Register.php,UserEdit.php"
+
+```
+
+
+
+
 
 
 
@@ -98,7 +113,7 @@ constant.h::urls        +=		https://urlexample2.com
 
 <h2>Screen shots</h2>
 <p align="center">
-<img src="Screenshots/2.png">
+<img src="Screenshots/global.png">
 </p>
 
 

@@ -11,6 +11,7 @@
 #include <utility>
 #include <functional>
 
+#include <QMessageBox>
 #include <QMainWindow>
 #include <QDateTime>
 #include "constant.h"
@@ -50,7 +51,7 @@ typedef struct{
 
 typedef struct{
     QString     key;
-    bool        ExistLineFeed;
+    bool        existLineFeed;
 } FlagType;
 
 typedef struct{
@@ -108,7 +109,7 @@ public:
 
     ~MainWindow() override;
 
-    void ShowMessageBox(const QString&, const QString&);
+    void ShowMessageBox(const QMessageBox::Icon, const QString&, const QString&);
 
     bool Open();
 
@@ -205,7 +206,7 @@ private:
     char*                                           programPath;
     char*                                           execPath;
 
-    void                        applyPalette         (QPalette& palete);
+    void                        applyPalette        (QPalette& palete);
 
     // setting table
     void                        sortTbl             (QTableWidget*);

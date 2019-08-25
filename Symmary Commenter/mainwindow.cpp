@@ -33,7 +33,7 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
     auto setTable = [](QTableWidget* tbl)-> void {
         tbl->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Fixed);
         tbl->horizontalHeader()->setStretchLastSection(true);
-        tbl->setSelectionBehavior(    QAbstractItemView::SelectRows   );
+        tbl->setSelectionBehavior(QAbstractItemView::SelectRows);
     };
 
     setTable(FlagTable_t);
@@ -48,7 +48,7 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
     programPath = argv[0];
     execPath    = argv[1];
 
-    pathQue = new std::deque<QString>();
+    pathQue  = new std::deque<QString>();
     sclately = new QFile(QFileInfo(programPath).dir().filePath(PROJECT_LATELY_OPEN_EXT));
 
     // scps 파일로 프로그램을 open한 경우
@@ -135,7 +135,7 @@ void MainWindow::OpenRecent(const int index){
 void MainWindow::Run(){
 
     if(ProjectPath_t.trimmed() == ""){
-        ShowMessageBox("No directory include!", "No directory");
+        ShowMessageBox(QMessageBox::Critical, "No directory include!", "No directory");
         return;
     }
 
@@ -157,7 +157,7 @@ void MainWindow::Run(){
     writeSCProjFile(ProjectPath_t + "\\" + PROJECT_WORKED_FILE_EXT,
                     que2);
 
-    ShowMessageBox("work completed!", "Jobs done");
+    ShowMessageBox(QMessageBox::Information, "work completed!", "Jobs done");
 }
 
 void MainWindow::NewFile()
@@ -174,10 +174,10 @@ void MainWindow::NewFile()
     }
 }
 
-void MainWindow::ShowMessageBox(const QString& message, const QString& title){
+void MainWindow::ShowMessageBox(const QMessageBox::Icon icon, const QString& message, const QString& title){
     QMessageBox msgBox;
+    msgBox.setIcon(icon);
     msgBox.setText(message);
-    msgBox.setBaseSize(QSize(600, 120));
     msgBox.setWindowTitle(title);
     msgBox.exec();
 }
@@ -328,19 +328,19 @@ void MainWindow::on_actionRemove_Comments_triggered()
         CommentStyle style = IsDivByStartEndTag_t ? CommentStyle::DivByStartEndTag : CommentStyle::DivBySeparator;
 
         if(style == CommentStyle::Undefined || div == ""){
-            ShowMessageBox("Essential Input Not Specified!", "Error");
+            ShowMessageBox(QMessageBox::Critical, "Essential Input Not Specified!", "Error");
             return;
         }
 
         removeComment(list, div, style);
     }
     else{
-        ShowMessageBox("scproj file not exist!", "Error");
+        ShowMessageBox(QMessageBox::Critical, "scproj file not exist!", "Error");
         return;
     }
 
     scprojFile.remove();
-    ShowMessageBox("done!", "Complete");
+    ShowMessageBox(QMessageBox::Information, "done!", "Complete");
 }
 
 void MainWindow::on_actionExecute_triggered()
@@ -402,7 +402,7 @@ void MainWindow::on_rmExcludeBtn_clicked()
 void MainWindow::on_actionOpen_Project_Path_triggered()
 {
     if(ProjectPath_t.trimmed() == ""){
-        ShowMessageBox("Directory not specified", "Error");
+        ShowMessageBox(QMessageBox::Critical, "Directory not specified", "Error");
         return;
     }
 
@@ -440,30 +440,40 @@ void MainWindow::on_actionSave_md_triggered()
 
     md.close();
 
-    ShowMessageBox("work done", "done!");
+    ShowMessageBox(QMessageBox::Information, "work done", "done!");
 }
 
 void MainWindow::on_actionRemove_Comments_From_All_File_triggered()
 {
-    // 모든 파일에서 현재 셋팅된 값으로 주석을 지울 것인지 확인하는 창을 띄울 것.
+    int ans = QMessageBox::warning(this, tr("Warning"),
+                                   tr("This action removes the comments of all files in the directory\n"
+                                      "that are currently set to the program.\n"
+                                      "In some cases, it may not work correctly."),
+                                   QMessageBox::Yes | QMessageBox::Cancel,
+                                   QMessageBox::Yes);
+
+    if(ans == QMessageBox::Cancel){
+        return;
+    }
+
     QString div = IsDivByStartEndTag_t ? EndTag_t : Separator_t;
     CommentStyle style = IsDivByStartEndTag_t ? CommentStyle::DivByStartEndTag : CommentStyle::DivBySeparator;
 
     if(style == CommentStyle::Undefined || div == ""){
-        ShowMessageBox("Essential Input Not Specified!", "Error");
+        ShowMessageBox(QMessageBox::Critical, "Essential Input Not Specified!", "Error");
         return;
     }
 
     removeComment(*(new QStringList()), div, style);
 
-    ShowMessageBox("done!", "Complete");
+    ShowMessageBox(QMessageBox::Information, "done!", "Complete");
 }
 
 
 void MainWindow::on_actionOpen_setting_file_triggered()
 {
     if(openedFile == nullptr){
-        ShowMessageBox("No files are open", "Error");
+        ShowMessageBox(QMessageBox::Critical, "No files are open", "Error");
         return;
     }
 
@@ -924,7 +934,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
     delete confQueue;
 
     if(errFlag){
-        ShowMessageBox("Setting file could contain syntax error", "Caution");
+        ShowMessageBox(QMessageBox::Warning, "Setting file could contain syntax error", "Caution");
     }
 
 }
@@ -1425,7 +1435,7 @@ void MainWindow::processFlag(QTextStream& ts, Flag& flag, bool previewMode){
         }
 
         // key와 value 사이에 띄어쓰기를 넣을 것인지 여부
-        if(flag.type.ExistLineFeed){
+        if(flag.type.existLineFeed){
             ts << Separator_t + key + " : \n" + flag.value;
         }
         else{
