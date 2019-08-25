@@ -28,18 +28,7 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
     QPalette palette;
     applyPalette(palette);
 
-    auto setTable = [](QTableWidget* tbl)-> void {
-        tbl->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Fixed);
-        tbl->horizontalHeader()->setStretchLastSection(true);
-        tbl->setSelectionBehavior(QAbstractItemView::SelectRows);
-    };
-
-    setTable(FlagTable_t);
-    setTable(DescTable_t);
-    setTable(IssueTable_t);
-    setTable(RefTable_t);
-    setTable(ExcludeTable_t);
-
+    setTables();
     setAcceptDrops(true);
     setShortCut();
     setToolbar();
@@ -49,6 +38,8 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
 
     pathQue  = new std::deque<QString>();
     sclately = new QFile(QFileInfo(programPath).dir().filePath(PROJECT_LATELY_OPEN_EXT));
+
+    DescTable_t->installEventFilter(this);
 
     // scps 파일로 프로그램을 open한 경우
     if((execPath != nullptr) && execPath[0] != '\0') {
@@ -460,8 +451,8 @@ void MainWindow::on_actionRemove_Comments_From_All_File_triggered()
         return;
     }
 
-    QString div = IsDivByStartEndTag_t ? EndTag_t : Separator_t;
-    CommentStyle style = IsDivByStartEndTag_t ? CommentStyle::DivByStartEndTag : CommentStyle::DivBySeparator;
+    QString         div = IsDivByStartEndTag_t ? EndTag_t : Separator_t;
+    CommentStyle  style = IsDivByStartEndTag_t ? CommentStyle::DivByStartEndTag : CommentStyle::DivBySeparator;
 
     if(style == CommentStyle::Undefined || div == ""){
         ShowMessageBox(QMessageBox::Critical, "Essential Input Not Specified!", "Error");
@@ -539,6 +530,42 @@ void MainWindow::on_FlagDeleteBtn_clicked()
 // ==============================+===============================================================
 // Private Methods
 // Init, set program
+
+bool MainWindow::eventFilter(QObject * obj, QEvent * e)
+{
+    if(obj == ui->descTblWidget){
+        if(e->type() == QEvent::KeyPress){
+            QKeyEvent* kEvent = static_cast<QKeyEvent*>(e);
+            if(kEvent->key() == Qt::Key_Enter){
+                qDebug() << DescTable_t->selectedItems()[1]->text();
+                DescTable_t->selectedItems()[1]->setText(DescTable_t->selectedItems()[1]->text() + "\n");
+                return true;
+            }
+        }
+    }
+    return false;
+    //return QDialog::eventFilter(obj, e);
+}
+
+void MainWindow::setTables()
+{
+    FlagTable_t->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    FlagTable_t->horizontalHeader()->setStretchLastSection(true);
+    FlagTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    DescTable_t->horizontalHeader()->setStretchLastSection(true);
+    DescTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    IssueTable_t->horizontalHeader()->setStretchLastSection(true);
+    IssueTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    RefTable_t->horizontalHeader()->setStretchLastSection(true);
+    RefTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    ExcludeTable_t->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ExcludeTable_t->horizontalHeader()->setStretchLastSection(true);
+    ExcludeTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
+}
 
 void MainWindow::setToolbar()
 {
@@ -698,7 +725,10 @@ void MainWindow::handleDrop(const QList<QUrl> & list)
         else if(fi.isFile()){
 
             // 지정한 확장자에 해당하는 파일만 가져온다.
-            QRegularExpression re(".[.](?<Ext>\\w+)");
+
+            QRegularExpression re("."               // file Name
+                                  "[.]"             // file Name.Ext
+                                  "(?<Ext>\\w+)");  // extract Ext
 
             auto match = re.match(fi.fileName(), 0, QRegularExpression::NormalMatch);
 
@@ -836,16 +866,50 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
     selectFile.close();
 
+    bool isBuffering         = false;
+    QString strKeyBuf        = "";
+    QString strValueBuf      = "";
+    QTableWidget* buffed_tbl = nullptr;
+
     while(!confQueue->empty()){
 
         // 주석 및 빈줄은 생략
-        if(confQueue->front().trimmed() == "" || confQueue->front().at(0) == "#"){
+        if(!isBuffering && (confQueue->front().trimmed() == "" || confQueue->front().at(0) == "#")){
             confQueue->pop();
             continue;
         }
 
+        // 버퍼링 상태에선 끝을 알리는 "가 언제 오는지 확인
+        if(isBuffering){
+            QRegularExpression isEndRe("(?<buf>.*)\"");
+
+            auto isEnd = isEndRe.match(confQueue->front(), 0,
+                                       QRegularExpression::NormalMatch);
+
+            if(isEnd.hasMatch()){
+                isBuffering = false;
+                strValueBuf += isEnd.captured("buf");
+                insertItem(buffed_tbl, true, strKeyBuf, strValueBuf);
+
+                //strBuf 사용 후 초기화
+                strKeyBuf   = "";
+                strValueBuf = "";
+                buffed_tbl  = nullptr;
+            }
+            else{
+                strValueBuf += confQueue->front() + "\n";
+            }
+
+            confQueue->pop();
+
+            continue;
+        }
+
         // Setting
-        QRegularExpression settingRe("setting[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
+        QRegularExpression settingRe("setting[.]"            // setting.
+                                     "(?<attKey>\\w+)\\s+"   // setting.key
+                                     "[=]\\s+"               // =
+                                     "(?<attValue>.+)");     // value
 
         auto settingMatch = settingRe.match(confQueue->front(), 0,
                                             QRegularExpression::NormalMatch);
@@ -858,7 +922,10 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Flag Setting
 
-        QRegularExpression flagRe("flag[.](?<attKey>\\w+)\\s+[=]\\s+(?<attValue>.+)");
+        QRegularExpression flagRe("flag[.]"
+                                  "(?<attKey>\\w+)\\s+"
+                                  "[=]\\s+"
+                                  "(?<attValue>.+)");
 
         auto flagMatch = flagRe.match(confQueue->front(), 0,
                                       QRegularExpression::NormalMatch);
@@ -880,7 +947,10 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Global Setting
 
-        QRegularExpression globalRe("global[.](?<attKey>\\w+)\\s+[=]\\s+\"(?<attValue>.*)\"");
+        QRegularExpression globalRe("global[.]"
+                                    "(?<attKey>\\w+)\\s+"
+                                    "[=]\\s+"
+                                    "\"(?<attValue>.*)\"");
 
         auto globalMatch = globalRe.match(confQueue->front(), 0,
                                           QRegularExpression::NormalMatch);
@@ -893,14 +963,28 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Desc Setting
 
-        QRegularExpression descRe("(?<attKey>.+[.]?\\w+)::desc\\s+[+][=]\\s+\"(?<attValue>.*)\"");
+        QRegularExpression descRe("(?<attKey>.+[.]?\\w+)"
+                                  "::desc\\s+"
+                                  "[+][=]\\s+"
+                                  "\"(?<attValue>.*)\"?");
 
         auto descMatch = descRe.match(confQueue->front(), 0,
                                       QRegularExpression::NormalMatch);
 
         if(descMatch.hasMatch()){
-            insertItem(DescTable_t, true,
-                       descMatch.captured("attKey"), descMatch.captured("attValue"));
+
+            QString val = descMatch.captured("attValue");
+
+            if(val.at(val.length() - 1) == "\""){
+                insertItem(DescTable_t, true,
+                           descMatch.captured("attKey"), val.left(val.length() - 1));
+            }
+            else{
+                isBuffering = true;
+                buffed_tbl  = DescTable_t;
+                strKeyBuf   = descMatch.captured("attKey");
+                strValueBuf = descMatch.captured("attValue") + "\n";
+            }
 
             confQueue->pop();
             continue;
@@ -908,14 +992,28 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Issue Setting
 
-        QRegularExpression issueRe("(?<attKey>.+[.]?\\w+)::issue\\s+[+][=]\\s+\"(?<attValue>.*)\"");
+        QRegularExpression issueRe("(?<attKey>.+[.]?\\w+)"
+                                   "::issue\\s+"
+                                   "[+][=]\\s+"
+                                   "\"(?<attValue>.*)\"?");
 
         auto issueMatch = issueRe.match(confQueue->front(), 0,
                                         QRegularExpression::NormalMatch);
 
         if(issueMatch.hasMatch()){
-            insertItem(IssueTable_t, true,
-                       issueMatch.captured("attKey"), issueMatch.captured("attValue"));
+
+            QString val = issueMatch.captured("attValue");
+
+            if(val.at(val.length() - 1) == "\""){
+                insertItem(IssueTable_t, true,
+                           issueMatch.captured("attKey"), val.left(val.length() - 1));
+            }
+            else{
+                isBuffering = true;
+                buffed_tbl  = IssueTable_t;
+                strKeyBuf   = issueMatch.captured("attKey");
+                strValueBuf = issueMatch.captured("attValue");
+            }
 
             confQueue->pop();
             continue;
@@ -923,14 +1021,28 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Reference URLs Setting
 
-        QRegularExpression refURLRe("(?<attKey>.+[.]?\\w+)::refURLs\\s+[+][=]\\s+\"(?<attValue>.*)\"");
+        QRegularExpression refURLRe("(?<attKey>.+[.]?\\w+)"
+                                    "::refURLs\\s+"
+                                    "[+][=]\\s+"
+                                    "\"(?<attValue>.*)\"?");
 
         auto refURLsMatch = refURLRe.match(confQueue->front(), 0,
                                            QRegularExpression::NormalMatch);
 
         if(refURLsMatch.hasMatch()){
-            insertItem(RefTable_t, true,
-                       refURLsMatch.captured("attKey"), refURLsMatch.captured("attValue"));
+
+            QString val = refURLsMatch.captured("attValue");
+
+            if(val.at(val.length() - 1) == "\""){
+                insertItem(RefTable_t, true,
+                           refURLsMatch.captured("attKey"), val.left(val.length() - 1));
+            }
+            else{
+                isBuffering = true;
+                buffed_tbl  = RefTable_t;
+                strKeyBuf   = refURLsMatch.captured("attKey");
+                strValueBuf = refURLsMatch.captured("attValue");
+            }
 
             confQueue->pop();
             continue;
@@ -938,7 +1050,8 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Excluded files
 
-        QRegularExpression excludingRe("(?<attKey>.+[.]?\\w+)::exclude");
+        QRegularExpression excludingRe("(?<attKey>.+[.]?\\w+)"
+                                       "::exclude");
 
         auto excludeMatch = excludingRe.match(confQueue->front(), 0,
                                               QRegularExpression::NormalMatch);
@@ -958,6 +1071,10 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
     }
 
     delete confQueue;
+
+//    DescTable_t->resizeRowsToContents();
+//    DescTable_t->setWordWrap(true);
+//    DescTable_t->setTextElideMode(Qt::ElideMiddle);
 
     if(errFlag){
         ShowMessageBox(QMessageBox::Warning, "Setting file could contain syntax error", "Caution");
@@ -1008,10 +1125,11 @@ void MainWindow::saveSCPSFile(const QString& path){
 
     ts << "\n# Globals\n";
 
-    QString subDs = SubDiv_t.replace("\n",",");
-    QString supDs = SupDiv_t.replace("\n",",");
+    QString subDs = SubDiv_t.replace("\n", ",");
+    QString supDs = SupDiv_t.replace("\n", ",");
 
     ts << "global.Extension        =  \"" <<   Extension_t      << "\"\n";
+    ts << "global.Project_Name     =  \"" <<   ProjectName_t    << "\"\n";
     ts << "global.Project_Path     =  \"" <<   ProjectPath_t    << "\"\n";
     ts << "global.Author           =  \"" <<   Author_t         << "\"\n";
     ts << "global.Separator        =  \"" <<   Separator_t      << "\"\n";
@@ -1024,7 +1142,6 @@ void MainWindow::saveSCPSFile(const QString& path){
     ts << "global.Github_Account   =  \"" <<   GithubAcc_t      << "\"\n";
     ts << "global.Team             =  \"" <<   Team_t           << "\"\n";
     ts << "global.Memo             =  \"" <<   memo             << "\"\n";
-    ts << "global.Project_Name     =  \"" <<   ProjectName_t    << "\"\n";
 
     ts << "\n# Desc\n";
 
@@ -1032,36 +1149,25 @@ void MainWindow::saveSCPSFile(const QString& path){
 
         // qDebug() << DescTable_t->item(i, 1)->text();
 
-        QStringList list = DescTable_t->item(i, 1)->text().split("\n");
+        ts << DescTable_t->item(i, 0)->text() + "::desc       +=       \""
+                  + DescTable_t->item(i, 1)->text() << "\"\n";
 
-        for (auto& desc : list){
-            ts << DescTable_t->item(i, 0)->text() + "::desc       +=       \""
-                  + desc << "\"\n";
-        }
     }
 
     ts << "\n# Issue\n";
 
     for(int i = 0; i < IssueTable_t->rowCount(); i++){
 
-        QStringList list = IssueTable_t->item(i, 1)->text().split("\n");
-
-        for (auto& issue : list){
-            ts << IssueTable_t->item(i, 0)->text() + "::issue       +=       \""
-                  + issue << "\"\n";
-        }
+         ts << IssueTable_t->item(i, 0)->text() + "::issue       +=       \""
+                  + IssueTable_t->item(i, 1)->text() << "\"\n";
     }
 
     ts << "\n# Reference URLs\n";
 
     for(int i = 0; i < RefTable_t->rowCount(); i++){
 
-        QStringList list = RefTable_t->item(i, 1)->text().split("\n");
-
-        for (auto& url : list){
-            ts << RefTable_t->item(i, 0)->text() + "::refURLs       +=       \""
-                  + url << "\"\n";
-        }
+        ts << RefTable_t->item(i, 0)->text() + "::refURLs       +=       \""
+                  + RefTable_t->item(i, 1)->text() << "\"\n";
 
     }
 
@@ -1249,7 +1355,9 @@ s_ptr<Scproj> MainWindow::readSCProjFile(const QString &path){
 
         QString line = scprojFile.readLine();
 
-        QRegularExpression sepRe("DivBySeparator:\\s*\"(?<sep>.*)\"");
+        QRegularExpression sepRe("DivBySeparator:\\s*"              // keyword
+                                 "\"(?<sep>.*)\""                   // separator
+        );
 
         auto sepMatch = sepRe.match(line, 0,
                                       QRegularExpression::NormalMatch);
@@ -1260,7 +1368,9 @@ s_ptr<Scproj> MainWindow::readSCProjFile(const QString &path){
             result->style = CommentStyle::DivBySeparator;
         }
 
-        QRegularExpression endTagRe("DivByStartEndTag_t:\\s*\"(?<tag>.*)\"");
+        QRegularExpression endTagRe("DivByStartEndTag_t:\\s*"       // keyword
+                                    "\"(?<tag>.*)\""                // end tag
+        );
 
         auto tagMatch = endTagRe.match(line, 0,
                                       QRegularExpression::NormalMatch);
@@ -1271,7 +1381,8 @@ s_ptr<Scproj> MainWindow::readSCProjFile(const QString &path){
             result->style = CommentStyle::DivByStartEndTag;
         }
 
-        QRegularExpression workedFileRe(":\\s*\"(?<files>.*)\"");
+        QRegularExpression workedFileRe(":\\s*"
+                                        "\"(?<files>.*)\"");
 
         auto fileMatch = workedFileRe.match(line, 0,
                                       QRegularExpression::NormalMatch);
@@ -1466,6 +1577,7 @@ void MainWindow::prependComment(FileInfo fileInfo){
 void MainWindow::processFlag(QTextStream& ts, Flag& flag, bool previewMode){
 
     QString key = flag.type.key;
+
     key.replace("_", " ");
 
     if(key.trimmed() == "" || key == nullptr){
@@ -1582,11 +1694,14 @@ s_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const 
             }
 
             if(fName == fileInfo.fileName){
-                *ret +=
-                        Separator_t + "   " +
-                        QString::number(++hits) + ". " +
-                        tbl->item(i, 1)->text()
-                        + "\n";
+                QStringList list = tbl->item(i, 1)->text().split("\n");
+
+                for(auto& line : list){
+                    *ret +=
+                            Separator_t + "   " +
+                            QString::number(++hits) + ". " +
+                            line + "\n";
+                }
             }
         }
     }
@@ -1601,10 +1716,14 @@ s_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const 
             }
 
             if(fName == fileInfo.fileName){
-                *ret +=
-                        Separator_t + "   " +
-                        tbl->item(i, 1)->text()
-                        + "\n";
+
+                QStringList list = tbl->item(i, 1)->text().split("\n");
+
+                for(auto& line : list){
+                    *ret +=
+                            Separator_t + "   " +
+                            line + "\n";
+                }
             }
         }
     }

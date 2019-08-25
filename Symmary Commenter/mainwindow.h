@@ -211,7 +211,11 @@ private:
     char*                                           programPath;
     char*                                           execPath;
 
+
+    bool                        eventFilter         (QObject*, QEvent*) override;
+
     // init, set program
+    void                        setTables           ();
     void                        setToolbar          ();
     void                        applyPalette        (QPalette& palete);
 
