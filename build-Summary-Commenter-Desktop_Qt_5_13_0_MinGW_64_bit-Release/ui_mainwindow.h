@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFrame>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
@@ -65,8 +66,7 @@ public:
     QWidget *SettingTab;
     QHBoxLayout *horizontalLayout_13;
     QGroupBox *groupBox;
-    QHBoxLayout *horizontalLayout_3;
-    QVBoxLayout *verticalLayout;
+    QGridLayout *gridLayout;
     QHBoxLayout *ExtensionL;
     QLabel *extensionLbl;
     QSpacerItem *spacer1;
@@ -75,10 +75,6 @@ public:
     QLabel *pathLbl;
     QSpacerItem *spacer2;
     QLineEdit *pathEdit;
-    QHBoxLayout *AuthorL;
-    QLabel *authorLbl;
-    QSpacerItem *spacer3;
-    QLineEdit *authorEdit;
     QHBoxLayout *SeparatorL;
     QLabel *separatorLbl;
     QSpacerItem *spacer4;
@@ -98,7 +94,16 @@ public:
     QLabel *subDivLbl;
     QPlainTextEdit *subDivEdit;
     QFrame *line;
-    QVBoxLayout *verticalLayout_6;
+    QGroupBox *groupBox_2;
+    QGridLayout *gridLayout_2;
+    QHBoxLayout *horizontalLayout_2;
+    QLabel *authorLbl;
+    QSpacerItem *spacer3;
+    QLineEdit *authorEdit;
+    QHBoxLayout *TelephoneL;
+    QLabel *telepLbl;
+    QSpacerItem *spacer8;
+    QLineEdit *telepEdit;
     QHBoxLayout *GithubL;
     QLabel *githubLbl;
     QSpacerItem *spacer1_4;
@@ -115,10 +120,6 @@ public:
     QLabel *emailLbl;
     QSpacerItem *spacer7;
     QLineEdit *emailEdit;
-    QHBoxLayout *TelephoneL;
-    QLabel *telepLbl;
-    QSpacerItem *spacer8;
-    QLineEdit *telepEdit;
     QHBoxLayout *MemoL;
     QLabel *memoLbl;
     QTextEdit *memoEdit;
@@ -262,13 +263,10 @@ public:
         horizontalLayout_13->setObjectName(QString::fromUtf8("horizontalLayout_13"));
         groupBox = new QGroupBox(SettingTab);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        horizontalLayout_3 = new QHBoxLayout(groupBox);
-        horizontalLayout_3->setSpacing(6);
-        horizontalLayout_3->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
-        verticalLayout = new QVBoxLayout();
-        verticalLayout->setSpacing(6);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        gridLayout = new QGridLayout(groupBox);
+        gridLayout->setSpacing(6);
+        gridLayout->setContentsMargins(11, 11, 11, 11);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         ExtensionL = new QHBoxLayout();
         ExtensionL->setSpacing(6);
         ExtensionL->setObjectName(QString::fromUtf8("ExtensionL"));
@@ -289,7 +287,7 @@ public:
         ExtensionL->addWidget(extensionEdit);
 
 
-        verticalLayout->addLayout(ExtensionL);
+        gridLayout->addLayout(ExtensionL, 0, 0, 1, 1);
 
         PathL = new QHBoxLayout();
         PathL->setSpacing(6);
@@ -311,29 +309,7 @@ public:
         PathL->addWidget(pathEdit);
 
 
-        verticalLayout->addLayout(PathL);
-
-        AuthorL = new QHBoxLayout();
-        AuthorL->setSpacing(6);
-        AuthorL->setObjectName(QString::fromUtf8("AuthorL"));
-        authorLbl = new QLabel(groupBox);
-        authorLbl->setObjectName(QString::fromUtf8("authorLbl"));
-
-        AuthorL->addWidget(authorLbl);
-
-        spacer3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        AuthorL->addItem(spacer3);
-
-        authorEdit = new QLineEdit(groupBox);
-        authorEdit->setObjectName(QString::fromUtf8("authorEdit"));
-        authorEdit->setMinimumSize(QSize(200, 0));
-        authorEdit->setMaximumSize(QSize(200, 16777215));
-
-        AuthorL->addWidget(authorEdit);
-
-
-        verticalLayout->addLayout(AuthorL);
+        gridLayout->addLayout(PathL, 1, 0, 1, 1);
 
         SeparatorL = new QHBoxLayout();
         SeparatorL->setSpacing(6);
@@ -355,7 +331,7 @@ public:
         SeparatorL->addWidget(separatorEdit);
 
 
-        verticalLayout->addLayout(SeparatorL);
+        gridLayout->addLayout(SeparatorL, 2, 0, 1, 1);
 
         StartTagL = new QHBoxLayout();
         StartTagL->setSpacing(6);
@@ -377,7 +353,7 @@ public:
         StartTagL->addWidget(sTagEdit);
 
 
-        verticalLayout->addLayout(StartTagL);
+        gridLayout->addLayout(StartTagL, 3, 0, 1, 1);
 
         EndTagL = new QHBoxLayout();
         EndTagL->setSpacing(6);
@@ -399,7 +375,7 @@ public:
         EndTagL->addWidget(eTagEdit);
 
 
-        verticalLayout->addLayout(EndTagL);
+        gridLayout->addLayout(EndTagL, 4, 0, 1, 1);
 
         SupDivLineL = new QHBoxLayout();
         SupDivLineL->setSpacing(6);
@@ -415,7 +391,7 @@ public:
         SupDivLineL->addWidget(supDivEdit);
 
 
-        verticalLayout->addLayout(SupDivLineL);
+        gridLayout->addLayout(SupDivLineL, 5, 0, 1, 1);
 
         SubDivLineL = new QHBoxLayout();
         SubDivLineL->setSpacing(6);
@@ -431,115 +407,52 @@ public:
         SubDivLineL->addWidget(subDivEdit);
 
 
-        verticalLayout->addLayout(SubDivLineL);
+        gridLayout->addLayout(SubDivLineL, 6, 0, 1, 1);
 
 
-        horizontalLayout_3->addLayout(verticalLayout);
+        horizontalLayout_13->addWidget(groupBox);
 
-        line = new QFrame(groupBox);
+        line = new QFrame(SettingTab);
         line->setObjectName(QString::fromUtf8("line"));
         line->setFrameShadow(QFrame::Raised);
         line->setLineWidth(1);
         line->setMidLineWidth(0);
         line->setFrameShape(QFrame::VLine);
 
-        horizontalLayout_3->addWidget(line);
+        horizontalLayout_13->addWidget(line);
 
-        verticalLayout_6 = new QVBoxLayout();
-        verticalLayout_6->setSpacing(6);
-        verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
-        GithubL = new QHBoxLayout();
-        GithubL->setSpacing(6);
-        GithubL->setObjectName(QString::fromUtf8("GithubL"));
-        githubLbl = new QLabel(groupBox);
-        githubLbl->setObjectName(QString::fromUtf8("githubLbl"));
+        groupBox_2 = new QGroupBox(SettingTab);
+        groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
+        gridLayout_2 = new QGridLayout(groupBox_2);
+        gridLayout_2->setSpacing(6);
+        gridLayout_2->setContentsMargins(11, 11, 11, 11);
+        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        authorLbl = new QLabel(groupBox_2);
+        authorLbl->setObjectName(QString::fromUtf8("authorLbl"));
 
-        GithubL->addWidget(githubLbl);
+        horizontalLayout_2->addWidget(authorLbl);
 
-        spacer1_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        spacer3 = new QSpacerItem(37, 17, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        GithubL->addItem(spacer1_4);
+        horizontalLayout_2->addItem(spacer3);
 
-        githubEdit = new QLineEdit(groupBox);
-        githubEdit->setObjectName(QString::fromUtf8("githubEdit"));
-        githubEdit->setMinimumSize(QSize(200, 0));
-        githubEdit->setMaximumSize(QSize(200, 16777215));
+        authorEdit = new QLineEdit(groupBox_2);
+        authorEdit->setObjectName(QString::fromUtf8("authorEdit"));
+        authorEdit->setMinimumSize(QSize(200, 0));
+        authorEdit->setMaximumSize(QSize(200, 16777215));
 
-        GithubL->addWidget(githubEdit);
-
-
-        verticalLayout_6->addLayout(GithubL);
-
-        TeamL = new QHBoxLayout();
-        TeamL->setSpacing(6);
-        TeamL->setObjectName(QString::fromUtf8("TeamL"));
-        teamLbl = new QLabel(groupBox);
-        teamLbl->setObjectName(QString::fromUtf8("teamLbl"));
-
-        TeamL->addWidget(teamLbl);
-
-        spacer1_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        TeamL->addItem(spacer1_5);
-
-        teamEdit = new QLineEdit(groupBox);
-        teamEdit->setObjectName(QString::fromUtf8("teamEdit"));
-        teamEdit->setMinimumSize(QSize(200, 0));
-        teamEdit->setMaximumSize(QSize(200, 16777215));
-
-        TeamL->addWidget(teamEdit);
+        horizontalLayout_2->addWidget(authorEdit);
 
 
-        verticalLayout_6->addLayout(TeamL);
-
-        ProjectNameL = new QHBoxLayout();
-        ProjectNameL->setSpacing(6);
-        ProjectNameL->setObjectName(QString::fromUtf8("ProjectNameL"));
-        projectNameLbl = new QLabel(groupBox);
-        projectNameLbl->setObjectName(QString::fromUtf8("projectNameLbl"));
-
-        ProjectNameL->addWidget(projectNameLbl);
-
-        spacer1_8 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        ProjectNameL->addItem(spacer1_8);
-
-        projectNameEdit = new QLineEdit(groupBox);
-        projectNameEdit->setObjectName(QString::fromUtf8("projectNameEdit"));
-        projectNameEdit->setMinimumSize(QSize(200, 0));
-        projectNameEdit->setMaximumSize(QSize(200, 16777215));
-
-        ProjectNameL->addWidget(projectNameEdit);
-
-
-        verticalLayout_6->addLayout(ProjectNameL);
-
-        EmailL = new QHBoxLayout();
-        EmailL->setSpacing(6);
-        EmailL->setObjectName(QString::fromUtf8("EmailL"));
-        emailLbl = new QLabel(groupBox);
-        emailLbl->setObjectName(QString::fromUtf8("emailLbl"));
-
-        EmailL->addWidget(emailLbl);
-
-        spacer7 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        EmailL->addItem(spacer7);
-
-        emailEdit = new QLineEdit(groupBox);
-        emailEdit->setObjectName(QString::fromUtf8("emailEdit"));
-        emailEdit->setMinimumSize(QSize(200, 0));
-        emailEdit->setMaximumSize(QSize(200, 16777215));
-
-        EmailL->addWidget(emailEdit);
-
-
-        verticalLayout_6->addLayout(EmailL);
+        gridLayout_2->addLayout(horizontalLayout_2, 0, 0, 1, 1);
 
         TelephoneL = new QHBoxLayout();
         TelephoneL->setSpacing(6);
         TelephoneL->setObjectName(QString::fromUtf8("TelephoneL"));
-        telepLbl = new QLabel(groupBox);
+        telepLbl = new QLabel(groupBox_2);
         telepLbl->setObjectName(QString::fromUtf8("telepLbl"));
 
         TelephoneL->addWidget(telepLbl);
@@ -548,7 +461,7 @@ public:
 
         TelephoneL->addItem(spacer8);
 
-        telepEdit = new QLineEdit(groupBox);
+        telepEdit = new QLineEdit(groupBox_2);
         telepEdit->setObjectName(QString::fromUtf8("telepEdit"));
         telepEdit->setMinimumSize(QSize(200, 0));
         telepEdit->setMaximumSize(QSize(200, 16777215));
@@ -556,29 +469,114 @@ public:
         TelephoneL->addWidget(telepEdit);
 
 
-        verticalLayout_6->addLayout(TelephoneL);
+        gridLayout_2->addLayout(TelephoneL, 1, 0, 1, 1);
+
+        GithubL = new QHBoxLayout();
+        GithubL->setSpacing(6);
+        GithubL->setObjectName(QString::fromUtf8("GithubL"));
+        githubLbl = new QLabel(groupBox_2);
+        githubLbl->setObjectName(QString::fromUtf8("githubLbl"));
+
+        GithubL->addWidget(githubLbl);
+
+        spacer1_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        GithubL->addItem(spacer1_4);
+
+        githubEdit = new QLineEdit(groupBox_2);
+        githubEdit->setObjectName(QString::fromUtf8("githubEdit"));
+        githubEdit->setMinimumSize(QSize(200, 0));
+        githubEdit->setMaximumSize(QSize(200, 16777215));
+
+        GithubL->addWidget(githubEdit);
+
+
+        gridLayout_2->addLayout(GithubL, 2, 0, 1, 1);
+
+        TeamL = new QHBoxLayout();
+        TeamL->setSpacing(6);
+        TeamL->setObjectName(QString::fromUtf8("TeamL"));
+        teamLbl = new QLabel(groupBox_2);
+        teamLbl->setObjectName(QString::fromUtf8("teamLbl"));
+
+        TeamL->addWidget(teamLbl);
+
+        spacer1_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        TeamL->addItem(spacer1_5);
+
+        teamEdit = new QLineEdit(groupBox_2);
+        teamEdit->setObjectName(QString::fromUtf8("teamEdit"));
+        teamEdit->setMinimumSize(QSize(200, 0));
+        teamEdit->setMaximumSize(QSize(200, 16777215));
+
+        TeamL->addWidget(teamEdit);
+
+
+        gridLayout_2->addLayout(TeamL, 3, 0, 1, 1);
+
+        ProjectNameL = new QHBoxLayout();
+        ProjectNameL->setSpacing(6);
+        ProjectNameL->setObjectName(QString::fromUtf8("ProjectNameL"));
+        projectNameLbl = new QLabel(groupBox_2);
+        projectNameLbl->setObjectName(QString::fromUtf8("projectNameLbl"));
+
+        ProjectNameL->addWidget(projectNameLbl);
+
+        spacer1_8 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        ProjectNameL->addItem(spacer1_8);
+
+        projectNameEdit = new QLineEdit(groupBox_2);
+        projectNameEdit->setObjectName(QString::fromUtf8("projectNameEdit"));
+        projectNameEdit->setMinimumSize(QSize(200, 0));
+        projectNameEdit->setMaximumSize(QSize(200, 16777215));
+
+        ProjectNameL->addWidget(projectNameEdit);
+
+
+        gridLayout_2->addLayout(ProjectNameL, 4, 0, 1, 1);
+
+        EmailL = new QHBoxLayout();
+        EmailL->setSpacing(6);
+        EmailL->setObjectName(QString::fromUtf8("EmailL"));
+        emailLbl = new QLabel(groupBox_2);
+        emailLbl->setObjectName(QString::fromUtf8("emailLbl"));
+
+        EmailL->addWidget(emailLbl);
+
+        spacer7 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        EmailL->addItem(spacer7);
+
+        emailEdit = new QLineEdit(groupBox_2);
+        emailEdit->setObjectName(QString::fromUtf8("emailEdit"));
+        emailEdit->setMinimumSize(QSize(200, 0));
+        emailEdit->setMaximumSize(QSize(200, 16777215));
+
+        EmailL->addWidget(emailEdit);
+
+
+        gridLayout_2->addLayout(EmailL, 5, 0, 1, 1);
 
         MemoL = new QHBoxLayout();
         MemoL->setSpacing(6);
         MemoL->setObjectName(QString::fromUtf8("MemoL"));
-        memoLbl = new QLabel(groupBox);
+        memoLbl = new QLabel(groupBox_2);
         memoLbl->setObjectName(QString::fromUtf8("memoLbl"));
 
         MemoL->addWidget(memoLbl);
 
-        memoEdit = new QTextEdit(groupBox);
+        memoEdit = new QTextEdit(groupBox_2);
         memoEdit->setObjectName(QString::fromUtf8("memoEdit"));
 
         MemoL->addWidget(memoEdit);
 
 
-        verticalLayout_6->addLayout(MemoL);
+        gridLayout_2->addLayout(MemoL, 6, 0, 1, 1);
 
 
-        horizontalLayout_3->addLayout(verticalLayout_6);
-
-
-        horizontalLayout_13->addWidget(groupBox);
+        horizontalLayout_13->addWidget(groupBox_2);
 
         tabWidget->addTab(SettingTab, QString());
         FlagTab = new QWidget();
@@ -966,10 +964,9 @@ public:
         actionNew->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+N", nullptr));
 #endif // QT_CONFIG(shortcut)
         actionrecent5->setText(QCoreApplication::translate("MainWindow", "recent5", nullptr));
-        groupBox->setTitle(QCoreApplication::translate("MainWindow", "Settings", nullptr));
+        groupBox->setTitle(QCoreApplication::translate("MainWindow", "Project Settings", nullptr));
         extensionLbl->setText(QCoreApplication::translate("MainWindow", "Extension", nullptr));
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));
-        authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));
         separatorLbl->setText(QCoreApplication::translate("MainWindow", "Separator", nullptr));
         separatorEdit->setText(QCoreApplication::translate("MainWindow", "// @ ", nullptr));
         sTagLbl->setText(QCoreApplication::translate("MainWindow", "Start Tag", nullptr));
@@ -979,11 +976,13 @@ public:
         supDivEdit->setPlainText(QCoreApplication::translate("MainWindow", "// ///////////////////////", nullptr));
         subDivLbl->setText(QCoreApplication::translate("MainWindow", "Sub Div Line", nullptr));
         subDivEdit->setPlainText(QCoreApplication::translate("MainWindow", "// ///////////////////////", nullptr));
+        groupBox_2->setTitle(QCoreApplication::translate("MainWindow", "Common Info", nullptr));
+        authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));
+        telepLbl->setText(QCoreApplication::translate("MainWindow", "Telephone", nullptr));
         githubLbl->setText(QCoreApplication::translate("MainWindow", "Github Account", nullptr));
         teamLbl->setText(QCoreApplication::translate("MainWindow", "Team", nullptr));
         projectNameLbl->setText(QCoreApplication::translate("MainWindow", "Project Name", nullptr));
         emailLbl->setText(QCoreApplication::translate("MainWindow", "Email", nullptr));
-        telepLbl->setText(QCoreApplication::translate("MainWindow", "Telephone", nullptr));
         memoLbl->setText(QCoreApplication::translate("MainWindow", "Memo", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(SettingTab), QCoreApplication::translate("MainWindow", "Global", nullptr));
         QTableWidgetItem *___qtablewidgetitem = flagTblWidget->horizontalHeaderItem(0);

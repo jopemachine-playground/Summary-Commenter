@@ -432,15 +432,15 @@ void MainWindow::on_actionSave_md_triggered()
 
     ts << "### Description\n";
 
-    makeMDForm(ts, DescTable_t,     "Description");
+    exportTblDataToMD(ts, DescTable_t,     "Description");
 
     ts << "\n### Issue\n";
 
-    makeMDForm(ts, IssueTable_t,    "Issue");
+    exportTblDataToMD(ts, IssueTable_t,    "Issue");
 
     ts << "\n### Reference\n";
 
-    makeMDForm(ts, RefTable_t,      "Reference");
+    exportTblDataToMD(ts, RefTable_t,      "Reference");
 
     md.close();
 
@@ -535,6 +535,10 @@ void MainWindow::on_FlagDeleteBtn_clicked()
 {
     removeSelectedItems(FlagTable_t);
 }
+
+// ==============================+===============================================================
+// Private Methods
+// Init, set program
 
 void MainWindow::setToolbar()
 {
@@ -798,7 +802,7 @@ void MainWindow::removeSelectedItems(QTableWidget* tbl){
 
 // ==============================+===============================================================
 // Private Methods
-// File save and load
+// Handle SCPS file
 
 void MainWindow::setSCPSFile(const QString& settingFilePath){
 
@@ -1020,6 +1024,7 @@ void MainWindow::saveSCPSFile(const QString& path){
     ts << "global.Github_Account   =  \"" <<   GithubAcc_t      << "\"\n";
     ts << "global.Team             =  \"" <<   Team_t           << "\"\n";
     ts << "global.Memo             =  \"" <<   memo             << "\"\n";
+    ts << "global.Project_Name     =  \"" <<   ProjectName_t    << "\"\n";
 
     ts << "\n# Desc\n";
 
@@ -1132,6 +1137,10 @@ void MainWindow::addGlobalVars(const QString& key, const QString& value){
         ui->eTagEdit    ->setText(value);
         return;
     }
+    if(key == "Project_Name"){
+       ui->projectNameEdit->setText(value);
+       return;
+    }
 
     qDebug() << "wrong Info included in addGlobalVars, value: " << key;
 }
@@ -1158,57 +1167,9 @@ void MainWindow::setSettingFlags(const QString &flagName, bool flag)
     }
 }
 
-void MainWindow::makeMDForm(QTextStream& ts, const QTableWidget *tbl, const QString &tblName)
-{
-
-    ts << "| File Name | " + tblName + " | \n";
-    ts << "|---|---|          \n";
-
-    bool prevSameKey = false;
-    bool nextSameKey = false;
-
-    for(int i = 0; i < tbl->rowCount(); i++){
-        // 다음 오는 키가 동일한 값인지 판단
-        if(i == tbl->rowCount() - 1){
-            nextSameKey = false;
-        }
-        else{
-            if(tbl->item(i, 0)->text() == tbl->item(i + 1, 0)->text()){
-                nextSameKey = true;
-            }
-            else{
-                nextSameKey = false;
-            }
-        }
-
-        // 이전의 키가 동일한 키인지 판단
-        if(i == 0){
-            prevSameKey = false;
-        }
-        else{
-            if(tbl->item(i, 0)->text() == tbl->item(i - 1, 0)->text()){
-                prevSameKey = true;
-            }
-            else{
-                prevSameKey = false;
-            }
-        }
-
-        if     (nextSameKey && !prevSameKey){
-            ts << "| " + tbl->item(i, 0)->text() + " | " + tbl->item(i, 1)->text() +    " ";
-        }
-        else if(nextSameKey && prevSameKey){
-            ts <<        tbl->item(i, 1)->text()                                   +    " ";
-        }
-        else if(!nextSameKey && prevSameKey){
-            ts <<        tbl->item(i, 1)->text()                                   + " |\n";
-        }
-        else{
-            ts << "| " + tbl->item(i, 0)->text() + " | " + tbl->item(i, 1)->text() + " |\n";
-        }
-    }
-
-}
+// ==============================+===============================================================
+// Private Methods
+// Handle SClately file
 
 bool MainWindow::openRecentSCPS()
 {
@@ -1225,6 +1186,11 @@ bool MainWindow::openRecentSCPS()
         QStringList list = fileContent.split(",");
 
         latest = list[0];
+
+        for(auto& path : list){
+            if(path == "") continue;
+            pathQue->push_back( path );
+        }
 
         applyRecentBar(list);
 
@@ -1259,12 +1225,11 @@ void MainWindow::applyRecentBar(QStringList &list)
             action->setText( list[index++] );
         }
     }
-
-    for(auto& path : list){
-        if(path == "") continue;
-        pathQue->push_back( path );
-    }
 }
+
+// ==============================+===============================================================
+// Private Methods
+// Handle SCProj file
 
 s_ptr<Scproj> MainWindow::readSCProjFile(const QString &path){
 
@@ -1359,6 +1324,63 @@ void MainWindow::writeSCProjFile(const QString &path, queue<FileInfo>& workedFil
 
     scprojFile.close();
 }
+
+// ==============================+===============================================================
+// Private Methods
+// Handle Other Files
+
+void MainWindow::exportTblDataToMD(QTextStream& ts, const QTableWidget *tbl, const QString &tblName)
+{
+
+    ts << "| File Name | " + tblName + " | \n";
+    ts << "|---|---|          \n";
+
+    bool prevSameKey = false;
+    bool nextSameKey = false;
+
+    for(int i = 0; i < tbl->rowCount(); i++){
+        // 다음 오는 키가 동일한 값인지 판단
+        if(i == tbl->rowCount() - 1){
+            nextSameKey = false;
+        }
+        else{
+            if(tbl->item(i, 0)->text() == tbl->item(i + 1, 0)->text()){
+                nextSameKey = true;
+            }
+            else{
+                nextSameKey = false;
+            }
+        }
+
+        // 이전의 키가 동일한 키인지 판단
+        if(i == 0){
+            prevSameKey = false;
+        }
+        else{
+            if(tbl->item(i, 0)->text() == tbl->item(i - 1, 0)->text()){
+                prevSameKey = true;
+            }
+            else{
+                prevSameKey = false;
+            }
+        }
+
+        if     (nextSameKey && !prevSameKey){
+            ts << "| " + tbl->item(i, 0)->text() + " | " + tbl->item(i, 1)->text() +    " ";
+        }
+        else if(nextSameKey && prevSameKey){
+            ts <<        tbl->item(i, 1)->text()                                   +    " ";
+        }
+        else if(!nextSameKey && prevSameKey){
+            ts <<        tbl->item(i, 1)->text()                                   + " |\n";
+        }
+        else{
+            ts << "| " + tbl->item(i, 0)->text() + " | " + tbl->item(i, 1)->text() + " |\n";
+        }
+    }
+
+}
+
 
 
 // ==============================+===============================================================
@@ -1528,6 +1550,7 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
         else if(key == "Team")           value = Team_t;
         else if(key == "Memo")           value = memo;
         else if(key == "File_Name")      value = fileInfo.fileName;
+        else if(key == "Project_Name")   value = ProjectName_t;
 
         Flag flag =
         {
@@ -1627,11 +1650,15 @@ void MainWindow::removeComment(QStringList &strList, const QString& div, const C
 
                     auto isEndPoint =
                             [&](QString line) -> bool {
-                        if(style == CommentStyle::DivByStartEndTag){
+                        if      (style == CommentStyle::DivByStartEndTag){
                             return line.left(div.length()) == div;
                         }
-                        else {
+                        else if (style == CommentStyle::DivBySeparator){
                             return line.left(div.length()) != div;
+                        }
+                        else{
+                            qDebug() << "problem occured in removeComment";
+                            return true;
                         }
                     };
 

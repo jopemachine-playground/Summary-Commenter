@@ -23,6 +23,7 @@
 #define GithubAcc_t             ui->githubEdit->text()
 #define Team_t                  ui->teamEdit->text()
 #define Memo_t                  ui->memoEdit->toPlainText()
+#define ProjectName_t           ui->projectNameEdit->text()
 
 #define IsDescNumbering_t       ui->actionDesc_Numbering->isChecked()
 #define IsIssueNumbering_t      ui->actionIssue_Numbering->isChecked()

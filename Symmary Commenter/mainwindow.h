@@ -61,6 +61,7 @@ typedef struct{
     void    init(){
                 int hit = 0;
                 map.insert({hit++,  {"Sup_Div_Line",   false}});
+                map.insert({hit++,  {"Project_Name",   false}});
                 map.insert({hit++,  {"File_Name",      false}});
                 map.insert({hit++,  {"Author",         false}});
                 map.insert({hit++,  {"Team",           false}});
@@ -163,6 +164,8 @@ private slots:
 
     void on_actionrecent4_triggered();
 
+    void on_actionrecent5_triggered();
+
     void on_descSortBtn_clicked();
 
     void on_issueSortBtn_clicked();
@@ -195,8 +198,6 @@ private slots:
 
     void on_FlagDeleteBtn_clicked();
 
-    void on_actionrecent5_triggered();
-
 private:
 
     // member vars
@@ -210,6 +211,7 @@ private:
     char*                                           programPath;
     char*                                           execPath;
 
+    // init, set program
     void                        setToolbar          ();
     void                        applyPalette        (QPalette& palete);
 
@@ -231,22 +233,22 @@ private:
     void                        insertItem          (QTableWidget* tbl, bool keyEditable, const QString& key, const QString& value);
     void                        removeSelectedItems (QTableWidget* tbl);
 
-    // * file save and load
-
-    // SCPS
+    // handle SCPS file
     void                        setSCPSFile         (const QString& path);
     void                        saveSCPSFile        (const QString& path);
     void                        addGlobalVars       (const QString& key, const QString& value);
     void                        setSettingFlags     (const QString& flagName, bool flag);
-    void                        makeMDForm          (QTextStream& ts, const QTableWidget* tbl, const QString& tblName);
 
-    // SClately
+    // handle SClately file
     bool                        openRecentSCPS      ();
     void                        applyRecentBar      (QStringList& list);
 
-    // SCProj
+    // handle SCProj file
     s_ptr<Scproj>               readSCProjFile      (const QString& path);
     void                        writeSCProjFile     (const QString &path, queue<FileInfo>&);
+
+    // handle other data I/O
+    void                        exportTblDataToMD   (QTextStream& ts, const QTableWidget* tbl, const QString& tblName);
 
     // directory traversal recursively and get all file info (except link file)
     s_ptr<queue<FileInfo>>      getAllTargetFiles   (const QString& dirName);

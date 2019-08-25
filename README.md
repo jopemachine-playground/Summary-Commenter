@@ -83,7 +83,7 @@ constant.h::urls        +=		https://urlexample2.com
 DivByStartEndTag_t: "-->"
 
 # Worked_Files
-: "Jekyll-Script.html,Comment.php,CommentExample.html,CommentManageService.php,index.html,AddComment.php,Comment.php,PopularPosting.php,Positiveness.php,PostsSortingByCommentsNumber.php,RecentComments.php,CommentPageLogin.php,CommentPageLogout.php,DeleteComment.php,DeleteService.php,EditComment.php,ID_DuplicateCheck.php,MySQLConection.php,RegisterURL.php,ShowHomePage.php,SignInAction.php,SignOutAction.php,SignUpAction.php,URLVerification.php,UserEditAction.php,UserModalBox.php,SignIn.php,SignUp.html,URL-Register.php,UserEdit.php"
+: "Jekyll-Script.html,Comment.php,CommentExample.html..."
 
 ```
 
@@ -105,9 +105,8 @@ DivByStartEndTag_t: "-->"
 
 * 지정한 디렉토리 내에 중복되는 이름을 가진 파일이 없다고 가정하고 작동한다. 중복되는 이름이 있는 파일이 있는 경우, Desc, Issue 등이 파일에 제대로 추가되지 않을 수 있음.
 * 지정 디렉토리 폴더에 scproj 파일이 존재해야만 주석을 삭제하는 기능을 사용할 수 있다. 
-* 주석을 삭제하는 기능은 scproj 파일에 명시된 파일들의 맨 처음 나온 주석을 제거한다. SummaryCommenter가 추가한 주석 위에 다른 주석이 달려 있다면, SummaryCommenter가 추가한 주석이 제거되지 않을 수 있음.
-* scproj 파일을 임의로 삭제하거나 변경하면, 주석 업데이트 시 중복 주석이 추가될 수 있음
-* 디렉토리 내 모든 소스 파일 이름에 띄어쓰기 등의 공백이 없다고 가정한다. 이름에 공백이 있으면 Desc, Issue 등이 파일에 제대로 추가되지 않을 수 있음.
+* SummaryCommenter가 추가한 주석을 변경하거나, 위에 다른 주석, 코드를 추가하면 문제가 발생할 수 있음.
+* scproj 파일을 임의로 삭제하거나 변경하면, 주석 업데이트 시 중복 주석이 추가되는 등 문제 발생의 원인이 됨
 
 
 

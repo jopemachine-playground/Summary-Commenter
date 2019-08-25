@@ -56,23 +56,23 @@ QT_MOC_LITERAL(20, 455, 26), // "on_actionrecent1_triggered"
 QT_MOC_LITERAL(21, 482, 26), // "on_actionrecent2_triggered"
 QT_MOC_LITERAL(22, 509, 26), // "on_actionrecent3_triggered"
 QT_MOC_LITERAL(23, 536, 26), // "on_actionrecent4_triggered"
-QT_MOC_LITERAL(24, 563, 22), // "on_descSortBtn_clicked"
-QT_MOC_LITERAL(25, 586, 23), // "on_issueSortBtn_clicked"
-QT_MOC_LITERAL(26, 610, 27), // "on_referenceSortBtn_clicked"
-QT_MOC_LITERAL(27, 638, 24), // "on_addExcludeBtn_clicked"
-QT_MOC_LITERAL(28, 663, 23), // "on_rmExcludeBtn_clicked"
-QT_MOC_LITERAL(29, 687, 25), // "on_sortExcludeBtn_clicked"
-QT_MOC_LITERAL(30, 713, 36), // "on_actionOpen_Project_Path_tr..."
-QT_MOC_LITERAL(31, 750, 26), // "on_actionRefresh_triggered"
-QT_MOC_LITERAL(32, 777, 26), // "on_actionSave_md_triggered"
-QT_MOC_LITERAL(33, 804, 48), // "on_actionRemove_Comments_From..."
-QT_MOC_LITERAL(34, 853, 36), // "on_actionOpen_setting_file_tr..."
-QT_MOC_LITERAL(35, 890, 20), // "on_FlagUpBtn_clicked"
-QT_MOC_LITERAL(36, 911, 22), // "on_FlagDownBtn_clicked"
-QT_MOC_LITERAL(37, 934, 22), // "on_actionNew_triggered"
-QT_MOC_LITERAL(38, 957, 21), // "on_FlagAddBtn_clicked"
-QT_MOC_LITERAL(39, 979, 24), // "on_FlagDeleteBtn_clicked"
-QT_MOC_LITERAL(40, 1004, 26) // "on_actionrecent5_triggered"
+QT_MOC_LITERAL(24, 563, 26), // "on_actionrecent5_triggered"
+QT_MOC_LITERAL(25, 590, 22), // "on_descSortBtn_clicked"
+QT_MOC_LITERAL(26, 613, 23), // "on_issueSortBtn_clicked"
+QT_MOC_LITERAL(27, 637, 27), // "on_referenceSortBtn_clicked"
+QT_MOC_LITERAL(28, 665, 24), // "on_addExcludeBtn_clicked"
+QT_MOC_LITERAL(29, 690, 23), // "on_rmExcludeBtn_clicked"
+QT_MOC_LITERAL(30, 714, 25), // "on_sortExcludeBtn_clicked"
+QT_MOC_LITERAL(31, 740, 36), // "on_actionOpen_Project_Path_tr..."
+QT_MOC_LITERAL(32, 777, 26), // "on_actionRefresh_triggered"
+QT_MOC_LITERAL(33, 804, 26), // "on_actionSave_md_triggered"
+QT_MOC_LITERAL(34, 831, 48), // "on_actionRemove_Comments_From..."
+QT_MOC_LITERAL(35, 880, 36), // "on_actionOpen_setting_file_tr..."
+QT_MOC_LITERAL(36, 917, 20), // "on_FlagUpBtn_clicked"
+QT_MOC_LITERAL(37, 938, 22), // "on_FlagDownBtn_clicked"
+QT_MOC_LITERAL(38, 961, 22), // "on_actionNew_triggered"
+QT_MOC_LITERAL(39, 984, 21), // "on_FlagAddBtn_clicked"
+QT_MOC_LITERAL(40, 1006, 24) // "on_FlagDeleteBtn_clicked"
 
     },
     "MainWindow\0on_descAddBtn_clicked\0\0"
@@ -93,6 +93,7 @@ QT_MOC_LITERAL(40, 1004, 26) // "on_actionrecent5_triggered"
     "on_actionrecent2_triggered\0"
     "on_actionrecent3_triggered\0"
     "on_actionrecent4_triggered\0"
+    "on_actionrecent5_triggered\0"
     "on_descSortBtn_clicked\0on_issueSortBtn_clicked\0"
     "on_referenceSortBtn_clicked\0"
     "on_addExcludeBtn_clicked\0"
@@ -105,8 +106,7 @@ QT_MOC_LITERAL(40, 1004, 26) // "on_actionrecent5_triggered"
     "on_actionOpen_setting_file_triggered\0"
     "on_FlagUpBtn_clicked\0on_FlagDownBtn_clicked\0"
     "on_actionNew_triggered\0on_FlagAddBtn_clicked\0"
-    "on_FlagDeleteBtn_clicked\0"
-    "on_actionrecent5_triggered"
+    "on_FlagDeleteBtn_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -233,23 +233,23 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 18: _t->on_actionrecent2_triggered(); break;
         case 19: _t->on_actionrecent3_triggered(); break;
         case 20: _t->on_actionrecent4_triggered(); break;
-        case 21: _t->on_descSortBtn_clicked(); break;
-        case 22: _t->on_issueSortBtn_clicked(); break;
-        case 23: _t->on_referenceSortBtn_clicked(); break;
-        case 24: _t->on_addExcludeBtn_clicked(); break;
-        case 25: _t->on_rmExcludeBtn_clicked(); break;
-        case 26: _t->on_sortExcludeBtn_clicked(); break;
-        case 27: _t->on_actionOpen_Project_Path_triggered(); break;
-        case 28: _t->on_actionRefresh_triggered(); break;
-        case 29: _t->on_actionSave_md_triggered(); break;
-        case 30: _t->on_actionRemove_Comments_From_All_File_triggered(); break;
-        case 31: _t->on_actionOpen_setting_file_triggered(); break;
-        case 32: _t->on_FlagUpBtn_clicked(); break;
-        case 33: _t->on_FlagDownBtn_clicked(); break;
-        case 34: _t->on_actionNew_triggered(); break;
-        case 35: _t->on_FlagAddBtn_clicked(); break;
-        case 36: _t->on_FlagDeleteBtn_clicked(); break;
-        case 37: _t->on_actionrecent5_triggered(); break;
+        case 21: _t->on_actionrecent5_triggered(); break;
+        case 22: _t->on_descSortBtn_clicked(); break;
+        case 23: _t->on_issueSortBtn_clicked(); break;
+        case 24: _t->on_referenceSortBtn_clicked(); break;
+        case 25: _t->on_addExcludeBtn_clicked(); break;
+        case 26: _t->on_rmExcludeBtn_clicked(); break;
+        case 27: _t->on_sortExcludeBtn_clicked(); break;
+        case 28: _t->on_actionOpen_Project_Path_triggered(); break;
+        case 29: _t->on_actionRefresh_triggered(); break;
+        case 30: _t->on_actionSave_md_triggered(); break;
+        case 31: _t->on_actionRemove_Comments_From_All_File_triggered(); break;
+        case 32: _t->on_actionOpen_setting_file_triggered(); break;
+        case 33: _t->on_FlagUpBtn_clicked(); break;
+        case 34: _t->on_FlagDownBtn_clicked(); break;
+        case 35: _t->on_actionNew_triggered(); break;
+        case 36: _t->on_FlagAddBtn_clicked(); break;
+        case 37: _t->on_FlagDeleteBtn_clicked(); break;
         default: ;
         }
     }
