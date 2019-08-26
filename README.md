@@ -17,7 +17,7 @@
 
 > Windows 10,  64 bit
 >
-> Qt 5.12.4 (MSVC 2017, 32bit)
+> Desktop Qt 5.13.0, MinGW 64-bit
 >
 > Qt Creator 4.9.2
 
@@ -107,6 +107,7 @@ DivByStartEndTag_t: "-->"
 * 지정 디렉토리 폴더에 scproj 파일이 존재해야만 주석을 삭제하는 기능을 사용할 수 있다. 
 * SummaryCommenter가 추가한 주석을 변경하거나, 위에 다른 주석, 코드를 추가하면 문제가 발생할 수 있음.
 * scproj 파일을 임의로 삭제하거나 변경하면, 주석 업데이트 시 중복 주석이 추가되는 등 문제 발생의 원인이 됨
+* Desc, Issue, Ref 탭 Value값에 "" 가 들어 있을 때 버그 발생.
 
 
 

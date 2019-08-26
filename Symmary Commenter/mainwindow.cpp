@@ -556,14 +556,17 @@ void MainWindow::setTables()
     DescTable_t->horizontalHeader()->setStretchLastSection(true);
     DescTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
     DescTable_t->verticalHeader()->setDefaultSectionSize(75);
+    DescTable_t->setColumnWidth(0, 250);
 
     IssueTable_t->horizontalHeader()->setStretchLastSection(true);
     IssueTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
     IssueTable_t->verticalHeader()->setDefaultSectionSize(75);
+    IssueTable_t->setColumnWidth(0, 250);
 
     RefTable_t->horizontalHeader()->setStretchLastSection(true);
     RefTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
     RefTable_t->verticalHeader()->setDefaultSectionSize(75);
+    RefTable_t->setColumnWidth(0, 250);
 
     ExcludeTable_t->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ExcludeTable_t->horizontalHeader()->setStretchLastSection(true);
@@ -572,6 +575,7 @@ void MainWindow::setTables()
 
 void MainWindow::setToolbar()
 {
+    // Exclusive한 라디오 버튼 그룹을 만들기 위한 메서드
     QActionGroup* modeGroup = new QActionGroup(ui->menuComments_style);
     modeGroup->setExclusive(true);
 
@@ -807,17 +811,16 @@ void MainWindow::insertMultiLineItem(QTableWidget *tbl, bool keyEditable, const 
 
     // key, value
     auto keyColumn      = new QTableWidgetItem(key);
-    //auto valueColumn    = new QTableWidgetItem();
 
     if(!keyEditable){
         keyColumn->setFlags(keyColumn->flags() & ~Qt::ItemIsEditable);
     }
 
     tbl->setItem(row, 0, keyColumn);
-    //tbl->setItem(row, 1, valueColumn);
 
     QPlainTextEdit *edit = new QPlainTextEdit();
     edit->setPlainText(value);
+    edit->setFrameStyle(QFrame::NoFrame);
     tbl->setCellWidget(row, 1, edit);
 }
 
@@ -1113,7 +1116,7 @@ void MainWindow::saveSCPSFile(const QString& path){
 
     ts << "setting.descNumbering        =   "         + QString::number(IsDescNumbering_t)       + "\n";
     ts << "setting.issueNumbering       =   "         + QString::number(IsIssueNumbering_t)      + "\n";
-    ts << "setting.refURLNumbering      =   "         + QString::number(IsRefURLNumbering_t)    + "\n";
+    ts << "setting.refURLNumbering      =   "         + QString::number(IsRefURLNumbering_t)     + "\n";
     ts << "setting.recursiveTraversal   =   "         + QString::number(IsRecursiveTraversal_t)  + "\n";
     ts << "setting.divBySeparator       =   "         + QString::number(IsDivBySeparator_t)      + "\n";
     ts << "setting.divByStartEndTag     =   "         + QString::number(IsDivByStartEndTag_t)    + "\n";
@@ -1464,53 +1467,15 @@ void MainWindow::exportTblDataToMD(QTextStream& ts, const QTableWidget *tbl, con
     ts << "| File Name | " + tblName + " | \n";
     ts << "|---|---|          \n";
 
-    bool prevSameKey = false;
-    bool nextSameKey = false;
-
     for(int i = 0; i < tbl->rowCount(); i++){
-        // 다음 오는 키가 동일한 값인지 판단
-        if(i == tbl->rowCount() - 1){
-            nextSameKey = false;
-        }
-        else{
-            if(tbl->item(i, 0)->text() == tbl->item(i + 1, 0)->text()){
-                nextSameKey = true;
-            }
-            else{
-                nextSameKey = false;
-            }
-        }
 
-        // 이전의 키가 동일한 키인지 판단
-        if(i == 0){
-            prevSameKey = false;
-        }
-        else{
-            if(tbl->item(i, 0)->text() == tbl->item(i - 1, 0)->text()){
-                prevSameKey = true;
-            }
-            else{
-                prevSameKey = false;
-            }
-        }
+        auto line = static_cast<QPlainTextEdit*>(tbl->cellWidget(i, 1))->toPlainText();
 
-        if     (nextSameKey && !prevSameKey){
-            ts << "| " + tbl->item(i, 0)->text() + " | " + tbl->item(i, 1)->text() +    " ";
-        }
-        else if(nextSameKey && prevSameKey){
-            ts <<        tbl->item(i, 1)->text()                                   +    " ";
-        }
-        else if(!nextSameKey && prevSameKey){
-            ts <<        tbl->item(i, 1)->text()                                   + " |\n";
-        }
-        else{
-            ts << "| " + tbl->item(i, 0)->text() + " | " + tbl->item(i, 1)->text() + " |\n";
-        }
+        ts << "| " + tbl->item(i, 0)->text() + " | "
+              + line.replace("\n", " ") +    " |\n";
     }
 
 }
-
-
 
 // ==============================+===============================================================
 // Private Methods
@@ -1646,9 +1611,9 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
     edit    = fileInfo.lastModified.toString("yyyy-MM-dd, HH:mm:ss");
     date    = fileInfo.created     .toString("yyyy-MM-dd, HH:mm:ss");
 
-    desc    = *(makeFromTbl(DescTable_t , IsDescNumbering_t , fileInfo));
-    issue   = *(makeFromTbl(IssueTable_t, IsIssueNumbering_t, fileInfo));
-    urls    = *(makeFromTbl(RefTable_t  , true              , fileInfo));
+    desc    = *(makeFromTbl(DescTable_t , IsDescNumbering_t   , fileInfo));
+    issue   = *(makeFromTbl(IssueTable_t, IsIssueNumbering_t  , fileInfo));
+    urls    = *(makeFromTbl(RefTable_t  , IsRefURLNumbering_t , fileInfo));
 
     auto memoText   = Memo_t;
     auto memos      = memoText.split("\n");
@@ -1663,7 +1628,7 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
     int loop = static_cast<int>(flagTypeTbl->map.size());
 
     for(int i = 0; i < loop; i++){
-        \
+
         QString key = flagTypeTbl->map.at(i).key;
         QString value = "";
 

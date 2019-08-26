@@ -185,7 +185,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(810, 578);
+        MainWindow->resize(1120, 727);
         actionGithub = new QAction(MainWindow);
         actionGithub->setObjectName(QString::fromUtf8("actionGithub"));
         QIcon icon;
@@ -226,11 +226,11 @@ public:
         actionIssue_Numbering = new QAction(MainWindow);
         actionIssue_Numbering->setObjectName(QString::fromUtf8("actionIssue_Numbering"));
         actionIssue_Numbering->setCheckable(true);
-        actionIssue_Numbering->setChecked(true);
+        actionIssue_Numbering->setChecked(false);
         actionDesc_Numbering = new QAction(MainWindow);
         actionDesc_Numbering->setObjectName(QString::fromUtf8("actionDesc_Numbering"));
         actionDesc_Numbering->setCheckable(true);
-        actionDesc_Numbering->setChecked(true);
+        actionDesc_Numbering->setChecked(false);
         actionOpen_Project_Path = new QAction(MainWindow);
         actionOpen_Project_Path->setObjectName(QString::fromUtf8("actionOpen_Project_Path"));
         actionRefresh = new QAction(MainWindow);
@@ -823,6 +823,7 @@ public:
         previewTextEdit = new QPlainTextEdit(PreviewTab);
         previewTextEdit->setObjectName(QString::fromUtf8("previewTextEdit"));
         previewTextEdit->setStyleSheet(QString::fromUtf8(""));
+        previewTextEdit->setReadOnly(true);
 
         verticalLayout_3->addWidget(previewTextEdit);
 
@@ -852,7 +853,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 810, 21));
+        menuBar->setGeometry(QRect(0, 0, 1120, 21));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuOpen_Recents = new QMenu(menuFile);
@@ -910,7 +911,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
