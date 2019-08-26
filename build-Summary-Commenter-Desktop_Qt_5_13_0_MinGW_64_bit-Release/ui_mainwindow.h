@@ -129,8 +129,6 @@ public:
     QVBoxLayout *verticalLayout_8;
     QTableWidget *flagTblWidget;
     QHBoxLayout *FlagBtnL;
-    QPushButton *FlagAddBtn;
-    QPushButton *FlagDeleteBtn;
     QPushButton *FlagUpBtn;
     QPushButton *FlagDownBtn;
     QWidget *DescTab;
@@ -606,16 +604,6 @@ public:
         FlagBtnL = new QHBoxLayout();
         FlagBtnL->setSpacing(6);
         FlagBtnL->setObjectName(QString::fromUtf8("FlagBtnL"));
-        FlagAddBtn = new QPushButton(FlagTab);
-        FlagAddBtn->setObjectName(QString::fromUtf8("FlagAddBtn"));
-
-        FlagBtnL->addWidget(FlagAddBtn);
-
-        FlagDeleteBtn = new QPushButton(FlagTab);
-        FlagDeleteBtn->setObjectName(QString::fromUtf8("FlagDeleteBtn"));
-
-        FlagBtnL->addWidget(FlagDeleteBtn);
-
         FlagUpBtn = new QPushButton(FlagTab);
         FlagUpBtn->setObjectName(QString::fromUtf8("FlagUpBtn"));
 
@@ -911,7 +899,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -974,9 +962,9 @@ public:
         eTagLbl->setText(QCoreApplication::translate("MainWindow", "End Tag", nullptr));
         eTagEdit->setText(QString());
         supDivLbl->setText(QCoreApplication::translate("MainWindow", "Sup Div Line", nullptr));
-        supDivEdit->setPlainText(QCoreApplication::translate("MainWindow", "// ///////////////////////", nullptr));
+        supDivEdit->setPlainText(QCoreApplication::translate("MainWindow", "// ==============================+===============================================================", nullptr));
         subDivLbl->setText(QCoreApplication::translate("MainWindow", "Sub Div Line", nullptr));
-        subDivEdit->setPlainText(QCoreApplication::translate("MainWindow", "// ///////////////////////", nullptr));
+        subDivEdit->setPlainText(QCoreApplication::translate("MainWindow", "// ==============================+===============================================================", nullptr));
         groupBox_2->setTitle(QCoreApplication::translate("MainWindow", "Common Info", nullptr));
         authorLbl->setText(QCoreApplication::translate("MainWindow", "Author", nullptr));
         telepLbl->setText(QCoreApplication::translate("MainWindow", "Telephone", nullptr));
@@ -990,8 +978,6 @@ public:
         ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "Flag", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = flagTblWidget->horizontalHeaderItem(1);
         ___qtablewidgetitem1->setText(QCoreApplication::translate("MainWindow", "Value", nullptr));
-        FlagAddBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
-        FlagDeleteBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Delete)", nullptr));
         FlagUpBtn->setText(QCoreApplication::translate("MainWindow", "Up", nullptr));
         FlagDownBtn->setText(QCoreApplication::translate("MainWindow", "Down", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(FlagTab), QCoreApplication::translate("MainWindow", "Flag", nullptr));

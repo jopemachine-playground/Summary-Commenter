@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="SettingTab">
        <attribute name="title">
@@ -249,7 +249,7 @@
              <item>
               <widget class="QPlainTextEdit" name="supDivEdit">
                <property name="plainText">
-                <string>// ///////////////////////</string>
+                <string>// ==============================+===============================================================</string>
                </property>
               </widget>
              </item>
@@ -267,7 +267,7 @@
              <item>
               <widget class="QPlainTextEdit" name="subDivEdit">
                <property name="plainText">
-                <string>// ///////////////////////</string>
+                <string>// ==============================+===============================================================</string>
                </property>
               </widget>
              </item>
@@ -580,20 +580,6 @@
           </item>
           <item>
            <layout class="QHBoxLayout" name="FlagBtnL">
-            <item>
-             <widget class="QPushButton" name="FlagAddBtn">
-              <property name="text">
-               <string>Add (+)</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="FlagDeleteBtn">
-              <property name="text">
-               <string>Remove (Delete)</string>
-              </property>
-             </widget>
-            </item>
             <item>
              <widget class="QPushButton" name="FlagUpBtn">
               <property name="text">

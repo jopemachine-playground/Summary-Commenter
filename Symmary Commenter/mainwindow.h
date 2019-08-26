@@ -11,6 +11,7 @@
 #include <utility>
 #include <functional>
 
+#include <QDirIterator>
 #include <QMessageBox>
 #include <QMainWindow>
 #include <QDateTime>
@@ -112,7 +113,7 @@ public:
 
     void ShowMessageBox(const QMessageBox::Icon, const QString&, const QString&);
 
-    bool Open();
+    auto Open() -> bool;
 
     void OpenRecent(const int);
 
@@ -194,10 +195,6 @@ private slots:
 
     void on_actionNew_triggered();
 
-    void on_FlagAddBtn_clicked();
-
-    void on_FlagDeleteBtn_clicked();
-
 private:
 
     // member vars
@@ -263,7 +260,9 @@ private:
     void                        makeComment         (QTextStream& ts, const FileInfo& fileName);
     s_ptr<QString>              makeFromTbl         (QTableWidget* tbl, bool numbering, const FileInfo& fileInfo);
 
-    void                        removeComment       (QStringList &strList, const QString& div, const CommentStyle style);
+    void                        removeComment              (QStringList &strList, const QString& div, const CommentStyle style);
+    void                        removeCommentByStartEndTag (QStringList &strList, const QString& startTag, const QString& endTag, const QDirIterator::IteratorFlag&);
+    void                        removeCommentBySeparator   (QStringList &strList, const QString& separator, const QDirIterator::IteratorFlag&);
 
 
 
