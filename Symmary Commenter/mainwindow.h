@@ -221,7 +221,7 @@ private:
 
     // setting table
     void                        sortTbl             (QTableWidget*);
-    void                        insertTbl           (QTableWidget*, const QString&, const QString& value = nullptr);
+    void                        insertTbl           (QTableWidget*, const QString&, const QString& value = nullptr, bool isMultiline = false);
     void                        setShortCut         ();
     void                        itemChange          (QTableWidget*, int prev, int dest);
     void                        clearAllTbls        ();
@@ -232,9 +232,9 @@ private:
     void                        handleDrop          (const QList<QUrl>&);
 
     // handle tables
-    QTableWidgetItem*           searchTable         (QTableWidget* tbl, const QString& key);
     void                        insertItem          (QTableWidget* tbl, bool keyEditable, const QString& item);
     void                        insertItem          (QTableWidget* tbl, bool keyEditable, const QString& key, const QString& value);
+    void                        insertMultiLineItem (QTableWidget* tbl, bool keyEditable, const QString& key, const QString& value);
     void                        removeSelectedItems (QTableWidget* tbl);
 
     // handle SCPS file

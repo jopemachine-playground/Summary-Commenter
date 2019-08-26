@@ -27,6 +27,7 @@
 
 #define IsDescNumbering_t       ui->actionDesc_Numbering->isChecked()
 #define IsIssueNumbering_t      ui->actionIssue_Numbering->isChecked()
+#define IsRefURLNumbering_t      ui->actionRefe_URL_Numbering->isChecked()
 #define IsRecursiveTraversal_t  ui->actionRecursive_Traversal->isChecked()
 
 #define IsDivBySeparator_t      divBySeparator->isChecked()

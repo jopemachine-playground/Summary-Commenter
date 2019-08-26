@@ -1,6 +1,6 @@
 #include <windows.h>
 
-IDI_ICON1	ICON	DISCARDABLE	"C:\\CommentHelper\\Symmary Commenter\\res\\img\\icon.ico"
+IDI_ICON1	ICON	DISCARDABLE	"C:\\Summary-Commenter\\Symmary Commenter\\res\\img\\icon.ico"
 
 VS_VERSION_INFO VERSIONINFO
 	FILEVERSION 0,0,0,0

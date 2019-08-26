@@ -911,6 +911,7 @@
     <addaction name="separator"/>
     <addaction name="actionIssue_Numbering"/>
     <addaction name="actionDesc_Numbering"/>
+    <addaction name="actionRefe_URL_Numbering"/>
     <addaction name="separator"/>
     <addaction name="menuComments_style"/>
    </widget>
@@ -1045,9 +1046,6 @@
    <property name="text">
     <string>Issue Numbering</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+I</string>
-   </property>
   </action>
   <action name="actionDesc_Numbering">
    <property name="checkable">
@@ -1058,9 +1056,6 @@
    </property>
    <property name="text">
     <string>Desc Numbering</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+D</string>
    </property>
   </action>
   <action name="actionOpen_Project_Path">
@@ -1111,6 +1106,14 @@
    </property>
    <property name="text">
     <string>recent5</string>
+   </property>
+  </action>
+  <action name="actionRefe_URL_Numbering">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ref URL Numbering</string>
    </property>
   </action>
  </widget>

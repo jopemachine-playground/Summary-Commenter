@@ -178,7 +178,7 @@ void MainWindow::ShowMessageBox(const QMessageBox::Icon icon, const QString& mes
 void MainWindow::on_descAddBtn_clicked()
 {
     QStringList exts = Extension_t.split(",");
-    insertTbl(DescTable_t, "fileName." + exts[0], "");
+    insertTbl(DescTable_t, "fileName." + exts[0], "", true);
 }
 
 void MainWindow::on_descRemoveBtn_clicked()
@@ -189,7 +189,7 @@ void MainWindow::on_descRemoveBtn_clicked()
 void MainWindow::on_issueAddBtn_clicked()
 {
     QStringList exts = Extension_t.split(",");
-    insertTbl(IssueTable_t, "fileName." + exts[0], "");
+    insertTbl(IssueTable_t, "fileName." + exts[0], "", true);
 }
 
 void MainWindow::on_issueRemoveBtn_clicked()
@@ -200,7 +200,7 @@ void MainWindow::on_issueRemoveBtn_clicked()
 void MainWindow::on_addReferenceBtn_clicked()
 {
     QStringList exts = Extension_t.split(",");
-    insertTbl(RefTable_t, "fileName." + exts[0], "");
+    insertTbl(RefTable_t, "fileName." + exts[0], "", true);
 }
 
 void MainWindow::on_rmReferenceBtn_clicked()
@@ -537,9 +537,9 @@ bool MainWindow::eventFilter(QObject * obj, QEvent * e)
         if(e->type() == QEvent::KeyPress){
             QKeyEvent* kEvent = static_cast<QKeyEvent*>(e);
             if(kEvent->key() == Qt::Key_Enter){
-                qDebug() << DescTable_t->selectedItems()[1]->text();
-                DescTable_t->selectedItems()[1]->setText(DescTable_t->selectedItems()[1]->text() + "\n");
-                return true;
+//                qDebug() << DescTable_t->selectedItems()[1]->text();
+//                DescTable_t->selectedItems()[1]->setText(DescTable_t->selectedItems()[1]->text() + "\n");
+//                return true;
             }
         }
     }
@@ -555,12 +555,15 @@ void MainWindow::setTables()
 
     DescTable_t->horizontalHeader()->setStretchLastSection(true);
     DescTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
+    DescTable_t->verticalHeader()->setDefaultSectionSize(75);
 
     IssueTable_t->horizontalHeader()->setStretchLastSection(true);
     IssueTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
+    IssueTable_t->verticalHeader()->setDefaultSectionSize(75);
 
     RefTable_t->horizontalHeader()->setStretchLastSection(true);
     RefTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
+    RefTable_t->verticalHeader()->setDefaultSectionSize(75);
 
     ExcludeTable_t->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ExcludeTable_t->horizontalHeader()->setStretchLastSection(true);
@@ -613,10 +616,16 @@ void MainWindow::sortTbl(QTableWidget *tbl){
     tbl->sortByColumn(0, Qt::AscendingOrder);
 }
 
-void MainWindow::insertTbl(QTableWidget *tbl, const QString& key, const QString& value){
-    insertItem(tbl, true, key, value);
+void MainWindow::insertTbl(QTableWidget *tbl, const QString& key, const QString& value, bool isMultiline){
+    if(isMultiline){
+        insertMultiLineItem(tbl, true, key, value);
+    }
+    else{
+        insertItem(tbl, true, key, value);
+    }
+
     tbl->selectRow(tbl->rowCount() - 1);
-    // tbl->item(tbl->rowCount() - 1, 0)->setSelected(true);
+
 }
 
 void MainWindow::setShortCut()
@@ -736,13 +745,13 @@ void MainWindow::handleDrop(const QList<QUrl> & list)
 
                 switch(ui->tabWidget->currentIndex()){
 
-                case TabIndex::TAB_DESCRIPT:   insertTbl(DescTable_t,    url.fileName(), "");
+                case TabIndex::TAB_DESCRIPT:   insertTbl(DescTable_t,    url.fileName(), "", true);
                     break;
 
-                case TabIndex::TAB_ISSUE:      insertTbl(IssueTable_t,   url.fileName(), "");
+                case TabIndex::TAB_ISSUE:      insertTbl(IssueTable_t,   url.fileName(), "", true);
                     break;
 
-                case TabIndex::TAB_REF:        insertTbl(RefTable_t,     url.fileName(), "");
+                case TabIndex::TAB_REF:        insertTbl(RefTable_t,     url.fileName(), "", true);
                     break;
 
                 case TabIndex::TAB_EXCLUDE:    insertTbl(ExcludeTable_t, url.fileName());
@@ -757,16 +766,6 @@ void MainWindow::handleDrop(const QList<QUrl> & list)
 // ==============================+===============================================================
 // Private Methods
 // Handle Tables
-
-// key를 String input으로 받고 해당하는 row의 value item을 반환한다
-QTableWidgetItem* MainWindow::searchTable(QTableWidget* table, const QString& key){
-    for(int i = 0;  i < table->rowCount(); i++){
-        if(table->item(i, 0)->text() == key){
-            return table->item(i, 1);
-        }
-    }
-    return nullptr;
-}
 
 void MainWindow::insertItem(QTableWidget* tbl, bool keyEditable, const QString& item){
 
@@ -799,7 +798,27 @@ void MainWindow::insertItem(QTableWidget* tbl, bool keyEditable,
 
     tbl->setItem(row, 0, keyColumn);
     tbl->setItem(row, 1, valueColumn);
+}
 
+void MainWindow::insertMultiLineItem(QTableWidget *tbl, bool keyEditable, const QString &key, const QString &value)
+{
+    int row =   tbl->rowCount();
+    tbl->insertRow(row);
+
+    // key, value
+    auto keyColumn      = new QTableWidgetItem(key);
+    //auto valueColumn    = new QTableWidgetItem();
+
+    if(!keyEditable){
+        keyColumn->setFlags(keyColumn->flags() & ~Qt::ItemIsEditable);
+    }
+
+    tbl->setItem(row, 0, keyColumn);
+    //tbl->setItem(row, 1, valueColumn);
+
+    QPlainTextEdit *edit = new QPlainTextEdit();
+    edit->setPlainText(value);
+    tbl->setCellWidget(row, 1, edit);
 }
 
 // https://www.qtcentre.org/threads/4885-Remove-selected-rows-from-a-QTableView 참고
@@ -887,9 +906,10 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
                                        QRegularExpression::NormalMatch);
 
             if(isEnd.hasMatch()){
+
                 isBuffering = false;
                 strValueBuf += isEnd.captured("buf");
-                insertItem(buffed_tbl, true, strKeyBuf, strValueBuf);
+                insertMultiLineItem(buffed_tbl, true, strKeyBuf, strValueBuf);
 
                 //strBuf 사용 후 초기화
                 strKeyBuf   = "";
@@ -963,7 +983,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Desc Setting
 
-        QRegularExpression descRe("(?<attKey>.+[.]?\\w+)"
+        QRegularExpression descRe("(?<attKey>.*)"
                                   "::desc\\s+"
                                   "[+][=]\\s+"
                                   "\"(?<attValue>.*)\"?");
@@ -976,7 +996,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
             QString val = descMatch.captured("attValue");
 
             if(val.at(val.length() - 1) == "\""){
-                insertItem(DescTable_t, true,
+                insertMultiLineItem(DescTable_t, true,
                            descMatch.captured("attKey"), val.left(val.length() - 1));
             }
             else{
@@ -992,7 +1012,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Issue Setting
 
-        QRegularExpression issueRe("(?<attKey>.+[.]?\\w+)"
+        QRegularExpression issueRe("(?<attKey>.*)"
                                    "::issue\\s+"
                                    "[+][=]\\s+"
                                    "\"(?<attValue>.*)\"?");
@@ -1005,7 +1025,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
             QString val = issueMatch.captured("attValue");
 
             if(val.at(val.length() - 1) == "\""){
-                insertItem(IssueTable_t, true,
+                insertMultiLineItem(IssueTable_t, true,
                            issueMatch.captured("attKey"), val.left(val.length() - 1));
             }
             else{
@@ -1021,7 +1041,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Reference URLs Setting
 
-        QRegularExpression refURLRe("(?<attKey>.+[.]?\\w+)"
+        QRegularExpression refURLRe("(?<attKey>.*)"
                                     "::refURLs\\s+"
                                     "[+][=]\\s+"
                                     "\"(?<attValue>.*)\"?");
@@ -1034,7 +1054,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
             QString val = refURLsMatch.captured("attValue");
 
             if(val.at(val.length() - 1) == "\""){
-                insertItem(RefTable_t, true,
+                insertMultiLineItem(RefTable_t, true,
                            refURLsMatch.captured("attKey"), val.left(val.length() - 1));
             }
             else{
@@ -1050,7 +1070,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
 
         // Excluded files
 
-        QRegularExpression excludingRe("(?<attKey>.+[.]?\\w+)"
+        QRegularExpression excludingRe("(?<attKey>.*)"
                                        "::exclude");
 
         auto excludeMatch = excludingRe.match(confQueue->front(), 0,
@@ -1071,10 +1091,6 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
     }
 
     delete confQueue;
-
-//    DescTable_t->resizeRowsToContents();
-//    DescTable_t->setWordWrap(true);
-//    DescTable_t->setTextElideMode(Qt::ElideMiddle);
 
     if(errFlag){
         ShowMessageBox(QMessageBox::Warning, "Setting file could contain syntax error", "Caution");
@@ -1097,6 +1113,7 @@ void MainWindow::saveSCPSFile(const QString& path){
 
     ts << "setting.descNumbering        =   "         + QString::number(IsDescNumbering_t)       + "\n";
     ts << "setting.issueNumbering       =   "         + QString::number(IsIssueNumbering_t)      + "\n";
+    ts << "setting.refURLNumbering      =   "         + QString::number(IsRefURLNumbering_t)    + "\n";
     ts << "setting.recursiveTraversal   =   "         + QString::number(IsRecursiveTraversal_t)  + "\n";
     ts << "setting.divBySeparator       =   "         + QString::number(IsDivBySeparator_t)      + "\n";
     ts << "setting.divByStartEndTag     =   "         + QString::number(IsDivByStartEndTag_t)    + "\n";
@@ -1147,10 +1164,8 @@ void MainWindow::saveSCPSFile(const QString& path){
 
     for(int i = 0; i < DescTable_t->rowCount(); i++){
 
-        // qDebug() << DescTable_t->item(i, 1)->text();
-
         ts << DescTable_t->item(i, 0)->text() + "::desc       +=       \""
-                  + DescTable_t->item(i, 1)->text() << "\"\n";
+                  + static_cast<QPlainTextEdit*>(DescTable_t->cellWidget(i, 1))->toPlainText() << "\"\n";
 
     }
 
@@ -1159,7 +1174,7 @@ void MainWindow::saveSCPSFile(const QString& path){
     for(int i = 0; i < IssueTable_t->rowCount(); i++){
 
          ts << IssueTable_t->item(i, 0)->text() + "::issue       +=       \""
-                  + IssueTable_t->item(i, 1)->text() << "\"\n";
+                  + static_cast<QPlainTextEdit*>(IssueTable_t->cellWidget(i, 1))->toPlainText() << "\"\n";
     }
 
     ts << "\n# Reference URLs\n";
@@ -1167,7 +1182,7 @@ void MainWindow::saveSCPSFile(const QString& path){
     for(int i = 0; i < RefTable_t->rowCount(); i++){
 
         ts << RefTable_t->item(i, 0)->text() + "::refURLs       +=       \""
-                  + RefTable_t->item(i, 1)->text() << "\"\n";
+                  + static_cast<QPlainTextEdit*>(RefTable_t->cellWidget(i, 1))->toPlainText() << "\"\n";
 
     }
 
@@ -1258,6 +1273,9 @@ void MainWindow::setSettingFlags(const QString &flagName, bool flag)
     }
     else if (flagName   == "issueNumbering"){
         ui->actionIssue_Numbering->setChecked(flag);
+    }
+    else if (flagName   == "refURLNumbering"){
+        ui->actionRefe_URL_Numbering->setChecked(flag);
     }
     else if (flagName   == "recursiveTraversal"){
         ui->actionRecursive_Traversal->setChecked(flag);
@@ -1627,6 +1645,7 @@ void MainWindow::makeComment(QTextStream& ts, const FileInfo& fileInfo){
 
     edit    = fileInfo.lastModified.toString("yyyy-MM-dd, HH:mm:ss");
     date    = fileInfo.created     .toString("yyyy-MM-dd, HH:mm:ss");
+
     desc    = *(makeFromTbl(DescTable_t , IsDescNumbering_t , fileInfo));
     issue   = *(makeFromTbl(IssueTable_t, IsIssueNumbering_t, fileInfo));
     urls    = *(makeFromTbl(RefTable_t  , true              , fileInfo));
@@ -1688,13 +1707,14 @@ s_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const 
         for(int i = 0; i < tbl->rowCount(); i++){
 
             auto fName = tbl->item(i, 0)->text();
+            auto edit  = static_cast<QPlainTextEdit*>(tbl->cellWidget(i, 1));
 
-            if(tbl->item(i, 1)->text().trimmed() == ""){
+            if(edit->toPlainText().trimmed() == ""){
                 continue;
             }
 
             if(fName == fileInfo.fileName){
-                QStringList list = tbl->item(i, 1)->text().split("\n");
+                QStringList list = edit->toPlainText().split("\n");
 
                 for(auto& line : list){
                     *ret +=
@@ -1710,14 +1730,15 @@ s_ptr<QString> MainWindow::makeFromTbl(QTableWidget* tbl, bool numbering, const 
         for(int i = 0; i < tbl->rowCount(); i++){
 
             auto fName = tbl->item(i, 0)->text();
+            auto edit  = static_cast<QPlainTextEdit*>(tbl->cellWidget(i, 1));
 
-            if(tbl->item(i, 1)->text().trimmed() == ""){
+            if(edit->toPlainText().trimmed() == ""){
                 continue;
             }
 
             if(fName == fileInfo.fileName){
 
-                QStringList list = tbl->item(i, 1)->text().split("\n");
+                QStringList list = edit->toPlainText().split("\n");
 
                 for(auto& line : list){
                     *ret +=

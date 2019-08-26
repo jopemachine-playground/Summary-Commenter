@@ -60,6 +60,7 @@ public:
     QAction *actionOpen_setting_file;
     QAction *actionNew;
     QAction *actionrecent5;
+    QAction *actionRefe_URL_Numbering;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_2;
     QTabWidget *tabWidget;
@@ -247,6 +248,9 @@ public:
         actionrecent5 = new QAction(MainWindow);
         actionrecent5->setObjectName(QString::fromUtf8("actionrecent5"));
         actionrecent5->setIcon(icon1);
+        actionRefe_URL_Numbering = new QAction(MainWindow);
+        actionRefe_URL_Numbering->setObjectName(QString::fromUtf8("actionRefe_URL_Numbering"));
+        actionRefe_URL_Numbering->setCheckable(true);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_2 = new QVBoxLayout(centralWidget);
@@ -896,6 +900,7 @@ public:
         menuSetting->addSeparator();
         menuSetting->addAction(actionIssue_Numbering);
         menuSetting->addAction(actionDesc_Numbering);
+        menuSetting->addAction(actionRefe_URL_Numbering);
         menuSetting->addSeparator();
         menuSetting->addAction(menuComments_style->menuAction());
         menuExecute->addAction(actionExecute);
@@ -943,13 +948,7 @@ public:
         actionrecent3->setText(QCoreApplication::translate("MainWindow", "recent3", nullptr));
         actionrecent4->setText(QCoreApplication::translate("MainWindow", "recent4", nullptr));
         actionIssue_Numbering->setText(QCoreApplication::translate("MainWindow", "Issue Numbering", nullptr));
-#if QT_CONFIG(shortcut)
-        actionIssue_Numbering->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+I", nullptr));
-#endif // QT_CONFIG(shortcut)
         actionDesc_Numbering->setText(QCoreApplication::translate("MainWindow", "Desc Numbering", nullptr));
-#if QT_CONFIG(shortcut)
-        actionDesc_Numbering->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+D", nullptr));
-#endif // QT_CONFIG(shortcut)
         actionOpen_Project_Path->setText(QCoreApplication::translate("MainWindow", "Open Project Path", nullptr));
         actionRefresh->setText(QCoreApplication::translate("MainWindow", "Refresh", nullptr));
 #if QT_CONFIG(shortcut)
@@ -964,6 +963,7 @@ public:
         actionNew->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+N", nullptr));
 #endif // QT_CONFIG(shortcut)
         actionrecent5->setText(QCoreApplication::translate("MainWindow", "recent5", nullptr));
+        actionRefe_URL_Numbering->setText(QCoreApplication::translate("MainWindow", "Ref URL Numbering", nullptr));
         groupBox->setTitle(QCoreApplication::translate("MainWindow", "Project Settings", nullptr));
         extensionLbl->setText(QCoreApplication::translate("MainWindow", "Extension", nullptr));
         pathLbl->setText(QCoreApplication::translate("MainWindow", "Project Path", nullptr));

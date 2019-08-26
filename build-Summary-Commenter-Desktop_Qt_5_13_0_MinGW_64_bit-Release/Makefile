@@ -108,16 +108,11 @@ Makefile: ../Symmary\ Commenter/Summary-Commenter.pro ../../Qt/5.13.0/mingw73_64
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_axserver_private.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_bluetooth.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_bluetooth_private.pri \
-		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_bodymovin_private.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_bootstrap_private.pri \
-		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_charts.pri \
-		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_charts_private.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_concurrent.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_concurrent_private.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_core.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_core_private.pri \
-		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_datavisualization.pri \
-		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_datavisualization_private.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_dbus.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_dbus_private.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_designer.pri \
@@ -159,8 +154,6 @@ Makefile: ../Symmary\ Commenter/Summary-Commenter.pro ../../Qt/5.13.0/mingw73_64
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_positioningquick_private.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_printsupport.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_printsupport_private.pri \
-		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_purchasing.pri \
-		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_purchasing_private.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_qml.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_qml_private.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_qmldebug_private.pri \
@@ -202,8 +195,6 @@ Makefile: ../Symmary\ Commenter/Summary-Commenter.pro ../../Qt/5.13.0/mingw73_64
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_uiplugin.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_uitools.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_uitools_private.pri \
-		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_virtualkeyboard.pri \
-		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_virtualkeyboard_private.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_vulkan_support_private.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_webchannel.pri \
 		../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_webchannel_private.pri \
@@ -296,16 +287,11 @@ Makefile: ../Symmary\ Commenter/Summary-Commenter.pro ../../Qt/5.13.0/mingw73_64
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_axserver_private.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_bluetooth.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_bluetooth_private.pri:
-../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_bodymovin_private.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_bootstrap_private.pri:
-../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_charts.pri:
-../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_charts_private.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_concurrent.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_concurrent_private.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_core.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_core_private.pri:
-../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_datavisualization.pri:
-../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_datavisualization_private.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_dbus.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_dbus_private.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_designer.pri:
@@ -347,8 +333,6 @@ Makefile: ../Symmary\ Commenter/Summary-Commenter.pro ../../Qt/5.13.0/mingw73_64
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_positioningquick_private.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_printsupport.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_printsupport_private.pri:
-../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_purchasing.pri:
-../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_purchasing_private.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_qml.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_qml_private.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_qmldebug_private.pri:
@@ -390,8 +374,6 @@ Makefile: ../Symmary\ Commenter/Summary-Commenter.pro ../../Qt/5.13.0/mingw73_64
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_uiplugin.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_uitools.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_uitools_private.pri:
-../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_virtualkeyboard.pri:
-../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_virtualkeyboard_private.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_vulkan_support_private.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_webchannel.pri:
 ../../Qt/5.13.0/mingw73_64/mkspecs/modules/qt_lib_webchannel_private.pri:
