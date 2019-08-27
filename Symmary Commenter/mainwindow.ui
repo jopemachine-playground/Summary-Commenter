@@ -921,8 +921,8 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionGithub">
    <property name="icon">
-    <iconset>
-     <normaloff>res/img/github.png</normaloff>res/img/github.png</iconset>
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/github.png</normaloff>:/new/img/res/img/github.png</iconset>
    </property>
    <property name="text">
     <string>Github</string>
@@ -991,8 +991,8 @@
   </action>
   <action name="actionrecent1">
    <property name="icon">
-    <iconset>
-     <normaloff>res/img/icon.ico</normaloff>res/img/icon.ico</iconset>
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/icon.ico</normaloff>:/new/img/res/img/icon.ico</iconset>
    </property>
    <property name="text">
     <string>recent1</string>
@@ -1000,8 +1000,8 @@
   </action>
   <action name="actionrecent2">
    <property name="icon">
-    <iconset>
-     <normaloff>res/img/icon.ico</normaloff>res/img/icon.ico</iconset>
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/icon.ico</normaloff>:/new/img/res/img/icon.ico</iconset>
    </property>
    <property name="text">
     <string>recent2</string>
@@ -1009,8 +1009,8 @@
   </action>
   <action name="actionrecent3">
    <property name="icon">
-    <iconset>
-     <normaloff>res/img/icon.ico</normaloff>res/img/icon.ico</iconset>
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/icon.ico</normaloff>:/new/img/res/img/icon.ico</iconset>
    </property>
    <property name="text">
     <string>recent3</string>
@@ -1018,8 +1018,8 @@
   </action>
   <action name="actionrecent4">
    <property name="icon">
-    <iconset>
-     <normaloff>res/img/icon.ico</normaloff>res/img/icon.ico</iconset>
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/icon.ico</normaloff>:/new/img/res/img/icon.ico</iconset>
    </property>
    <property name="text">
     <string>recent4</string>
@@ -1090,8 +1090,8 @@
   </action>
   <action name="actionrecent5">
    <property name="icon">
-    <iconset>
-     <normaloff>res/img/icon.ico</normaloff>res/img/icon.ico</iconset>
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/icon.ico</normaloff>:/new/img/res/img/icon.ico</iconset>
    </property>
    <property name="text">
     <string>recent5</string>
@@ -1107,6 +1107,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
  <connections/>
 </ui>

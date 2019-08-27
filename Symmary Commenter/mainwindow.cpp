@@ -43,6 +43,8 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
     if((execPath != nullptr) && execPath[0] != '\0') {
         clearAllTbls();
         setSCPSFile(QString(execPath));
+        QStringList list = readSClately();
+        applyRecentBar(list);
         return;
     }
 
@@ -1295,40 +1297,15 @@ bool MainWindow::openRecentSCPS()
 {
     clearAllTbls();
 
-    QString latest = nullptr;
+    QStringList list = readSClately();
 
-    if(sclately->exists()){
+    applyRecentBar(list);
 
-        sclately->open( QFile::ReadWrite | QFile::Text  );
+    if(list.empty() || list[0].trimmed() == "") return false;
 
-        QString fileContent = sclately->readLine();
+    setSCPSFile(list[0]);
 
-        QStringList list = fileContent.split(",");
-
-        latest = list[0];
-
-        for(auto& path : list){
-            if(path == "") continue;
-            pathQue->push_back( path );
-        }
-
-        applyRecentBar(list);
-
-        if(latest.trimmed() == "") return false;
-
-        setSCPSFile(latest);
-
-        return true;
-    }
-    else{
-        sclately->open( QFile::ReadWrite | QFile::Text  );
-
-        QStringList empty{};
-
-        applyRecentBar(empty);
-
-        return false;
-    }
+    return true;
 }
 
 void MainWindow::applyRecentBar(QStringList &list)
@@ -1344,6 +1321,35 @@ void MainWindow::applyRecentBar(QStringList &list)
         else{
             action->setText( list[index++] );
         }
+    }
+}
+
+QStringList MainWindow::readSClately()
+{
+    if(sclately->exists()){
+
+        sclately->open( QFile::ReadWrite | QFile::Text  );
+
+        QString fileContent = sclately->readLine();
+
+        QStringList list = fileContent.split(",");
+
+        for(auto& path : list){
+            if(path == "") continue;
+            pathQue->push_back( path );
+        }
+
+        return list;
+
+    }
+    else{
+
+        sclately->open( QFile::ReadWrite | QFile::Text  );
+
+        QStringList empty{};
+
+        return empty;
+
     }
 }
 

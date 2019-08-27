@@ -59,7 +59,7 @@ enum CommentStyle{
 
 #define SAVE_RECENT_PATH    5
 
-#define CSH_START_COMMENT   "#--------------------------------------------------------\n#\n# This file is created by comment helper \n#\n#--------------------------------------------------------"
+#define CSH_START_COMMENT   "#--------------------------------------------------------\n#\n# This file is created by summary commenter \n#\n#--------------------------------------------------------"
 
 #define PROJECT_SETTING_FILE_EXT "scps" // Summary Commenter Project Setting file
 

@@ -187,7 +187,7 @@ public:
         actionGithub = new QAction(MainWindow);
         actionGithub->setObjectName(QString::fromUtf8("actionGithub"));
         QIcon icon;
-        icon.addFile(QString::fromUtf8("res/img/github.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QString::fromUtf8(":/new/img/res/img/github.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionGithub->setIcon(icon);
         actionExecute = new QAction(MainWindow);
         actionExecute->setObjectName(QString::fromUtf8("actionExecute"));
@@ -210,7 +210,7 @@ public:
         actionrecent1 = new QAction(MainWindow);
         actionrecent1->setObjectName(QString::fromUtf8("actionrecent1"));
         QIcon icon1;
-        icon1.addFile(QString::fromUtf8("res/img/icon.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        icon1.addFile(QString::fromUtf8(":/new/img/res/img/icon.ico"), QSize(), QIcon::Normal, QIcon::Off);
         actionrecent1->setIcon(icon1);
         actionrecent2 = new QAction(MainWindow);
         actionrecent2->setObjectName(QString::fromUtf8("actionrecent2"));

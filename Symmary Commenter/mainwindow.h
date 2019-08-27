@@ -243,6 +243,7 @@ private:
     // handle SClately file
     bool                        openRecentSCPS      ();
     void                        applyRecentBar      (QStringList& list);
+    QStringList                 readSClately        ();
 
     // handle SCProj file
     s_ptr<Scproj>               readSCProjFile      (const QString& path);
