@@ -316,20 +316,15 @@ void MainWindow::on_actionRemove_Comments_triggered()
 
     // 설정파일이 존재하면 파일을 읽어들여 주석을 지울 파일들의 리스트를 만든다
     if(scprojFile.exists()){
-        scprojFile.open(QFile::ReadOnly|QFile::Text);
-        QTextStream ts(&scprojContent);
-        ts << scprojFile.readAll();
-        QStringList list = scprojContent.split(",");
 
-        QString div = IsDivByStartEndTag_t ? EndTag_t : Separator_t;
-        CommentStyle style = IsDivByStartEndTag_t ? CommentStyle::DivByStartEndTag : CommentStyle::DivBySeparator;
+        auto proj = readSCProjFile(ProjectPath_t + "\\" + PROJECT_WORKED_FILE_EXT);
 
-        if(style == CommentStyle::Undefined || div == ""){
+        if(proj->style == CommentStyle::Undefined || proj->div == ""){
             ShowMessageBox(QMessageBox::Critical, "Essential Input Not Specified!", "Error");
             return;
         }
 
-        removeComment(list, div, style);
+        removeComment(proj->workedFiles, proj->div, proj->style);
     }
     else{
         ShowMessageBox(QMessageBox::Critical, "scproj file not exist!", "Error");
