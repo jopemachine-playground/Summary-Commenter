@@ -39,6 +39,9 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
     pathQue  = new std::deque<QString>();
     sclately = new QFile(QFileInfo(programPath).dir().filePath(PROJECT_LATELY_OPEN_EXT));
 
+    DescSearchBar->installEventFilter(this);
+    IsseSearchBar->installEventFilter(this);
+
     // scps 파일로 프로그램을 open한 경우
     if((execPath != nullptr) && execPath[0] != '\0') {
         clearAllTbls();
@@ -525,18 +528,27 @@ void MainWindow::on_actionNew_triggered()
 
 bool MainWindow::eventFilter(QObject * obj, QEvent * e)
 {
-    if(obj == ui->descTblWidget){
+    if     (obj == DescSearchBar){
         if(e->type() == QEvent::KeyPress){
             QKeyEvent* kEvent = static_cast<QKeyEvent*>(e);
-            if(kEvent->key() == Qt::Key_Enter){
-//                qDebug() << DescTable_t->selectedItems()[1]->text();
-//                DescTable_t->selectedItems()[1]->setText(DescTable_t->selectedItems()[1]->text() + "\n");
-//                return true;
+            if(kEvent->key() == Qt::Key_Enter || kEvent->key() == Qt::Key_Return){
+                  qDebug() << "실행1";
+                  showSearchResDial();
+                  return true;
+            }
+        }
+    }
+    else if(obj == IsseSearchBar){
+        if(e->type() == QEvent::KeyPress){
+            QKeyEvent* kEvent = static_cast<QKeyEvent*>(e);
+            if(kEvent->key() == Qt::Key_Enter || kEvent->key() == Qt::Key_Return){
+                  qDebug() << "실행2";
+
+                  return true;
             }
         }
     }
     return false;
-    //return QDialog::eventFilter(obj, e);
 }
 
 void MainWindow::setTables()
@@ -1356,7 +1368,7 @@ s_ptr<Scproj> MainWindow::readSCProjFile(const QString &path){
 
     QFile scprojFile(path);
 
-    if(!scprojFile.exists()){
+    if( !scprojFile.exists() ){
         return nullptr;
     }
 
@@ -1366,7 +1378,7 @@ s_ptr<Scproj> MainWindow::readSCProjFile(const QString &path){
 
     result->style = CommentStyle::Undefined;
 
-    while(!scprojFile.atEnd()){
+    while( !scprojFile.atEnd() ){
 
         QString line = scprojFile.readLine();
 
@@ -1420,7 +1432,7 @@ void MainWindow::writeSCProjFile(const QString &path, queue<FileInfo>& workedFil
 
     QString workedFiles = "";
 
-    while(!workedFilesQue.empty()){
+    while( !workedFilesQue.empty() ){
         // prepend 할 때 마다 workedFiles에 추가
         workedFiles += workedFilesQue.size() == 1 ?
                     workedFilesQue.front().fileName : workedFilesQue.front().fileName + ",";
@@ -1561,7 +1573,7 @@ void MainWindow::processFlag(QTextStream& ts, Flag& flag, bool previewMode){
         return;
     }
 
-    if(!previewMode && flag.value.trimmed() == ""){
+    if( !previewMode && flag.value.trimmed() == "" ){
         return;
     }
 
@@ -1859,3 +1871,17 @@ void MainWindow::removeCommentBySeparator(QStringList& strList, const QString& s
 
 // ==============================+===============================================================
 
+void MainWindow::searchTbl(QTableWidget *, QString target)
+{
+
+}
+
+void MainWindow::showSearchResDial()
+{
+    QDialog *dialog = new QDialog;
+    QTableWidget* resTbl = new QTableWidget(dialog);
+
+
+    dialog->adjustSize();
+    dialog->show();
+}

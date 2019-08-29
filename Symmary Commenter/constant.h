@@ -4,6 +4,9 @@
 // ==============================+===============================================================
 // shortcuts
 
+#define DescSearchBar           ui->descSearchEdit
+#define IsseSearchBar           ui->issueSearchEdit
+
 #define FlagTable_t             ui->flagTblWidget
 #define DescTable_t             ui->descTblWidget
 #define IssueTable_t            ui->issueTblWidget
@@ -32,6 +35,7 @@
 
 #define IsDivBySeparator_t      divBySeparator->isChecked()
 #define IsDivByStartEndTag_t    divByStartEndTag->isChecked()
+
 
 // ==============================+===============================================================
 // enum

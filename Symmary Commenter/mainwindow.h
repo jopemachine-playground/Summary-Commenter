@@ -265,6 +265,9 @@ private:
     void                        removeCommentByStartEndTag (QStringList &strList, const QString& startTag, const QString& endTag, const QDirIterator::IteratorFlag&);
     void                        removeCommentBySeparator   (QStringList &strList, const QString& separator, const QDirIterator::IteratorFlag&);
 
+    // search table and show
+    void                        searchTbl           (QTableWidget*, QString target);
+    void                        showSearchResDial   ();
 
 
 };

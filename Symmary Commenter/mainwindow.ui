@@ -604,7 +604,21 @@
        <attribute name="title">
         <string>Desc</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLabel" name="descSearchLbl">
+            <property name="text">
+             <string>Search</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="descSearchEdit"/>
+          </item>
+         </layout>
+        </item>
         <item>
          <layout class="QVBoxLayout" name="descTabL1">
           <item>
@@ -654,9 +668,23 @@
        <attribute name="title">
         <string>Issue</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_10">
+       <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
-         <layout class="QVBoxLayout" name="issueTabL">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="QLabel" name="issueSearchLbl">
+              <property name="text">
+               <string>Search</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="issueSearchEdit"/>
+            </item>
+           </layout>
+          </item>
           <item>
            <widget class="QTableWidget" name="issueTblWidget">
             <column>
