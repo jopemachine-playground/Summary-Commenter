@@ -532,8 +532,8 @@ bool MainWindow::eventFilter(QObject * obj, QEvent * e)
         if(e->type() == QEvent::KeyPress){
             QKeyEvent* kEvent = static_cast<QKeyEvent*>(e);
             if(kEvent->key() == Qt::Key_Enter || kEvent->key() == Qt::Key_Return){
-                  qDebug() << "실행1";
-                  showSearchResDial();
+
+                  showSearchResDial(searchTbl(DescTable_t, DescSearchBar->text()));
                   return true;
             }
         }
@@ -542,8 +542,8 @@ bool MainWindow::eventFilter(QObject * obj, QEvent * e)
         if(e->type() == QEvent::KeyPress){
             QKeyEvent* kEvent = static_cast<QKeyEvent*>(e);
             if(kEvent->key() == Qt::Key_Enter || kEvent->key() == Qt::Key_Return){
-                  qDebug() << "실행2";
 
+                  showSearchResDial(searchTbl(IssueTable_t, IsseSearchBar->text()));
                   return true;
             }
         }
@@ -1871,16 +1871,54 @@ void MainWindow::removeCommentBySeparator(QStringList& strList, const QString& s
 
 // ==============================+===============================================================
 
-void MainWindow::searchTbl(QTableWidget *, QString target)
+s_ptr<std::list<TblRecord>> MainWindow::searchTbl(QTableWidget* tbl, QString target)
 {
+    auto resList = std::make_shared<std::list<TblRecord>>();
 
+    QRegularExpression re(".*" + target + ".*");
+
+    for (int i = 0; i < tbl->rowCount(); i++){
+
+        QString fileName = tbl->item(i, 0)->text();
+        QString tblText  = static_cast<QPlainTextEdit*>(tbl->cellWidget(i, 1))->toPlainText();
+
+        auto match = re.match(tblText, 0,
+                                      QRegularExpression::NormalMatch);
+
+        if(match.hasMatch()){
+            resList->push_back(TblRecord {fileName, tblText});
+        }
+    }
+
+    return resList;
 }
 
-void MainWindow::showSearchResDial()
+void MainWindow::showSearchResDial(s_ptr<std::list<TblRecord>> recordList)
 {
+    int WINDOWSIZE_X = 1000;
+    int WINDOWSIZE_Y = 600;
+
     QDialog *dialog = new QDialog;
+
     QTableWidget* resTbl = new QTableWidget(dialog);
 
+    dialog->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    dialog->setFixedSize(WINDOWSIZE_X, WINDOWSIZE_Y);
+    dialog->setWindowTitle("Search result");
+
+    QStringList *header = new QStringList{ "File Name", "Content" };
+    resTbl->setRowCount(0);
+    resTbl->setColumnCount(2);
+    resTbl->setHorizontalHeaderLabels(*header);
+    resTbl->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    resTbl->setFixedSize(WINDOWSIZE_X, WINDOWSIZE_Y);
+    resTbl->verticalHeader()->setDefaultSectionSize(75);
+    resTbl->setColumnWidth(0, 250);
+    resTbl->horizontalHeader()->setStretchLastSection(true);
+
+    for(auto& rec : *recordList){
+        insertMultiLineItem(resTbl, false, rec.fileName, rec.content);
+    }
 
     dialog->adjustSize();
     dialog->show();

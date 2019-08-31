@@ -98,6 +98,10 @@ typedef struct{
     CommentStyle style;
 } Scproj;
 
+typedef struct{
+    QString     fileName;
+    QString     content;
+} TblRecord;
 
 // ==============================+===============================================================
 
@@ -266,8 +270,8 @@ private:
     void                        removeCommentBySeparator   (QStringList &strList, const QString& separator, const QDirIterator::IteratorFlag&);
 
     // search table and show
-    void                        searchTbl           (QTableWidget*, QString target);
-    void                        showSearchResDial   ();
+    s_ptr<std::list<TblRecord>> searchTbl           (QTableWidget*, QString target);
+    void                        showSearchResDial   (s_ptr<std::list<TblRecord>>);
 
 
 };
