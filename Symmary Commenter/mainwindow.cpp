@@ -1895,6 +1895,12 @@ s_ptr<std::list<TblRecord>> MainWindow::searchTbl(QTableWidget* tbl, QString tar
 
 void MainWindow::showSearchResDial(s_ptr<std::list<TblRecord>> recordList)
 {
+
+    if(recordList->size() == 0){
+        ShowMessageBox(QMessageBox::Warning, "Search results do not exist", "Error");
+        return;
+    }
+
     int WINDOWSIZE_X = 1000;
     int WINDOWSIZE_Y = 600;
 
