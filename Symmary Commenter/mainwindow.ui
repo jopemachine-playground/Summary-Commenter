@@ -661,7 +661,7 @@
             <item>
              <widget class="QPushButton" name="descAutoImtBtn">
               <property name="text">
-               <string>Auto Import (F6)</string>
+               <string>Add All Files (F6)</string>
               </property>
              </widget>
             </item>
@@ -729,6 +729,13 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QPushButton" name="issueAutoImtBtn">
+              <property name="text">
+               <string>Add All Files (F6)</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>
@@ -776,6 +783,13 @@
              <widget class="QPushButton" name="referenceSortBtn">
               <property name="text">
                <string>Sort By File Name (Ctrl + T)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="refAutoImtBtn">
+              <property name="text">
+               <string>Add All Files (F6)</string>
               </property>
              </widget>
             </item>

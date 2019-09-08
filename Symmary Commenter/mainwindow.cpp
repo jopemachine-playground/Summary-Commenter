@@ -524,7 +524,17 @@ void MainWindow::on_actionNew_triggered()
 
 void MainWindow::on_descAutoImtBtn_clicked()
 {
+    addAllItemBtnClicked();
+}
 
+void MainWindow::on_issueAutoImtBtn_clicked()
+{
+    addAllItemBtnClicked();
+}
+
+void MainWindow::on_refAutoImtBtn_clicked()
+{
+    addAllItemBtnClicked();
 }
 
 
@@ -555,6 +565,20 @@ bool MainWindow::eventFilter(QObject * obj, QEvent * e)
         }
     }
     return false;
+}
+
+void MainWindow::addAllItemBtnClicked()
+{
+    QStringList allTargetFiles;
+
+    queue<FileInfo> que  = *(getAllTargetFiles(ProjectPath_t));
+
+    while(!que.empty()){
+        allTargetFiles.push_back(que.front().filePath);
+        que.pop();
+    }
+
+    handleDrop(allTargetFiles);
 }
 
 void MainWindow::setTables()
@@ -675,6 +699,8 @@ void MainWindow::setShortCut()
 
     // Auto Import
     bindKey(QKeySequence(Qt::Key_F6)          , ui->descAutoImtBtn);
+    bindKey(QKeySequence(Qt::Key_F6)          , ui->issueAutoImtBtn);
+    bindKey(QKeySequence(Qt::Key_F6)          , ui->refAutoImtBtn);
 
 }
 
@@ -1431,7 +1457,7 @@ s_ptr<Scproj> MainWindow::readSCProjFile(const QString &path){
         }
 
         QRegularExpression endTagRe("DivByStartEndTag:\\s*"       // keyword
-                                    "\"(?<tag>.*)\""                // end tag
+                                    "\"(?<tag>.*)\""              // end tag
         );
 
         auto tagMatch = endTagRe.match(line, 0,
@@ -1522,7 +1548,7 @@ void MainWindow::exportTblDataToMD(QTextStream& ts, const QTableWidget *tbl, con
 // Private Methods
 // Directory traversal
 
-s_ptr<queue<FileInfo>> MainWindow::getAllTargetFiles(const QString &dirName){
+s_ptr<queue<FileInfo>> MainWindow::getAllTargetFiles(const QString& dirName){
 
     // target Extension을 구하고, trim 한다.
     QStringList targetExtensions = Extension_t.split(",");

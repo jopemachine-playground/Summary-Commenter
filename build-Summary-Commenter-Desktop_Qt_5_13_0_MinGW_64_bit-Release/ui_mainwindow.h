@@ -154,6 +154,7 @@ public:
     QPushButton *issueAddBtn;
     QPushButton *issueRemoveBtn;
     QPushButton *issueSortBtn;
+    QPushButton *issueAutoImtBtn;
     QWidget *referenceTab;
     QVBoxLayout *verticalLayout_10;
     QVBoxLayout *verticalLayout_9;
@@ -162,6 +163,7 @@ public:
     QPushButton *addReferenceBtn;
     QPushButton *rmReferenceBtn;
     QPushButton *referenceSortBtn;
+    QPushButton *refAutoImtBtn;
     QWidget *excludeTab;
     QHBoxLayout *horizontalLayout_5;
     QVBoxLayout *verticalLayout_7;
@@ -748,6 +750,11 @@ public:
 
         horizontalLayout_8->addWidget(issueSortBtn);
 
+        issueAutoImtBtn = new QPushButton(IssueTab);
+        issueAutoImtBtn->setObjectName(QString::fromUtf8("issueAutoImtBtn"));
+
+        horizontalLayout_8->addWidget(issueAutoImtBtn);
+
 
         verticalLayout_4->addLayout(horizontalLayout_8);
 
@@ -792,6 +799,11 @@ public:
         referenceSortBtn->setObjectName(QString::fromUtf8("referenceSortBtn"));
 
         ReferenceL_2->addWidget(referenceSortBtn);
+
+        refAutoImtBtn = new QPushButton(referenceTab);
+        refAutoImtBtn->setObjectName(QString::fromUtf8("refAutoImtBtn"));
+
+        ReferenceL_2->addWidget(refAutoImtBtn);
 
 
         verticalLayout_9->addLayout(ReferenceL_2);
@@ -1033,7 +1045,7 @@ public:
         descAddBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
         descRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Del)", nullptr));
         descSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name (Ctrl + T)", nullptr));
-        descAutoImtBtn->setText(QCoreApplication::translate("MainWindow", "Auto Import (F6)", nullptr));
+        descAutoImtBtn->setText(QCoreApplication::translate("MainWindow", "Add All Files (F6)", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(DescTab), QCoreApplication::translate("MainWindow", "Desc", nullptr));
         issueSearchLbl->setText(QCoreApplication::translate("MainWindow", "Search", nullptr));
         QTableWidgetItem *___qtablewidgetitem4 = issueTblWidget->horizontalHeaderItem(0);
@@ -1043,6 +1055,7 @@ public:
         issueAddBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
         issueRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Del)", nullptr));
         issueSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name (Ctrl + T)", nullptr));
+        issueAutoImtBtn->setText(QCoreApplication::translate("MainWindow", "Add All Files (F6)", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(IssueTab), QCoreApplication::translate("MainWindow", "Issue", nullptr));
         QTableWidgetItem *___qtablewidgetitem6 = referenceTbl->horizontalHeaderItem(0);
         ___qtablewidgetitem6->setText(QCoreApplication::translate("MainWindow", "File Name", nullptr));
@@ -1051,6 +1064,7 @@ public:
         addReferenceBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
         rmReferenceBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Del)", nullptr));
         referenceSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name (Ctrl + T)", nullptr));
+        refAutoImtBtn->setText(QCoreApplication::translate("MainWindow", "Add All Files (F6)", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(referenceTab), QCoreApplication::translate("MainWindow", "Reference", nullptr));
         QTableWidgetItem *___qtablewidgetitem8 = excludeTbl->horizontalHeaderItem(0);
         ___qtablewidgetitem8->setText(QCoreApplication::translate("MainWindow", "File Name to exclude", nullptr));

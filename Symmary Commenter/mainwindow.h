@@ -201,6 +201,10 @@ private slots:
 
     void on_descAutoImtBtn_clicked();
 
+    void on_issueAutoImtBtn_clicked();
+
+    void on_refAutoImtBtn_clicked();
+
 private:
 
     // member vars
@@ -215,7 +219,12 @@ private:
     char*                                           execPath;
 
 
+    // event process
     bool                        eventFilter         (QObject*, QEvent*) override;
+    void                        addAllItemBtnClicked();
+    void                        dragEnterEvent      (QDragEnterEvent*) override;
+    void                        dropEvent           (QDropEvent*     ) override;
+    void                        handleDrop          (const QStringList&);
 
     // init, set program
     void                        setTables           ();
@@ -228,11 +237,6 @@ private:
     void                        setShortCut         ();
     void                        itemChange          (QTableWidget*, int prev, int dest);
     void                        clearAllTbls        ();
-
-    // setting table's dragging event
-    void                        dragEnterEvent      (QDragEnterEvent*) override;
-    void                        dropEvent           (QDropEvent*     ) override;
-    void                        handleDrop          (const QStringList&);
 
     // handle tables
     void                        insertItem          (QTableWidget* tbl, bool keyEditable, const QString& item);
@@ -268,6 +272,7 @@ private:
     void                        makeComment         (QTextStream& ts, const FileInfo& fileName);
     s_ptr<QString>              makeFromTbl         (QTableWidget* tbl, bool numbering, const FileInfo& fileInfo);
 
+    // remove comment
     void                        removeComment              (QStringList &strList, const QString& div, const CommentStyle style);
     void                        removeCommentByStartEndTag (QStringList &strList, const QString& startTag, const QString& endTag, const QDirIterator::IteratorFlag&);
     void                        removeCommentBySeparator   (QStringList &strList, const QString& separator, const QDirIterator::IteratorFlag&);
@@ -275,7 +280,6 @@ private:
     // search table and show
     s_ptr<std::list<TblRecord>> searchTbl           (QTableWidget*, QString target);
     void                        showSearchResDial   (s_ptr<std::list<TblRecord>>);
-
 
 };
 
