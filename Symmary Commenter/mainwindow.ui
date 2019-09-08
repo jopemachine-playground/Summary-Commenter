@@ -658,6 +658,13 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QPushButton" name="descAutoImtBtn">
+              <property name="text">
+               <string>Auto Import (F6)</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>

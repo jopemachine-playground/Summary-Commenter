@@ -522,6 +522,12 @@ void MainWindow::on_actionNew_triggered()
     NewFile();
 }
 
+void MainWindow::on_descAutoImtBtn_clicked()
+{
+
+}
+
+
 // ==============================+===============================================================
 // Private Methods
 // Init, set program
@@ -667,6 +673,9 @@ void MainWindow::setShortCut()
     bindKey(QKeySequence(Qt::Key_Up)          , ui->FlagUpBtn);
     bindKey(QKeySequence(Qt::Key_Down)        , ui->FlagDownBtn);
 
+    // Auto Import
+    bindKey(QKeySequence(Qt::Key_F6)          , ui->descAutoImtBtn);
+
 }
 
 void MainWindow::itemChange(QTableWidget* tbl, int prev, int dest)
@@ -703,32 +712,39 @@ void MainWindow::clearAllTbls()
 // Private Methods
 // Setting Table's dragging event
 
-void MainWindow::dragEnterEvent(QDragEnterEvent *e)
+void MainWindow::dragEnterEvent(QDragEnterEvent* e)
 {
     if (e->mimeData()->hasUrls()) {
         e->acceptProposedAction();
     }
 }
 
-void MainWindow::dropEvent(QDropEvent *e)
+void MainWindow::dropEvent(QDropEvent* e)
 {
-    handleDrop(e->mimeData()->urls());
+    QStringList strList;
+    QList<QUrl> list = e->mimeData()->urls();
+
+    // QList<> to QStringList
+    foreach (const QUrl &url, list) {
+        strList.push_back(url.toLocalFile());
+    }
+
+    handleDrop(strList);
 }
 
-void MainWindow::handleDrop(const QList<QUrl> & list)
+void MainWindow::handleDrop(const QStringList& list)
 {
-    foreach (const QUrl &url, list) {
+    foreach (const QString& localPath, list) {
 
-        QString localPath = url.toLocalFile();
         QFileInfo fi(localPath);
 
         if(fi.isDir()){
-            QList<QUrl> newList;
+            QStringList newList;
             QDirIterator it(QDir(localPath), QDirIterator::IteratorFlag::Subdirectories);
             while(true){
 
                 if(!it.fileInfo().isDir() && it.filePath() != ""){
-                    newList.append(QUrl::fromLocalFile(it.filePath()));
+                    newList.push_back(it.filePath());
                 }
 
                 if(!it.hasNext()) break;
@@ -751,16 +767,24 @@ void MainWindow::handleDrop(const QList<QUrl> & list)
 
                 switch(ui->tabWidget->currentIndex()){
 
-                case TabIndex::TAB_DESCRIPT:   insertTbl(DescTable_t,    url.fileName(), "", true);
+                case TabIndex::TAB_DESCRIPT:
+                    if(!isDuplicateItem(DescTable_t,    fi.fileName()))
+                    insertTbl(DescTable_t,    fi.fileName(), "", true);
                     break;
 
-                case TabIndex::TAB_ISSUE:      insertTbl(IssueTable_t,   url.fileName(), "", true);
+                case TabIndex::TAB_ISSUE:
+                    if(!isDuplicateItem(IssueTable_t,   fi.fileName()))
+                    insertTbl(IssueTable_t,   fi.fileName(), "", true);
                     break;
 
-                case TabIndex::TAB_REF:        insertTbl(RefTable_t,     url.fileName(), "", true);
+                case TabIndex::TAB_REF:
+                    if(!isDuplicateItem(RefTable_t,     fi.fileName()))
+                    insertTbl(RefTable_t,     fi.fileName(), "", true);
                     break;
 
-                case TabIndex::TAB_EXCLUDE:    insertTbl(ExcludeTable_t, url.fileName());
+                case TabIndex::TAB_EXCLUDE:
+                    if(!isDuplicateItem(ExcludeTable_t, fi.fileName()))
+                    insertTbl(ExcludeTable_t, fi.fileName());
                     break;
 
                 };
@@ -852,6 +876,17 @@ void MainWindow::removeSelectedItems(QTableWidget* tbl){
         //remove the selected row
         tbl->removeRow(removeRows.at(i));
     }
+}
+
+bool MainWindow::isDuplicateItem(QTableWidget *tbl, const QString &item)
+{
+    for(int i = 0; i < tbl->rowCount(); i++){
+        if(tbl->item(i, 0)->text() == item){
+            return true;
+        }
+    }
+
+    return false;
 }
 
 // ==============================+===============================================================

@@ -199,6 +199,8 @@ private slots:
 
     void on_actionNew_triggered();
 
+    void on_descAutoImtBtn_clicked();
+
 private:
 
     // member vars
@@ -228,15 +230,16 @@ private:
     void                        clearAllTbls        ();
 
     // setting table's dragging event
-    void                        dragEnterEvent      (QDragEnterEvent *e) override;
-    void                        dropEvent           (QDropEvent      *e) override;
-    void                        handleDrop          (const QList<QUrl>&);
+    void                        dragEnterEvent      (QDragEnterEvent*) override;
+    void                        dropEvent           (QDropEvent*     ) override;
+    void                        handleDrop          (const QStringList&);
 
     // handle tables
     void                        insertItem          (QTableWidget* tbl, bool keyEditable, const QString& item);
     void                        insertItem          (QTableWidget* tbl, bool keyEditable, const QString& key, const QString& value);
     void                        insertMultiLineItem (QTableWidget* tbl, bool keyEditable, const QString& key, const QString& value);
     void                        removeSelectedItems (QTableWidget* tbl);
+    bool                        isDuplicateItem     (QTableWidget* tbl, const QString& item);
 
     // handle SCPS file
     void                        setSCPSFile         (const QString& path);
@@ -251,7 +254,7 @@ private:
 
     // handle SCProj file
     s_ptr<Scproj>               readSCProjFile      (const QString& path);
-    void                        writeSCProjFile     (const QString &path, queue<FileInfo>&);
+    void                        writeSCProjFile     (const QString& path, queue<FileInfo>&);
 
     // handle other data I/O
     void                        exportTblDataToMD   (QTextStream& ts, const QTableWidget* tbl, const QString& tblName);

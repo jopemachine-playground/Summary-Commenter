@@ -142,6 +142,7 @@ public:
     QPushButton *descAddBtn;
     QPushButton *descRemoveBtn;
     QPushButton *descSortBtn;
+    QPushButton *descAutoImtBtn;
     QWidget *IssueTab;
     QVBoxLayout *verticalLayout_6;
     QVBoxLayout *verticalLayout_4;
@@ -681,6 +682,11 @@ public:
 
         descTabL2->addWidget(descSortBtn);
 
+        descAutoImtBtn = new QPushButton(DescTab);
+        descAutoImtBtn->setObjectName(QString::fromUtf8("descAutoImtBtn"));
+
+        descTabL2->addWidget(descAutoImtBtn);
+
 
         descTabL1->addLayout(descTabL2);
 
@@ -1027,6 +1033,7 @@ public:
         descAddBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
         descRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Del)", nullptr));
         descSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name (Ctrl + T)", nullptr));
+        descAutoImtBtn->setText(QCoreApplication::translate("MainWindow", "Auto Import (F6)", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(DescTab), QCoreApplication::translate("MainWindow", "Desc", nullptr));
         issueSearchLbl->setText(QCoreApplication::translate("MainWindow", "Search", nullptr));
         QTableWidgetItem *___qtablewidgetitem4 = issueTblWidget->horizontalHeaderItem(0);
