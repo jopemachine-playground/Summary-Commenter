@@ -591,16 +591,19 @@ void MainWindow::setTables()
     DescTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
     DescTable_t->verticalHeader()->setDefaultSectionSize(75);
     DescTable_t->setColumnWidth(0, 250);
+    DescTable_t->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     IssueTable_t->horizontalHeader()->setStretchLastSection(true);
     IssueTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
     IssueTable_t->verticalHeader()->setDefaultSectionSize(75);
     IssueTable_t->setColumnWidth(0, 250);
+    IssueTable_t->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     RefTable_t->horizontalHeader()->setStretchLastSection(true);
     RefTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
     RefTable_t->verticalHeader()->setDefaultSectionSize(75);
     RefTable_t->setColumnWidth(0, 250);
+    RefTable_t->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     ExcludeTable_t->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ExcludeTable_t->horizontalHeader()->setStretchLastSection(true);
