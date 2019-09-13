@@ -1023,7 +1023,7 @@ void MainWindow::setSCPSFile(const QString& settingFilePath){
             // 읽은 순서대로 flagTypeTbl에 기록하고, 테이블에 추가
             bool LineFeed = false;
             if(flagMatch.captured("attKey") == "Desc" || flagMatch.captured("attKey") == "Issue" ||
-                    flagMatch.captured("attKey") == "Memo"){
+                    flagMatch.captured("attKey") == "Memo" || flagMatch.captured("attKey") == "Ref_URLs"){
                 LineFeed = true;
             }
 

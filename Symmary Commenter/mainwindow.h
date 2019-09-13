@@ -73,7 +73,7 @@ typedef struct{
                 map.insert({hit++,  {"Email",          false}});
                 map.insert({hit++,  {"Telephone",      false}});
                 map.insert({hit++,  {"Github_Account", false}});
-                map.insert({hit++,  {"Ref_URLs",       false}});
+                map.insert({hit++,  {"Ref_URLs",       true }});
                 map.insert({hit++,  {"Memo",           true }});
                 map.insert({hit++,  {"Sub_Div_Line",   false}});
     }
