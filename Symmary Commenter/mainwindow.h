@@ -231,7 +231,7 @@ private:
     void                        setTables           ();
     void                        setToolbar          ();
     void                        applyPalette        (QPalette& palete);
-    void                        applyFonts          ();
+    bool                        applyFonts          ();
 
     // setting table
     void                        sortTbl             (QTableWidget*);

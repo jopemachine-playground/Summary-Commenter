@@ -998,10 +998,20 @@
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
+    <property name="font">
+     <font>
+      <family>Consolas</family>
+     </font>
+    </property>
     <property name="title">
      <string>File</string>
     </property>
     <widget class="QMenu" name="menuOpen_Recents">
+     <property name="font">
+      <font>
+       <family>Consolas</family>
+      </font>
+     </property>
      <property name="title">
       <string>Open Recents</string>
      </property>
@@ -1028,6 +1038,11 @@
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
+    <property name="font">
+     <font>
+      <family>Consolas</family>
+     </font>
+    </property>
     <property name="title">
      <string>Help</string>
     </property>
@@ -1039,6 +1054,11 @@
      <string>Setting</string>
     </property>
     <widget class="QMenu" name="menuComments_style">
+     <property name="font">
+      <font>
+       <family>Consolas</family>
+      </font>
+     </property>
      <property name="title">
       <string>Comments style</string>
      </property>
@@ -1052,6 +1072,11 @@
     <addaction name="menuComments_style"/>
    </widget>
    <widget class="QMenu" name="menuExecute">
+    <property name="font">
+     <font>
+      <family>Consolas</family>
+     </font>
+    </property>
     <property name="title">
      <string>Execute</string>
     </property>
@@ -1074,6 +1099,11 @@
    <property name="text">
     <string>Github</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
+   </property>
   </action>
   <action name="actionExecute">
    <property name="icon">
@@ -1082,6 +1112,11 @@
    </property>
    <property name="text">
     <string>Run</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
    </property>
    <property name="shortcut">
     <string>F5</string>
@@ -1095,6 +1130,11 @@
    <property name="text">
     <string>Save</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
+   </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
    </property>
@@ -1106,6 +1146,11 @@
    </property>
    <property name="text">
     <string>Open</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -1119,6 +1164,11 @@
    <property name="text">
     <string>Save as</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
+   </property>
    <property name="shortcut">
     <string>Alt+S</string>
    </property>
@@ -1126,6 +1176,11 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
    </property>
   </action>
   <action name="actionOpen_and_run">
@@ -1135,6 +1190,11 @@
    </property>
    <property name="text">
     <string>Open and Run</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
    </property>
    <property name="shortcut">
     <string>Shift+F5</string>
@@ -1148,6 +1208,11 @@
    <property name="text">
     <string>Remove Worked Comments</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
+   </property>
   </action>
   <action name="actionRecursive_Traversal">
    <property name="checkable">
@@ -1159,6 +1224,11 @@
    <property name="text">
     <string>Recursive Traversal</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
+   </property>
   </action>
   <action name="actionrecent1">
    <property name="icon">
@@ -1167,6 +1237,11 @@
    </property>
    <property name="text">
     <string>recent1</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
    </property>
   </action>
   <action name="actionrecent2">
@@ -1177,6 +1252,11 @@
    <property name="text">
     <string>recent2</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
+   </property>
   </action>
   <action name="actionrecent3">
    <property name="icon">
@@ -1186,6 +1266,11 @@
    <property name="text">
     <string>recent3</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
+   </property>
   </action>
   <action name="actionrecent4">
    <property name="icon">
@@ -1194,6 +1279,11 @@
    </property>
    <property name="text">
     <string>recent4</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
    </property>
   </action>
   <action name="actionIssue_Numbering">
@@ -1206,6 +1296,11 @@
    <property name="text">
     <string>Issue Numbering</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
+   </property>
   </action>
   <action name="actionDesc_Numbering">
    <property name="checkable">
@@ -1217,15 +1312,34 @@
    <property name="text">
     <string>Desc Numbering</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
+   </property>
   </action>
   <action name="actionOpen_Project_Path">
    <property name="text">
     <string>Open Project Path</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
+   </property>
   </action>
   <action name="actionRefresh">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/refresh-cw.ico</normaloff>:/new/img/res/img/refresh-cw.ico</iconset>
+   </property>
    <property name="text">
     <string>Refresh</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
@@ -1234,6 +1348,11 @@
   <action name="actionSave_md">
    <property name="text">
     <string>Export as Markdown</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
    </property>
   </action>
   <action name="actionRemove_Comments_From_All_File">
@@ -1244,10 +1363,24 @@
    <property name="text">
     <string>Remove Comments From All Files</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
+   </property>
   </action>
   <action name="actionHelp">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/help-circle.ico</normaloff>:/new/img/res/img/help-circle.ico</iconset>
+   </property>
    <property name="text">
     <string>Manual</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
    </property>
   </action>
   <action name="actionOpen_setting_file">
@@ -1258,6 +1391,11 @@
    <property name="text">
     <string>Open Setting File</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
+   </property>
   </action>
   <action name="actionNew">
    <property name="icon">
@@ -1266,6 +1404,11 @@
    </property>
    <property name="text">
     <string>New</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
@@ -1279,6 +1422,11 @@
    <property name="text">
     <string>recent5</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
+   </property>
   </action>
   <action name="actionRefe_URL_Numbering">
    <property name="checkable">
@@ -1286,6 +1434,11 @@
    </property>
    <property name="text">
     <string>Ref URL Numbering</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+    </font>
    </property>
   </action>
  </widget>

@@ -104,8 +104,16 @@ compiler_rcc_clean:
 	-$(DEL_FILE) release\qrc_res.cpp
 release/qrc_res.cpp: ../Symmary\ Commenter/res.qrc \
 		../../Qt/5.13.0/mingw73_64/bin/rcc.exe \
+		../Symmary\ Commenter/res/img/book-open.ico \
+		../Symmary\ Commenter/res/img/plus-circle.ico \
+		../Symmary\ Commenter/res/img/settings.ico \
 		../Symmary\ Commenter/res/img/icon.ico \
-		../Symmary\ Commenter/res/img/github.png
+		../Symmary\ Commenter/res/img/github.png \
+		../Symmary\ Commenter/res/img/save.ico \
+		../Symmary\ Commenter/res/img/trash-2.ico \
+		../Symmary\ Commenter/res/img/alert-triangle.ico \
+		../Symmary\ Commenter/res/img/trending-up.ico \
+		../Symmary\ Commenter/res/fonts/JejuGothic.ttf
 	C:\Qt\5.13.0\mingw73_64\bin\rcc.exe -name res "..\Symmary Commenter\res.qrc" -o release\qrc_res.cpp
 
 compiler_qmlcache_make_all:
@@ -587,6 +595,8 @@ release/mainwindow.o: ../Symmary\ Commenter/mainwindow.cpp ../../Qt/5.13.0/mingw
 		../../Qt/5.13.0/mingw73_64/include/QtWidgets/qpushbutton.h \
 		../../Qt/5.13.0/mingw73_64/include/QtWidgets/qabstractbutton.h \
 		../../Qt/5.13.0/mingw73_64/include/QtWidgets/QSpacerItem \
+		../../Qt/5.13.0/mingw73_64/include/QtWidgets/QSplitter \
+		../../Qt/5.13.0/mingw73_64/include/QtWidgets/qsplitter.h \
 		../../Qt/5.13.0/mingw73_64/include/QtWidgets/QStatusBar \
 		../../Qt/5.13.0/mingw73_64/include/QtWidgets/qstatusbar.h \
 		../../Qt/5.13.0/mingw73_64/include/QtWidgets/QTabWidget \

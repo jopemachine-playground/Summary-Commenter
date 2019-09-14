@@ -27,7 +27,7 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
 
     QPalette palette;
     applyPalette(palette);
-    applyFonts();
+    if(!applyFonts()) ShowMessageBox(QMessageBox::Critical, "Font file not found", "Error");
 
     setTables();
     setAcceptDrops(true);
@@ -40,10 +40,9 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
     pathQue  = new std::deque<QString>();
     sclately = new QFile(QFileInfo(programPath).dir().filePath(PROJECT_LATELY_OPEN_EXT));
 
-    DescSearchBar->installEventFilter(this);
-    IsseSearchBar->installEventFilter(this);
-
-    ui->descLargeEdit->installEventFilter(this);
+    DescSearchBar     ->installEventFilter(this);
+    IsseSearchBar     ->installEventFilter(this);
+    ui->descLargeEdit ->installEventFilter(this);
     ui->issueLargeEdit->installEventFilter(this);
 
     connect(DescTable_t,  SIGNAL(cellClicked(int, int)), this, SLOT(tableItemClicked(int,int)));
@@ -274,8 +273,13 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
+
+    ui->descLargeEdit->clear();
+    ui->issueLargeEdit->clear();
+
+    switch (index) {
     // preview 탭이 클릭되면 preview에 들어갈 텍스트를 계산
-    if(index == TabIndex::TAB_PREVIEW){
+    case TabIndex::TAB_PREVIEW:{
         QString text = "";
 
         QTextStream ts(&text);
@@ -283,8 +287,9 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         makeComment(ts, {});
 
         ui->previewTextEdit->setPlainText(text);
+        break;
     }
-
+    }
 }
 
 void MainWindow::on_actionSave_as_triggered()
@@ -646,6 +651,7 @@ void MainWindow::setTables()
 
 void MainWindow::setToolbar()
 {
+    QFont font("Consolas");
     // Exclusive한 라디오 버튼 그룹을 만들기 위한 메서드
     QActionGroup* modeGroup = new QActionGroup(ui->menuComments_style);
     modeGroup->setExclusive(true);
@@ -653,11 +659,15 @@ void MainWindow::setToolbar()
     divBySeparator = ui->menuComments_style->addAction("Divide by Separator");
     divBySeparator->setCheckable(true);
     divBySeparator->setChecked(true);
+    divBySeparator->setFont(font);
     modeGroup->addAction(divBySeparator);
 
     divByStartEndTag = ui->menuComments_style->addAction("Divide by Start End tag");
     divByStartEndTag->setCheckable(true);
+    divBySeparator->setFont(font);
     modeGroup->addAction(divByStartEndTag);
+
+    ui->menuComments_style->setFont(font);
 }
 
 void MainWindow::applyPalette(QPalette &palette)
@@ -683,16 +693,34 @@ void MainWindow::applyPalette(QPalette &palette)
     qApp->setPalette(palette);
 }
 
-void MainWindow::applyFonts()
+bool MainWindow::applyFonts()
 {
     // 외부 폰트 로드 및 적용
-    int id = QFontDatabase::addApplicationFont("./res/fonts/JejuGothic.ttf");
+    QFile fontFile("./res/fonts/JejuGothic.ttf");
+
+    QFileInfo info(fontFile);
+//    qDebug() << fontFile.fileName();
+//    qDebug() << info.absolutePath();
+
+//  ShowMessageBox(QMessageBox::Critical, info.absolutePath(), "1");
+
+    if(!fontFile.exists()) return false;
+
+    int id = QFontDatabase::addApplicationFont(fontFile.fileName());
     QString family = QFontDatabase::applicationFontFamilies(id).at(0);
 
-    QFont tblItemFont(family), largeEditFont(family), settingTabFont(family);
+    QFont
+            tblItemFont(family),
+            largeEditFont(family),
+            settingTabFont(family),
+            tabBarFont(family),
+            previewFont("Consolas");
+
     tblItemFont.setPointSize(10);
     settingTabFont.setPointSize(10);
     largeEditFont.setPointSize(11);
+    tabBarFont.setPointSize(9);
+    previewFont.setPointSize(10);
 
     ui->SettingTab->setFont(settingTabFont);
     FlagTable_t->setFont(tblItemFont);
@@ -702,6 +730,11 @@ void MainWindow::applyFonts()
     ui->issueLargeEdit->setFont(largeEditFont);
     RefTable_t->setFont(tblItemFont);
     ExcludeTable_t->setFont(tblItemFont);
+
+    ui->tabWidget->setFont(tabBarFont);
+    ui->PreviewTab->setFont(previewFont);
+
+    return true;
 }
 
 // ==============================+===============================================================
@@ -997,6 +1030,8 @@ bool MainWindow::isDuplicateItem(QTableWidget *tbl, const QString &item)
 // Handle SCPS file
 
 void MainWindow::setSCPSFile(const QString& settingFilePath){
+
+    ui->tabWidget->setCurrentIndex(TabIndex::TAB_GLOBAL);
 
     setWindowTitle(settingFilePath);
 

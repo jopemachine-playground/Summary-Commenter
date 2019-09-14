@@ -9,6 +9,9 @@
         <file>res/img/settings.ico</file>
         <file>res/img/trash-2.ico</file>
         <file>res/img/trending-up.ico</file>
+        <file>res/img/edit.ico</file>
+        <file>res/img/help-circle.ico</file>
+        <file>res/img/refresh-cw.ico</file>
     </qresource>
     <qresource prefix="/new/fonts">
         <file>res/fonts/JejuGothic.ttf</file>
