@@ -25,6 +25,7 @@
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSplitter>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
@@ -132,24 +133,28 @@ public:
     QPushButton *FlagUpBtn;
     QPushButton *FlagDownBtn;
     QWidget *DescTab;
-    QVBoxLayout *verticalLayout;
+    QGridLayout *gridLayout_4;
+    QGridLayout *gridLayout_3;
     QHBoxLayout *horizontalLayout_3;
     QLabel *descSearchLbl;
     QLineEdit *descSearchEdit;
-    QVBoxLayout *descTabL1;
+    QSplitter *descEditSpliter;
     QTableWidget *descTblWidget;
+    QPlainTextEdit *descLargeEdit;
     QHBoxLayout *descTabL2;
     QPushButton *descAddBtn;
     QPushButton *descRemoveBtn;
     QPushButton *descSortBtn;
     QPushButton *descAutoImtBtn;
     QWidget *IssueTab;
-    QVBoxLayout *verticalLayout_6;
-    QVBoxLayout *verticalLayout_4;
+    QGridLayout *gridLayout_6;
+    QGridLayout *gridLayout_5;
     QHBoxLayout *horizontalLayout_7;
     QLabel *issueSearchLbl;
     QLineEdit *issueSearchEdit;
+    QSplitter *issueSplitter;
     QTableWidget *issueTblWidget;
+    QPlainTextEdit *issueLargeEdit;
     QHBoxLayout *horizontalLayout_8;
     QPushButton *issueAddBtn;
     QPushButton *issueRemoveBtn;
@@ -632,10 +637,13 @@ public:
         tabWidget->addTab(FlagTab, QString());
         DescTab = new QWidget();
         DescTab->setObjectName(QString::fromUtf8("DescTab"));
-        verticalLayout = new QVBoxLayout(DescTab);
-        verticalLayout->setSpacing(6);
-        verticalLayout->setContentsMargins(11, 11, 11, 11);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        gridLayout_4 = new QGridLayout(DescTab);
+        gridLayout_4->setSpacing(6);
+        gridLayout_4->setContentsMargins(11, 11, 11, 11);
+        gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
+        gridLayout_3 = new QGridLayout();
+        gridLayout_3->setSpacing(6);
+        gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setSpacing(6);
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
@@ -650,12 +658,19 @@ public:
         horizontalLayout_3->addWidget(descSearchEdit);
 
 
-        verticalLayout->addLayout(horizontalLayout_3);
+        gridLayout_3->addLayout(horizontalLayout_3, 0, 0, 1, 1);
 
-        descTabL1 = new QVBoxLayout();
-        descTabL1->setSpacing(6);
-        descTabL1->setObjectName(QString::fromUtf8("descTabL1"));
-        descTblWidget = new QTableWidget(DescTab);
+        descEditSpliter = new QSplitter(DescTab);
+        descEditSpliter->setObjectName(QString::fromUtf8("descEditSpliter"));
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(descEditSpliter->sizePolicy().hasHeightForWidth());
+        descEditSpliter->setSizePolicy(sizePolicy);
+        descEditSpliter->setMinimumSize(QSize(0, 300));
+        descEditSpliter->setBaseSize(QSize(0, 0));
+        descEditSpliter->setOrientation(Qt::Vertical);
+        descTblWidget = new QTableWidget(descEditSpliter);
         if (descTblWidget->columnCount() < 2)
             descTblWidget->setColumnCount(2);
         QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
@@ -663,8 +678,29 @@ public:
         QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
         descTblWidget->setHorizontalHeaderItem(1, __qtablewidgetitem3);
         descTblWidget->setObjectName(QString::fromUtf8("descTblWidget"));
+        descTblWidget->setEnabled(true);
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(descTblWidget->sizePolicy().hasHeightForWidth());
+        descTblWidget->setSizePolicy(sizePolicy1);
+        descTblWidget->setMinimumSize(QSize(0, 300));
+        descEditSpliter->addWidget(descTblWidget);
+        descLargeEdit = new QPlainTextEdit(descEditSpliter);
+        descLargeEdit->setObjectName(QString::fromUtf8("descLargeEdit"));
+        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(descLargeEdit->sizePolicy().hasHeightForWidth());
+        descLargeEdit->setSizePolicy(sizePolicy2);
+        descLargeEdit->setMinimumSize(QSize(0, 0));
+        descLargeEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        descLargeEdit->setTabStopDistance(80.000000000000000);
+        descLargeEdit->setBackgroundVisible(false);
+        descLargeEdit->setCenterOnScroll(false);
+        descEditSpliter->addWidget(descLargeEdit);
 
-        descTabL1->addWidget(descTblWidget);
+        gridLayout_3->addWidget(descEditSpliter, 1, 0, 1, 1);
 
         descTabL2 = new QHBoxLayout();
         descTabL2->setSpacing(6);
@@ -690,21 +726,21 @@ public:
         descTabL2->addWidget(descAutoImtBtn);
 
 
-        descTabL1->addLayout(descTabL2);
+        gridLayout_3->addLayout(descTabL2, 2, 0, 1, 1);
 
 
-        verticalLayout->addLayout(descTabL1);
+        gridLayout_4->addLayout(gridLayout_3, 0, 0, 1, 1);
 
         tabWidget->addTab(DescTab, QString());
         IssueTab = new QWidget();
         IssueTab->setObjectName(QString::fromUtf8("IssueTab"));
-        verticalLayout_6 = new QVBoxLayout(IssueTab);
-        verticalLayout_6->setSpacing(6);
-        verticalLayout_6->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
-        verticalLayout_4 = new QVBoxLayout();
-        verticalLayout_4->setSpacing(6);
-        verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
+        gridLayout_6 = new QGridLayout(IssueTab);
+        gridLayout_6->setSpacing(6);
+        gridLayout_6->setContentsMargins(11, 11, 11, 11);
+        gridLayout_6->setObjectName(QString::fromUtf8("gridLayout_6"));
+        gridLayout_5 = new QGridLayout();
+        gridLayout_5->setSpacing(6);
+        gridLayout_5->setObjectName(QString::fromUtf8("gridLayout_5"));
         horizontalLayout_7 = new QHBoxLayout();
         horizontalLayout_7->setSpacing(6);
         horizontalLayout_7->setObjectName(QString::fromUtf8("horizontalLayout_7"));
@@ -719,9 +755,12 @@ public:
         horizontalLayout_7->addWidget(issueSearchEdit);
 
 
-        verticalLayout_4->addLayout(horizontalLayout_7);
+        gridLayout_5->addLayout(horizontalLayout_7, 0, 0, 1, 1);
 
-        issueTblWidget = new QTableWidget(IssueTab);
+        issueSplitter = new QSplitter(IssueTab);
+        issueSplitter->setObjectName(QString::fromUtf8("issueSplitter"));
+        issueSplitter->setOrientation(Qt::Vertical);
+        issueTblWidget = new QTableWidget(issueSplitter);
         if (issueTblWidget->columnCount() < 2)
             issueTblWidget->setColumnCount(2);
         QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
@@ -729,8 +768,20 @@ public:
         QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
         issueTblWidget->setHorizontalHeaderItem(1, __qtablewidgetitem5);
         issueTblWidget->setObjectName(QString::fromUtf8("issueTblWidget"));
+        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Maximum);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(issueTblWidget->sizePolicy().hasHeightForWidth());
+        issueTblWidget->setSizePolicy(sizePolicy3);
+        issueTblWidget->setMinimumSize(QSize(0, 300));
+        issueSplitter->addWidget(issueTblWidget);
+        issueLargeEdit = new QPlainTextEdit(issueSplitter);
+        issueLargeEdit->setObjectName(QString::fromUtf8("issueLargeEdit"));
+        sizePolicy2.setHeightForWidth(issueLargeEdit->sizePolicy().hasHeightForWidth());
+        issueLargeEdit->setSizePolicy(sizePolicy2);
+        issueSplitter->addWidget(issueLargeEdit);
 
-        verticalLayout_4->addWidget(issueTblWidget);
+        gridLayout_5->addWidget(issueSplitter, 1, 0, 1, 1);
 
         horizontalLayout_8 = new QHBoxLayout();
         horizontalLayout_8->setSpacing(6);
@@ -756,10 +807,10 @@ public:
         horizontalLayout_8->addWidget(issueAutoImtBtn);
 
 
-        verticalLayout_4->addLayout(horizontalLayout_8);
+        gridLayout_5->addLayout(horizontalLayout_8, 2, 0, 1, 1);
 
 
-        verticalLayout_6->addLayout(verticalLayout_4);
+        gridLayout_6->addLayout(gridLayout_5, 0, 0, 1, 1);
 
         tabWidget->addTab(IssueTab, QString());
         referenceTab = new QWidget();
@@ -1042,6 +1093,8 @@ public:
         ___qtablewidgetitem2->setText(QCoreApplication::translate("MainWindow", "File Name", nullptr));
         QTableWidgetItem *___qtablewidgetitem3 = descTblWidget->horizontalHeaderItem(1);
         ___qtablewidgetitem3->setText(QCoreApplication::translate("MainWindow", "Description", nullptr));
+        descLargeEdit->setDocumentTitle(QString());
+        descLargeEdit->setPlaceholderText(QCoreApplication::translate("MainWindow", "Edit Description by here", nullptr));
         descAddBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
         descRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Del)", nullptr));
         descSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name (Ctrl + T)", nullptr));
@@ -1052,6 +1105,7 @@ public:
         ___qtablewidgetitem4->setText(QCoreApplication::translate("MainWindow", "File Name", nullptr));
         QTableWidgetItem *___qtablewidgetitem5 = issueTblWidget->horizontalHeaderItem(1);
         ___qtablewidgetitem5->setText(QCoreApplication::translate("MainWindow", "Issue", nullptr));
+        issueLargeEdit->setPlaceholderText(QCoreApplication::translate("MainWindow", "Edit Issue by here", nullptr));
         issueAddBtn->setText(QCoreApplication::translate("MainWindow", "Add (+)", nullptr));
         issueRemoveBtn->setText(QCoreApplication::translate("MainWindow", "Remove (Del)", nullptr));
         issueSortBtn->setText(QCoreApplication::translate("MainWindow", "Sort By File Name (Ctrl + T)", nullptr));

@@ -135,7 +135,7 @@ private slots:
 
     void on_issueRemoveBtn_clicked();
 
-    void on_tabWidget_currentChanged(int index);
+    void on_tabWidget_currentChanged(int);
 
     void on_actionExit_triggered();
 
@@ -204,6 +204,8 @@ private slots:
     void on_issueAutoImtBtn_clicked();
 
     void on_refAutoImtBtn_clicked();
+
+    void tableItemClicked (int,int);
 
 private:
 

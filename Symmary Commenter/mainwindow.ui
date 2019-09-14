@@ -604,38 +604,108 @@
        <attribute name="title">
         <string>Desc</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <widget class="QLabel" name="descSearchLbl">
-            <property name="text">
-             <string>Search</string>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="descSearchLbl">
+              <property name="text">
+               <string>Search</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="descSearchEdit"/>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QSplitter" name="descEditSpliter">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>300</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <widget class="QTableWidget" name="descTblWidget">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>300</height>
+              </size>
+             </property>
+             <column>
+              <property name="text">
+               <string>File Name</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Description</string>
+              </property>
+             </column>
+            </widget>
+            <widget class="QPlainTextEdit" name="descLargeEdit">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="documentTitle">
+              <string/>
+             </property>
+             <property name="tabStopDistance">
+              <double>80.000000000000000</double>
+             </property>
+             <property name="backgroundVisible">
+              <bool>false</bool>
+             </property>
+             <property name="centerOnScroll">
+              <bool>false</bool>
+             </property>
+             <property name="placeholderText">
+              <string>Edit Description by here</string>
+             </property>
+            </widget>
            </widget>
           </item>
-          <item>
-           <widget class="QLineEdit" name="descSearchEdit"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="descTabL1">
-          <item>
-           <widget class="QTableWidget" name="descTblWidget">
-            <column>
-             <property name="text">
-              <string>File Name</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Description</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-          <item>
+          <item row="2" column="0">
            <layout class="QHBoxLayout" name="descTabL2">
             <item>
              <widget class="QPushButton" name="descAddBtn">
@@ -675,10 +745,10 @@
        <attribute name="title">
         <string>Issue</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_6">
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <item>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_7">
             <item>
              <widget class="QLabel" name="issueSearchLbl">
@@ -692,21 +762,49 @@
             </item>
            </layout>
           </item>
-          <item>
-           <widget class="QTableWidget" name="issueTblWidget">
-            <column>
-             <property name="text">
-              <string>File Name</string>
+          <item row="1" column="0">
+           <widget class="QSplitter" name="issueSplitter">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <widget class="QTableWidget" name="issueTblWidget">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Issue</string>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>300</height>
+              </size>
              </property>
-            </column>
+             <column>
+              <property name="text">
+               <string>File Name</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Issue</string>
+              </property>
+             </column>
+            </widget>
+            <widget class="QPlainTextEdit" name="issueLargeEdit">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="placeholderText">
+              <string>Edit Issue by here</string>
+             </property>
+            </widget>
            </widget>
           </item>
-          <item>
+          <item row="2" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_8">
             <item>
              <widget class="QPushButton" name="issueAddBtn">

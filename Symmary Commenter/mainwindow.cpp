@@ -43,6 +43,12 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
     DescSearchBar->installEventFilter(this);
     IsseSearchBar->installEventFilter(this);
 
+    ui->descLargeEdit->installEventFilter(this);
+    ui->issueLargeEdit->installEventFilter(this);
+
+    connect(DescTable_t,  SIGNAL(cellClicked(int, int)), this, SLOT(tableItemClicked(int,int)));
+    connect(IssueTable_t, SIGNAL(cellClicked(int, int)), this, SLOT(tableItemClicked(int,int)));
+
     // scps 파일로 프로그램을 open한 경우
     if((execPath != nullptr) && execPath[0] != '\0') {
         clearAllTbls();
@@ -543,7 +549,7 @@ void MainWindow::on_refAutoImtBtn_clicked()
 // Private Methods
 // Init, set program
 
-bool MainWindow::eventFilter(QObject * obj, QEvent * e)
+bool MainWindow::eventFilter(QObject* obj, QEvent* e)
 {
     if     (obj == DescSearchBar){
         if(e->type() == QEvent::KeyPress){
@@ -565,6 +571,27 @@ bool MainWindow::eventFilter(QObject * obj, QEvent * e)
             }
         }
     }
+    else if(obj == ui->descLargeEdit){
+        if(e->type() == QEvent::KeyPress){
+            QKeyEvent* kEvent = static_cast<QKeyEvent*>(e);
+            if(kEvent->key() == Qt::Key_Enter || kEvent->key() == Qt::Key_Return){
+                int row = DescTable_t->selectedItems()[0]->row();
+                QPlainTextEdit* edit = static_cast<QPlainTextEdit*>(DescTable_t->cellWidget(row, 1));
+                edit->setPlainText(ui->descLargeEdit->toPlainText());
+            }
+        }
+    }
+    else if(obj == ui->issueLargeEdit){
+        if(e->type() == QEvent::KeyPress){
+            QKeyEvent* kEvent = static_cast<QKeyEvent*>(e);
+            if(kEvent->key() == Qt::Key_Enter || kEvent->key() == Qt::Key_Return){
+                int row = IssueTable_t->selectedItems()[0]->row();
+                QPlainTextEdit* edit = static_cast<QPlainTextEdit*>(IssueTable_t->cellWidget(row, 1));
+                edit->setPlainText(ui->issueLargeEdit->toPlainText());
+            }
+        }
+    }
+
     return false;
 }
 
@@ -584,25 +611,31 @@ void MainWindow::addAllItemBtnClicked()
 
 void MainWindow::setTables()
 {
+    QList<int> spliterSizes;
+    spliterSizes << 100 << 145 << 200;
+
     FlagTable_t->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     FlagTable_t->horizontalHeader()->setStretchLastSection(true);
     FlagTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
+    FlagTable_t->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     DescTable_t->horizontalHeader()->setStretchLastSection(true);
     DescTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
-    DescTable_t->verticalHeader()->setDefaultSectionSize(75);
+    DescTable_t->verticalHeader()->setDefaultSectionSize(60);
     DescTable_t->setColumnWidth(0, 250);
     DescTable_t->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->descEditSpliter->setSizes(spliterSizes);
 
     IssueTable_t->horizontalHeader()->setStretchLastSection(true);
     IssueTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
-    IssueTable_t->verticalHeader()->setDefaultSectionSize(75);
+    IssueTable_t->verticalHeader()->setDefaultSectionSize(60);
     IssueTable_t->setColumnWidth(0, 250);
     IssueTable_t->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->issueSplitter->setSizes(spliterSizes);
 
     RefTable_t->horizontalHeader()->setStretchLastSection(true);
     RefTable_t->setSelectionBehavior(QAbstractItemView::SelectRows);
-    RefTable_t->verticalHeader()->setDefaultSectionSize(75);
+    RefTable_t->verticalHeader()->setDefaultSectionSize(60);
     RefTable_t->setColumnWidth(0, 250);
     RefTable_t->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
@@ -656,22 +689,19 @@ void MainWindow::applyFonts()
     int id = QFontDatabase::addApplicationFont("./res/fonts/JejuGothic.ttf");
     QString family = QFontDatabase::applicationFontFamilies(id).at(0);
 
-    QFont tblFont(family);
-    tblFont.setPointSize(10);
-
-//    QFont overallUIFont(family);
-//    overallUIFont.setPixelSize(11);
-
-    QFont settingTabFont(family);
-    settingTabFont.setPixelSize(13);
+    QFont tblItemFont(family), largeEditFont(family), settingTabFont(family);
+    tblItemFont.setPointSize(10);
+    settingTabFont.setPointSize(10);
+    largeEditFont.setPointSize(11);
 
     ui->SettingTab->setFont(settingTabFont);
-
-    FlagTable_t->setFont(tblFont);
-    DescTable_t->setFont(tblFont);
-    IssueTable_t->setFont(tblFont);
-    RefTable_t->setFont(tblFont);
-    ExcludeTable_t->setFont(tblFont);
+    FlagTable_t->setFont(tblItemFont);
+    DescTable_t->setFont(tblItemFont);
+    ui->descLargeEdit->setFont(largeEditFont);
+    IssueTable_t->setFont(tblItemFont);
+    ui->issueLargeEdit->setFont(largeEditFont);
+    RefTable_t->setFont(tblItemFont);
+    ExcludeTable_t->setFont(tblItemFont);
 }
 
 // ==============================+===============================================================
@@ -843,6 +873,25 @@ void MainWindow::handleDrop(const QStringList& list)
 
                 };
             }
+        }
+    }
+}
+
+void MainWindow::tableItemClicked(int row, int col)
+{
+    switch(ui->tabWidget->currentIndex()){
+
+        case TabIndex::TAB_DESCRIPT:{
+             // qDebug() << row << " " << col;
+             QString selectedText_desc = static_cast<QPlainTextEdit*>(DescTable_t->cellWidget(row, 1))->toPlainText();
+             ui->descLargeEdit->setPlainText(selectedText_desc);
+             break;
+        }
+
+        case TabIndex::TAB_ISSUE:{
+             QString selectedText_issue = static_cast<QPlainTextEdit*>(IssueTable_t->cellWidget(row, 1))->toPlainText();
+             ui->issueLargeEdit->setPlainText(selectedText_issue);
+             break;
         }
     }
 }
