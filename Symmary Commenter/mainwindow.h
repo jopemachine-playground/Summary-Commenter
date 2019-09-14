@@ -218,7 +218,6 @@ private:
     char*                                           programPath;
     char*                                           execPath;
 
-
     // event process
     bool                        eventFilter         (QObject*, QEvent*) override;
     void                        addAllItemBtnClicked();
@@ -230,6 +229,7 @@ private:
     void                        setTables           ();
     void                        setToolbar          ();
     void                        applyPalette        (QPalette& palete);
+    void                        applyFonts          ();
 
     // setting table
     void                        sortTbl             (QTableWidget*);

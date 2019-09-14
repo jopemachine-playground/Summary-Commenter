@@ -3,4 +3,7 @@
         <file>res/img/github.png</file>
         <file>res/img/icon.ico</file>
     </qresource>
+    <qresource prefix="/new/fonts">
+        <file>res/fonts/JejuGothic.ttf</file>
+    </qresource>
 </RCC>

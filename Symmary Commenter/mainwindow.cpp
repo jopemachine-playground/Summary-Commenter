@@ -27,6 +27,7 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
 
     QPalette palette;
     applyPalette(palette);
+    applyFonts();
 
     setTables();
     setAcceptDrops(true);
@@ -647,6 +648,30 @@ void MainWindow::applyPalette(QPalette &palette)
     palette.setColor(QPalette::Disabled, QPalette::ButtonText,  Qt::darkGray);
 
     qApp->setPalette(palette);
+}
+
+void MainWindow::applyFonts()
+{
+    // 외부 폰트 로드 및 적용
+    int id = QFontDatabase::addApplicationFont("./res/fonts/JejuGothic.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+
+    QFont tblFont(family);
+    tblFont.setPointSize(10);
+
+//    QFont overallUIFont(family);
+//    overallUIFont.setPixelSize(11);
+
+    QFont settingTabFont(family);
+    settingTabFont.setPixelSize(13);
+
+    ui->SettingTab->setFont(settingTabFont);
+
+    FlagTable_t->setFont(tblFont);
+    DescTable_t->setFont(tblFont);
+    IssueTable_t->setFont(tblFont);
+    RefTable_t->setFont(tblFont);
+    ExcludeTable_t->setFont(tblFont);
 }
 
 // ==============================+===============================================================
