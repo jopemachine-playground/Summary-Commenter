@@ -1076,6 +1076,10 @@
    </property>
   </action>
   <action name="actionExecute">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/trending-up.ico</normaloff>:/new/img/res/img/trending-up.ico</iconset>
+   </property>
    <property name="text">
     <string>Run</string>
    </property>
@@ -1084,6 +1088,10 @@
    </property>
   </action>
   <action name="actionSave">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/save.ico</normaloff>:/new/img/res/img/save.ico</iconset>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>
@@ -1092,6 +1100,10 @@
    </property>
   </action>
   <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/book-open.ico</normaloff>:/new/img/res/img/book-open.ico</iconset>
+   </property>
    <property name="text">
     <string>Open</string>
    </property>
@@ -1100,6 +1112,10 @@
    </property>
   </action>
   <action name="actionSave_as">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/save.ico</normaloff>:/new/img/res/img/save.ico</iconset>
+   </property>
    <property name="text">
     <string>Save as</string>
    </property>
@@ -1113,6 +1129,10 @@
    </property>
   </action>
   <action name="actionOpen_and_run">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/trending-up.ico</normaloff>:/new/img/res/img/trending-up.ico</iconset>
+   </property>
    <property name="text">
     <string>Open and Run</string>
    </property>
@@ -1121,6 +1141,10 @@
    </property>
   </action>
   <action name="actionRemove_Comments">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/trash-2.ico</normaloff>:/new/img/res/img/trash-2.ico</iconset>
+   </property>
    <property name="text">
     <string>Remove Worked Comments</string>
    </property>
@@ -1213,6 +1237,10 @@
    </property>
   </action>
   <action name="actionRemove_Comments_From_All_File">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/alert-triangle.ico</normaloff>:/new/img/res/img/alert-triangle.ico</iconset>
+   </property>
    <property name="text">
     <string>Remove Comments From All Files</string>
    </property>
@@ -1223,11 +1251,19 @@
    </property>
   </action>
   <action name="actionOpen_setting_file">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/settings.ico</normaloff>:/new/img/res/img/settings.ico</iconset>
+   </property>
    <property name="text">
     <string>Open Setting File</string>
    </property>
   </action>
   <action name="actionNew">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/img/res/img/plus-circle.ico</normaloff>:/new/img/res/img/plus-circle.ico</iconset>
+   </property>
    <property name="text">
     <string>New</string>
    </property>

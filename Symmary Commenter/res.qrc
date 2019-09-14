@@ -2,6 +2,13 @@
     <qresource prefix="/new/img">
         <file>res/img/github.png</file>
         <file>res/img/icon.ico</file>
+        <file>res/img/alert-triangle.ico</file>
+        <file>res/img/book-open.ico</file>
+        <file>res/img/plus-circle.ico</file>
+        <file>res/img/save.ico</file>
+        <file>res/img/settings.ico</file>
+        <file>res/img/trash-2.ico</file>
+        <file>res/img/trending-up.ico</file>
     </qresource>
     <qresource prefix="/new/fonts">
         <file>res/fonts/JejuGothic.ttf</file>
