@@ -205,7 +205,9 @@ private slots:
 
     void on_refAutoImtBtn_clicked();
 
-    void tableItemClicked (int,int);
+    void on_tableItemClickedked (int,int);
+
+    void on_actionHelp_triggered();
 
 private:
 

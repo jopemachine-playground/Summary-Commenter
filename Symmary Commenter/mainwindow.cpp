@@ -45,8 +45,8 @@ MainWindow::MainWindow(char *argv[], QWidget *parent) :
     ui->descLargeEdit ->installEventFilter(this);
     ui->issueLargeEdit->installEventFilter(this);
 
-    connect(DescTable_t,  SIGNAL(cellClicked(int, int)), this, SLOT(tableItemClicked(int,int)));
-    connect(IssueTable_t, SIGNAL(cellClicked(int, int)), this, SLOT(tableItemClicked(int,int)));
+    connect(DescTable_t,  SIGNAL(cellClicked(int, int)), this, SLOT(on_tableItemClickedked(int,int)));
+    connect(IssueTable_t, SIGNAL(cellClicked(int, int)), this, SLOT(on_tableItemClickedked(int,int)));
 
     // scps 파일로 프로그램을 open한 경우
     if((execPath != nullptr) && execPath[0] != '\0') {
@@ -549,6 +549,29 @@ void MainWindow::on_refAutoImtBtn_clicked()
     addAllItemBtnClicked();
 }
 
+void MainWindow::on_actionHelp_triggered()
+{
+    system("start chrome /new-window https://github.com/jopemachine/Summary-Commenter/blob/master/README.md");
+}
+
+void MainWindow::on_tableItemClickedked(int row, int col)
+{
+    switch(ui->tabWidget->currentIndex()){
+
+        case TabIndex::TAB_DESCRIPT:{
+             QString selectedText_desc = static_cast<QPlainTextEdit*>(DescTable_t->cellWidget(row, 1))->toPlainText();
+             ui->descLargeEdit->setPlainText(selectedText_desc);
+             break;
+        }
+
+        case TabIndex::TAB_ISSUE:{
+             QString selectedText_issue = static_cast<QPlainTextEdit*>(IssueTable_t->cellWidget(row, 1))->toPlainText();
+             ui->issueLargeEdit->setPlainText(selectedText_issue);
+             break;
+        }
+    }
+}
+
 
 // ==============================+===============================================================
 // Private Methods
@@ -584,6 +607,11 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
                 QPlainTextEdit* edit = static_cast<QPlainTextEdit*>(DescTable_t->cellWidget(row, 1));
                 edit->setPlainText(ui->descLargeEdit->toPlainText());
             }
+            else if(kEvent->key() == Qt::Key_Backspace){
+                int row = DescTable_t->selectedItems()[0]->row();
+                QPlainTextEdit* edit = static_cast<QPlainTextEdit*>(DescTable_t->cellWidget(row, 1));
+                edit->setPlainText(ui->descLargeEdit->toPlainText().left(ui->descLargeEdit->toPlainText().length() - 1));
+            }
         }
     }
     else if(obj == ui->issueLargeEdit){
@@ -594,6 +622,12 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
                 QPlainTextEdit* edit = static_cast<QPlainTextEdit*>(IssueTable_t->cellWidget(row, 1));
                 edit->setPlainText(ui->issueLargeEdit->toPlainText());
             }
+            else if(kEvent->key() == Qt::Key_Backspace){
+                int row = IssueTable_t->selectedItems()[0]->row();
+                QPlainTextEdit* edit = static_cast<QPlainTextEdit*>(IssueTable_t->cellWidget(row, 1));
+                edit->setPlainText(ui->issueLargeEdit->toPlainText().left(ui->issueLargeEdit->toPlainText().length() - 1));
+            }
+
         }
     }
 
@@ -906,25 +940,6 @@ void MainWindow::handleDrop(const QStringList& list)
 
                 };
             }
-        }
-    }
-}
-
-void MainWindow::tableItemClicked(int row, int col)
-{
-    switch(ui->tabWidget->currentIndex()){
-
-        case TabIndex::TAB_DESCRIPT:{
-             // qDebug() << row << " " << col;
-             QString selectedText_desc = static_cast<QPlainTextEdit*>(DescTable_t->cellWidget(row, 1))->toPlainText();
-             ui->descLargeEdit->setPlainText(selectedText_desc);
-             break;
-        }
-
-        case TabIndex::TAB_ISSUE:{
-             QString selectedText_issue = static_cast<QPlainTextEdit*>(IssueTable_t->cellWidget(row, 1))->toPlainText();
-             ui->issueLargeEdit->setPlainText(selectedText_issue);
-             break;
         }
     }
 }
