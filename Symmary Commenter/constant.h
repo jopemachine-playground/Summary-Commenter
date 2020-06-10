@@ -73,6 +73,12 @@ enum CommentStyle{
 
 // ==============================+===============================================================
 
+#ifdef Q_OS_MACOS
+#endif
+
+#ifdef Q_OS_WINDOWS
+#endif
+
 #endif // CONSTANT_H
 
 
